@@ -6,8 +6,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class CoLaborApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(CoLaborApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(CoLaborApplication.class, args);
+    }
 
 }
