@@ -1,10 +1,10 @@
-package pelican.co_labor.domain.labor_user;
+package pelican.co_labor.domain.enterprise_user;
 
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import pelican.co_labor.domain.chatting.Chatting;
-import pelican.co_labor.domain.review.Review;
+import pelican.co_labor.domain.enterprise.Enterprise;
+import pelican.co_labor.domain.job.Job;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -12,12 +12,11 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-@Table(name = "laber_user", uniqueConstraints = @UniqueConstraint(columnNames = "email"))
-public class LaborUser {
-
+@Table(name = "enterprise_user", uniqueConstraints = @UniqueConstraint(columnNames = "email"))
+public class EnterpriseUser {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long labor_user_id;
+    private Long enterprise_user_id;
 
     @Column(nullable = false)
     private String password;
@@ -36,10 +35,12 @@ public class LaborUser {
         created_at = LocalDateTime.now();
     }
 
-    @OneToMany(mappedBy = "laborUser", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Review> reviews;
+    @ManyToOne
+    @JoinColumn(name = "enterprise_id")
+    private Enterprise enterprise;
 
-    @OneToMany(mappedBy = "laborUser", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Chatting> chattings;
+    @OneToMany(mappedBy = "enterpriseUser", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Job> jobs;
+
 
 }

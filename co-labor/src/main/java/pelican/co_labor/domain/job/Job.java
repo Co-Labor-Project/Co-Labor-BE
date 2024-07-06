@@ -1,26 +1,26 @@
-package pelican.co_labor.domain.review;
+package pelican.co_labor.domain.job;
 
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import pelican.co_labor.domain.enterprise.Enterprise;
-import pelican.co_labor.domain.labor_user.LaborUser;
+import pelican.co_labor.domain.enterprise_user.EnterpriseUser;
 
 import java.time.LocalDateTime;
 
 @Getter
 @Setter
 @Entity
-@Table(name = "review")
-public class Review {
+@Table(name = "job")
+public class Job {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long review_id;
+    private Long job_id;
 
     @ManyToOne
-    @JoinColumn(name = "labor_user_id")
-    private LaborUser laborUser;
+    @JoinColumn(name = "enterprise_user_id")
+    private EnterpriseUser enterpriseUser;
 
     @ManyToOne
     @JoinColumn(name = "enterprise_id")
@@ -29,32 +29,20 @@ public class Review {
     @Column(nullable = false)
     private String title;
 
-    @Column(nullable = false)
-    private int rating;
-
-    @Column(nullable = false)
-    private int promotion_rating;
-
-    @Column(nullable = false)
-    private int salary_rating;
-
-    @Column(nullable = false)
-    private int balance_rating;
-
-    @Column(nullable = false)
-    private int culture_rating;
-
-    @Column(nullable = false)
-    private int management_rating;
-
     @Column(columnDefinition = "TEXT")
-    private String pros;
+    private String description;
 
-    @Column(columnDefinition = "TEXT")
-    private String cons;
+    @Column
+    private String gender;
+
+    @Column
+    private String age;
 
     @Column(nullable = false)
-    private int like_count;
+    private int views;
+
+    @Column(nullable = false)
+    private LocalDateTime dead_date;
 
     @Column(nullable = false, updatable = false)
     private LocalDateTime created_at;
