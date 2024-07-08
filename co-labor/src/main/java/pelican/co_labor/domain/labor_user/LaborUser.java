@@ -12,7 +12,7 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-@Table(name = "laber_user", uniqueConstraints = @UniqueConstraint(columnNames = "email"))
+@Table(name = "labor_user", uniqueConstraints = @UniqueConstraint(columnNames = "email"))
 public class LaborUser {
 
     @Id
