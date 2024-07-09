@@ -7,6 +7,7 @@ import pelican.co_labor.domain.enterprise.Enterprise;
 import pelican.co_labor.domain.job.Job;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -15,7 +16,6 @@ import java.util.List;
 @Table(name = "enterprise_user", uniqueConstraints = @UniqueConstraint(columnNames = "email"))
 public class EnterpriseUser {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long enterprise_user_id;
 
     @Column(nullable = false)
@@ -38,9 +38,5 @@ public class EnterpriseUser {
     @ManyToOne
     @JoinColumn(name = "enterprise_id")
     private Enterprise enterprise;
-
-    @OneToMany(mappedBy = "enterpriseUser", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Job> jobs;
-
 
 }

@@ -7,6 +7,7 @@ import pelican.co_labor.domain.enterprise_user.EnterpriseUser;
 import pelican.co_labor.domain.review.Review;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -16,7 +17,6 @@ import java.util.List;
 public class Enterprise {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     //사업자 등록 번호
     private Long enterprise_id;
 
@@ -37,10 +37,5 @@ public class Enterprise {
         created_at = LocalDateTime.now();
     }
 
-    @OneToMany(mappedBy = "enterprise", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Review> reviews;
-
-    @OneToMany(mappedBy = "enterprise", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<EnterpriseUser> enterpriseUsers;
 
 }
