@@ -7,12 +7,13 @@ import pelican.co_labor.domain.chatting.Chatting;
 import pelican.co_labor.domain.review.Review;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
 @Setter
 @Entity
-@Table(name = "laber_user", uniqueConstraints = @UniqueConstraint(columnNames = "email"))
+@Table(name = "labor_user", uniqueConstraints = @UniqueConstraint(columnNames = "email"))
 public class LaborUser {
 
     @Id
@@ -35,11 +36,5 @@ public class LaborUser {
     protected void onCreate() {
         created_at = LocalDateTime.now();
     }
-
-    @OneToMany(mappedBy = "laborUser", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Review> reviews;
-
-    @OneToMany(mappedBy = "laborUser", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Chatting> chattings;
 
 }
