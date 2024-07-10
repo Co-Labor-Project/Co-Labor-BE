@@ -23,7 +23,10 @@ public class SupportCenter {
     private String address;
 
     @Column(nullable = false)
-    private String center_type;
+    private String center_type; // 필드 이름을 'type'에서 'center_type'으로 변경
+
+    @Column(nullable = false)
+    private String phone; // 새로운 필드 추가
 
     @Column(nullable = false, updatable = false)
     private LocalDateTime created_at;
