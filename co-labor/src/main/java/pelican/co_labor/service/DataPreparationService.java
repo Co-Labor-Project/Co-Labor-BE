@@ -114,9 +114,9 @@ public class DataPreparationService {
             Word2Vec vec = new Word2Vec.Builder()
                     .minWordFrequency(1)
                     .iterations(5)
-                    .layerSize(100)
+                    .layerSize(200)
                     .seed(42)
-                    .windowSize(5)
+                    .windowSize(10)
                     .iterate(sentenceIterator)
                     .tokenizerFactory(tokenizerFactory)
                     .build();
