@@ -29,6 +29,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.deeplearning4j:deeplearning4j-nlp:1.0.0-beta7'
 	implementation 'org.nd4j:nd4j-native-platform:1.0.0-beta7'
+	implementation 'org.json:json:20210307'
 
 	compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'

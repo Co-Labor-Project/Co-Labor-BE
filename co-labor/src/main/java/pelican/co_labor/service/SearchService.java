@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class SearchService {
@@ -39,27 +40,24 @@ public class SearchService {
     }
 
     public List<Job> searchJobs(List<String> keywords) {
-        Set<Job> jobs = new HashSet<>();
-        for (String keyword : keywords) {
-            jobs.addAll(jobRepository.searchJobs(keyword));
-        }
-        return new ArrayList<>(jobs);
+        return keywords.stream()
+                .flatMap(keyword -> jobRepository.searchJobs(keyword).stream())
+                .distinct()  // 중복 제거
+                .collect(Collectors.toList());
     }
 
     public List<Review> searchReviews(List<String> keywords) {
-        Set<Review> reviews = new HashSet<>();
-        for (String keyword : keywords) {
-            reviews.addAll(reviewRepository.searchReviews(keyword));
-        }
-        return new ArrayList<>(reviews);
+        return keywords.stream()
+                .flatMap(keyword -> reviewRepository.searchReviews(keyword).stream())
+                .distinct()  // 중복 제거
+                .collect(Collectors.toList());
     }
 
     public List<Enterprise> searchEnterprises(List<String> keywords) {
-        Set<Enterprise> enterprises = new HashSet<>();
-        for (String keyword : keywords) {
-            enterprises.addAll(enterpriseRepository.searchEnterprises(keyword));
-        }
-        return new ArrayList<>(enterprises);
+        return keywords.stream()
+                .flatMap(keyword -> enterpriseRepository.searchEnterprises(keyword).stream())
+                .distinct()  // 중복 제거
+                .collect(Collectors.toList());
     }
 
 
