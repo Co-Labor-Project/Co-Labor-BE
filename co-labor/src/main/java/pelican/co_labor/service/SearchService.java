@@ -9,10 +9,7 @@ import pelican.co_labor.repository.enterprise.EnterpriseRepository;
 import pelican.co_labor.repository.job.JobRepository;
 import pelican.co_labor.repository.review.ReviewRepository;
 
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -59,7 +56,6 @@ public class SearchService {
                 .distinct()  // 중복 제거
                 .collect(Collectors.toList());
     }
-
 
 
 }

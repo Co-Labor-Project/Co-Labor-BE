@@ -3,12 +3,8 @@ package pelican.co_labor.domain.labor_user;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import pelican.co_labor.domain.chatting.Chatting;
-import pelican.co_labor.domain.review.Review;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Getter
 @Setter

@@ -5,7 +5,8 @@ build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 word2vecModel.txt
-
+src/main/resources/application.properties
+co-labor/src/main/resources/application.properties
 
 ### STS ###
 .apt_generated
