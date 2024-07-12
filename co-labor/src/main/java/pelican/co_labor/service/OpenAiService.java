@@ -33,7 +33,7 @@ public class OpenAiService {
             boolean isKorean = Pattern.matches(".*[ㄱ-ㅎㅏ-ㅣ가-힣]+.*", sentence);
             String systemPrompt = isKorean ?
                     "당신은 데이터 추출 도우미입니다. 주어진 문장에서 주요 키워드를 추출하세요. 간결하고 관련성 있는 키워드를 제공하세요. 또한 키워드만 제공하고 추가적인 키워드도 제공해주세요. DB 검색 용도이니 키워드로 제공해야 하고 sentence에 존재하지 않는 연관된 키워드도 유추해서 추가로 제공해주세요." :
-                    "You are a data extraction assistant. Extract key phrases and concepts from the provided sentences. Just provide only keywords. Provide additional keywords.";
+                    "You are a data extraction assistant. Extract key phrases and concepts from the provided sentences. Just provide only keywords. Provide additional keywords including input sentence's primary keywords.";
             String userPrompt = isKorean ?
                     "이 문장에서 키워드를 추출하세요: " + sentence :
                     "Extract keywords from this sentence: " + sentence;
@@ -66,7 +66,10 @@ public class OpenAiService {
 
                 String[] extractedKeywords = text.split(", ");
                 for (String keyword : extractedKeywords) {
-                    keywords.add(keyword.trim());
+                    keyword = keyword.replaceAll("[^\\p{IsAlphabetic}\\p{IsHangul}]", "").trim(); // Keep only alphabetic characters and Hangul
+                    if (!keyword.isEmpty()) {
+                        keywords.add(keyword);
+                    }
                 }
             }
 
