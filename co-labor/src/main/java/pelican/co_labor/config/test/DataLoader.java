@@ -38,14 +38,14 @@ public class DataLoader {
     public void loadData() {
         // Enterprise 더미 데이터 생성
         Enterprise enterprise1 = new Enterprise();
-        enterprise1.setEnterprise_id(1L);
+        enterprise1.setEnterprise_id("1234");
         enterprise1.setName("Tech Company");
         enterprise1.setAddress("123 Tech Street");
         enterprise1.setDescription("Leading tech company in the industry.");
         enterpriseRepository.save(enterprise1);
 
         Enterprise enterprise2 = new Enterprise();
-        enterprise2.setEnterprise_id(2L);
+        enterprise2.setEnterprise_id("5678");
         enterprise2.setName("Data Corp");
         enterprise2.setAddress("456 Data Avenue");
         enterprise2.setDescription("Innovative data solutions provider.");

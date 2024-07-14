@@ -14,7 +14,7 @@ public class Enterprise {
 
     @Id
     //사업자 등록 번호
-    private Long enterprise_id;
+    private String enterprise_id;
 
     @Column(nullable = false)
     private String name;
