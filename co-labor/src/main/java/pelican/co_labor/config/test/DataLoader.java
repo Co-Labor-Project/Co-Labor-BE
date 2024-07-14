@@ -85,7 +85,6 @@ public class DataLoader {
 
         // Job 더미 데이터 생성
         Job job1 = new Job();
-        job1.setJob_id(1L);
         job1.setTitle("Tech Engineer");
         job1.setDescription("Develop and maintain software solutions.");
         job1.setGender("Any");
@@ -99,7 +98,6 @@ public class DataLoader {
         jobRepository.save(job1);
 
         Job job2 = new Job();
-        job2.setJob_id(2L);
         job2.setTitle("Data Scientist");
         job2.setDescription("Analyze and interpret complex data sets.");
         job2.setGender("Any");
@@ -114,7 +112,6 @@ public class DataLoader {
 
         // Review 더미 데이터 생성
         Review review1 = new Review();
-        review1.setReview_id(1L);
         review1.setTitle("Tech Place to Work");
         review1.setRating(5);
         review1.setPromotion_rating(4);
@@ -132,7 +129,6 @@ public class DataLoader {
         reviewRepository.save(review1);
 
         Review review2 = new Review();
-        review2.setReview_id(2L);
         review2.setTitle("Challenging Environment");
         review2.setRating(4);
         review2.setPromotion_rating(3);
