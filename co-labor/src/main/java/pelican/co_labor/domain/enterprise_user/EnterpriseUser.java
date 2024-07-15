@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @Table(name = "enterprise_user", uniqueConstraints = @UniqueConstraint(columnNames = "email"))
 public class EnterpriseUser {
     @Id
-    private Long enterprise_user_id;
+    private String enterprise_user_id;
 
     @Column(nullable = false)
     private String password;

@@ -20,7 +20,16 @@ public class Enterprise {
     private String name;
 
     @Column(nullable = false)
-    private String address;
+    private String address1;
+
+    @Column(nullable = false)
+    private String address2;
+
+    @Column(nullable = false)
+    private String type;
+
+    @Column(nullable = false)
+    private String phone_number;
 
     @Column(columnDefinition = "TEXT")
     private String description;

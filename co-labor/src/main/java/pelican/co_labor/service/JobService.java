@@ -34,8 +34,7 @@ public class JobService {
         return jobRepository.findById(jobId).map(job -> {
             job.setTitle(jobDetails.getTitle());
             job.setDescription(jobDetails.getDescription());
-            job.setGender(jobDetails.getGender());
-            job.setAge(jobDetails.getAge());
+            job.setRequirement(jobDetails.getRequirement());
             job.setViews(jobDetails.getViews());
             job.setDead_date(jobDetails.getDead_date());
             job.setModified_at(jobDetails.getModified_at());
