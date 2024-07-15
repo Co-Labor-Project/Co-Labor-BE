@@ -8,6 +8,7 @@ import org.springframework.web.client.RestTemplate;
 import pelican.co_labor.domain.support_center.SupportCenter;
 import pelican.co_labor.repository.support_center.SupportCenterRepository;
 
+import javax.annotation.PostConstruct;
 import java.util.List;
 import java.util.Map;
 
@@ -29,7 +30,14 @@ public class SupportCenterService {
         this.naverGeocodingService = naverGeocodingService;
     }
 
+    @PostConstruct
+    public void init() {
+        fetchDataFromApi();
+    }
+
     public void fetchDataFromApi() {
+        supportCenterRepository.deleteAll(); // 기존 데이터 삭제
+
         // 인코딩된 키로 데이터 가져오기 시도
         try {
             fetchDataUsingKey(apiKeyEncoded);
