@@ -3,21 +3,19 @@ package pelican.co_labor.domain.labor_user;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import pelican.co_labor.domain.chatting.Chatting;
-import pelican.co_labor.domain.review.Review;
+import pelican.co_labor.dto.auth.LaborUserDTO;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Getter
 @Setter
 @Entity
-@Table(name = "laber_user", uniqueConstraints = @UniqueConstraint(columnNames = "email"))
+@Table(name = "labor_user", uniqueConstraints = @UniqueConstraint(columnNames = "email"))
 public class LaborUser {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long labor_user_id;
+    private String labor_user_id;
 
     @Column(nullable = false)
     private String password;
@@ -31,15 +29,17 @@ public class LaborUser {
     @Column(nullable = false, updatable = false)
     private LocalDateTime created_at;
 
+    public static LaborUser toLaborUser(LaborUserDTO laborUserDTO) {
+        LaborUser laborUser = new LaborUser();
+        laborUser.setLabor_user_id(laborUserDTO.getUsername());
+        laborUser.setPassword(laborUserDTO.getPassword());
+        laborUser.setName(laborUserDTO.getName());
+        laborUser.setEmail(laborUserDTO.getEmail());
+        return laborUser;
+    }
+
     @PrePersist
     protected void onCreate() {
         created_at = LocalDateTime.now();
     }
-
-    @OneToMany(mappedBy = "laborUser", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Review> reviews;
-
-    @OneToMany(mappedBy = "laborUser", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Chatting> chattings;
-
 }

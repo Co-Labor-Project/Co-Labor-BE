@@ -3,11 +3,8 @@ package pelican.co_labor.domain.enterprise;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import pelican.co_labor.domain.enterprise_user.EnterpriseUser;
-import pelican.co_labor.domain.review.Review;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Getter
 @Setter
@@ -16,9 +13,8 @@ import java.util.List;
 public class Enterprise {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     //사업자 등록 번호
-    private Long enterprise_id;
+    private String enterprise_id;
 
     @Column(nullable = false)
     private String name;
@@ -37,10 +33,5 @@ public class Enterprise {
         created_at = LocalDateTime.now();
     }
 
-    @OneToMany(mappedBy = "enterprise", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Review> reviews;
-
-    @OneToMany(mappedBy = "enterprise", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<EnterpriseUser> enterpriseUsers;
 
 }

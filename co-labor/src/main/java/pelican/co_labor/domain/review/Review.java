@@ -62,6 +62,7 @@ public class Review {
     @PrePersist
     protected void onCreate() {
         created_at = LocalDateTime.now();
+        modified_at = LocalDateTime.now();
     }
 
     @Column(nullable = false)

@@ -25,6 +25,15 @@ public class SupportCenter {
     @Column(nullable = false)
     private String center_type;
 
+    @Column(nullable = false)
+    private String phone;
+
+    @Column(nullable = false)
+    private double latitude; // 위도 추가
+
+    @Column(nullable = false)
+    private double longitude; // 경도 추가
+
     @Column(nullable = false, updatable = false)
     private LocalDateTime created_at;
 
