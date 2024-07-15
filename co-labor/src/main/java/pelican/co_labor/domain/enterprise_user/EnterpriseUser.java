@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import pelican.co_labor.domain.enterprise.Enterprise;
 import pelican.co_labor.domain.job.Job;
+import pelican.co_labor.dto.auth.EnterpriseUserDTO;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -42,5 +43,10 @@ public class EnterpriseUser {
     @OneToMany(mappedBy = "enterpriseUser", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Job> jobs;
 
-
+    public static EnterpriseUser toEnterPriseUser            (EnterpriseUserDTO enterpriseUserDTO) {
+        EnterpriseUser enterpriseUser = new EnterpriseUser();
+        enterpriseUser.setEnterprise_user_id(enterpriseUserDTO.getUsername());
+        enterpriseUser.setEmail(enterpriseUserDTO.getEmail());
+        return enterpriseUser;
+    }
 }
