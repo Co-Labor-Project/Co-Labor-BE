@@ -13,8 +13,7 @@ import java.time.LocalDateTime;
 public class SupportCenter {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long support_center_id;
+    private Long support_center_id; // "순번"을 primary key로 사용
 
     @Column(nullable = false)
     private String name;
