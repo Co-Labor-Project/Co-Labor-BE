@@ -14,7 +14,6 @@ import java.time.LocalDateTime;
 public class LaborUser {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String labor_user_id;
 
     @Column(nullable = false)

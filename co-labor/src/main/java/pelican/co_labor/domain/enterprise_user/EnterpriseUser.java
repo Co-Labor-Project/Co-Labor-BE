@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "enterprise_user", uniqueConstraints = @UniqueConstraint(columnNames = "email"))
 public class EnterpriseUser {
+
     @Id
     private String enterprise_user_id;
 
