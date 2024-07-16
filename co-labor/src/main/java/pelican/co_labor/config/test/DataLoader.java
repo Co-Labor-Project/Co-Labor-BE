@@ -42,6 +42,7 @@ public class DataLoader {
         enterprise1.setName("Tech Company");
         enterprise1.setAddress1("서울특별시");
         enterprise1.setAddress2("강동구");
+        enterprise1.setAddress3("무슨동");
         enterprise1.setDescription("Leading tech company in the industry.");
         enterprise1.setType("유통");
         enterprise1.setPhone_number("1234-1234");
@@ -52,6 +53,7 @@ public class DataLoader {
         enterprise2.setName("Data Corp");
         enterprise2.setAddress1("대구광역시");
         enterprise2.setAddress2("달서구");
+        enterprise2.setAddress3("진천동");
         enterprise2.setDescription("Innovative data solutions provider.");
         enterprise2.setType("건설");
         enterprise2.setPhone_number("5678-5678");

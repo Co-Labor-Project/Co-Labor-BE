@@ -1,4 +1,4 @@
-package pelican.co_labor.service;
+package pelican.co_labor.service.Search;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
