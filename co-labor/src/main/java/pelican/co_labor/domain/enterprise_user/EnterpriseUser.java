@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import pelican.co_labor.domain.enterprise.Enterprise;
+import pelican.co_labor.dto.auth.EnterpriseUserDTO;
 
 import java.time.LocalDateTime;
 
@@ -12,6 +13,7 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "enterprise_user", uniqueConstraints = @UniqueConstraint(columnNames = "email"))
 public class EnterpriseUser {
+
     @Id
     private String enterprise_user_id;
 
@@ -26,14 +28,21 @@ public class EnterpriseUser {
 
     @Column(nullable = false, updatable = false)
     private LocalDateTime created_at;
+    @ManyToOne
+    @JoinColumn(name = "enterprise_id")
+    private Enterprise enterprise;
+
+    public static EnterpriseUser toEnterpriseUser(EnterpriseUserDTO enterpriseUserDTO) {
+        EnterpriseUser enterpriseUser = new EnterpriseUser();
+        enterpriseUser.setEnterprise_user_id(enterpriseUserDTO.getUsername());
+        enterpriseUser.setPassword(enterpriseUserDTO.getPassword());
+        enterpriseUser.setName(enterpriseUserDTO.getName());
+        enterpriseUser.setEmail(enterpriseUserDTO.getEmail());
+        return enterpriseUser;
+    }
 
     @PrePersist
     protected void onCreate() {
         created_at = LocalDateTime.now();
     }
-
-    @ManyToOne
-    @JoinColumn(name = "enterprise_id")
-    private Enterprise enterprise;
-
 }
