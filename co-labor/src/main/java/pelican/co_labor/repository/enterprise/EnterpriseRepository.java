@@ -11,6 +11,6 @@ import java.util.List;
 @Repository
 public interface EnterpriseRepository extends JpaRepository<Enterprise, Long> {
 
-    @Query("SELECT e FROM Enterprise e WHERE LOWER(e.name) LIKE LOWER(CONCAT('%', :keyword, '%')) OR LOWER(e.address) LIKE LOWER(CONCAT('%', :keyword, '%')) OR LOWER(e.description) LIKE LOWER(CONCAT('%', :keyword, '%'))")
+    @Query("SELECT e FROM Enterprise e WHERE LOWER(e.name) LIKE LOWER(CONCAT('%', :keyword, '%')) OR LOWER(e.address1) LIKE LOWER(CONCAT('%', :keyword, '%')) OR LOWER(e.address2) LIKE LOWER(CONCAT('%', :keyword, '%')) OR LOWER(e.address3) LIKE LOWER(CONCAT('%', :keyword, '%')) OR LOWER(e.type) LIKE LOWER(CONCAT('%', :keyword, '%')) OR LOWER(e.description) LIKE LOWER(CONCAT('%', :keyword, '%'))")
     List<Enterprise> searchEnterprises(@Param("keyword") String keyword);
 }

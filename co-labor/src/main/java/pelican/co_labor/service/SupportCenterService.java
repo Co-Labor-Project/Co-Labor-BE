@@ -60,14 +60,15 @@ public class SupportCenterService {
         ResponseEntity<Map> response = restTemplate.getForEntity(url, Map.class);
 
         if (response.getStatusCode().is2xxSuccessful() && response.getBody() != null) {
-            List<Map<String, String>> records = (List<Map<String, String>>) response.getBody().get("data");
+            List<Map<String, Object>> records = (List<Map<String, Object>>) response.getBody().get("data");
 
-            for (Map<String, String> record : records) {
+            for (Map<String, Object> record : records) {
                 SupportCenter supportCenter = new SupportCenter();
-                supportCenter.setCenter_type(record.get("유형"));
-                supportCenter.setName(record.get("기관명(거점센터 운영기관)"));
-                supportCenter.setAddress(record.get("소재지"));
-                supportCenter.setPhone(record.get("연락처"));
+                supportCenter.setSupport_center_id(Long.valueOf(record.get("순번").toString()));
+                supportCenter.setCenter_type(record.get("유형").toString());
+                supportCenter.setName(record.get("기관명(거점센터 운영기관)").toString());
+                supportCenter.setAddress(record.get("소재지").toString());
+                supportCenter.setPhone(record.get("연락처").toString());
 
                 // 네이버 지오코딩 서비스 사용하여 위도와 경도 설정
                 String coordinates = naverGeocodingService.getCoordinates(supportCenter.getAddress());

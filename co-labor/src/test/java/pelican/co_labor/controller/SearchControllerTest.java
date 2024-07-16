@@ -11,7 +11,7 @@ import pelican.co_labor.domain.review.Review;
 import pelican.co_labor.repository.enterprise.EnterpriseRepository;
 import pelican.co_labor.repository.job.JobRepository;
 import pelican.co_labor.repository.review.ReviewRepository;
-import pelican.co_labor.service.SearchService;
+import pelican.co_labor.service.Search.SearchService;
 
 import java.util.Arrays;
 import java.util.List;

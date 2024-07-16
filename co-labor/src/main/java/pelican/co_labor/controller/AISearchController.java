@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.RestController;
 import pelican.co_labor.domain.enterprise.Enterprise;
 import pelican.co_labor.domain.job.Job;
 import pelican.co_labor.domain.review.Review;
-import pelican.co_labor.service.KeywordSearchService;
-import pelican.co_labor.service.OpenAiService;
-import pelican.co_labor.service.SearchService;
+import pelican.co_labor.service.Search.KeywordSearchService;
+import pelican.co_labor.service.Search.OpenAiService;
+import pelican.co_labor.service.Search.SearchService;
 
 import java.util.HashMap;
 import java.util.List;

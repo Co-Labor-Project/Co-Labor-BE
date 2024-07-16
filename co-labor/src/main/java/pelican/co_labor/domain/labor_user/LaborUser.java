@@ -13,8 +13,7 @@ import java.time.LocalDateTime;
 public class LaborUser {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long labor_user_id;
+    private String labor_user_id;
 
     @Column(nullable = false)
     private String password;

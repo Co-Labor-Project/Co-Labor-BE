@@ -33,8 +33,11 @@ public class EnterpriseService {
     public Optional<Enterprise> updateEnterprise(Long enterpriseId, Enterprise enterpriseDetails) {
         return enterpriseRepository.findById(enterpriseId).map(enterprise -> {
             enterprise.setName(enterpriseDetails.getName());
-            enterprise.setAddress(enterpriseDetails.getAddress());
+            enterprise.setAddress1(enterpriseDetails.getAddress1());
+            enterprise.setAddress2(enterpriseDetails.getAddress2());
             enterprise.setDescription(enterpriseDetails.getDescription());
+            enterprise.setType(enterpriseDetails.getType());
+            enterprise.setPhone_number(enterpriseDetails.getPhone_number());
             return enterpriseRepository.save(enterprise);
         });
     }

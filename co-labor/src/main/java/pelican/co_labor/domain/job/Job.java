@@ -32,11 +32,8 @@ public class Job {
     @Column(columnDefinition = "TEXT")
     private String description;
 
-    @Column
-    private String gender;
-
-    @Column
-    private String age;
+    @Column(columnDefinition = "TEXT")
+    private String requirement;
 
     @Column(nullable = false)
     private int views;
