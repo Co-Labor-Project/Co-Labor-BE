@@ -1,4 +1,4 @@
-package pelican.co_labor.service;
+package pelican.co_labor.service.Search;
 
 import jakarta.annotation.PostConstruct;
 import org.deeplearning4j.models.embeddings.loader.WordVectorSerializer;
@@ -85,13 +85,17 @@ public class DataPreparationService {
                     .map(Enterprise::getAddress2)
                     .collect(Collectors.toList()));
 
+            List<String> enterpriseAddresses3 = getSafeList(enterpriseRepository.findAll().stream()
+                    .map(Enterprise::getAddress3)
+                    .collect(Collectors.toList()));
+
             List<String> enterpriseTypes = getSafeList(enterpriseRepository.findAll().stream()
                     .map(Enterprise::getType)
                     .collect(Collectors.toList()));
 
             // 모든 데이터를 하나의 리스트로 합치기
             logger.info("Combining all extracted data into a single list...");
-            List<String> sentences = Stream.of(jobDescriptions, jobTitles, jobConditions, reviewPros, reviewCons, reviewTitles, enterpriseDescriptions, enterpriseNames, enterpriseAddresses1, enterpriseAddresses2, enterpriseTypes)
+            List<String> sentences = Stream.of(jobDescriptions, jobTitles, jobConditions, reviewPros, reviewCons, reviewTitles, enterpriseDescriptions, enterpriseNames, enterpriseAddresses1, enterpriseAddresses2, enterpriseAddresses3 , enterpriseTypes)
                     .flatMap(List::stream)
                     .collect(Collectors.toList());
 

@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 public class Enterprise {
 
     @Id
+    @Column(unique = true)
     //사업자 등록 번호
     private String enterprise_id;
 
@@ -24,6 +25,9 @@ public class Enterprise {
 
     @Column(nullable = false)
     private String address2;
+
+    @Column(nullable = true)
+    private String address3;
 
     @Column(nullable = false)
     private String type;

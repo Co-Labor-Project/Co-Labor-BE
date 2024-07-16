@@ -1,4 +1,4 @@
-package pelican.co_labor.service;
+package pelican.co_labor.service.Search;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,14 +15,17 @@ import java.util.stream.Collectors;
 @Service
 public class SearchService {
 
-    @Autowired
-    private JobRepository jobRepository;
+    private final JobRepository jobRepository;
 
-    @Autowired
-    private ReviewRepository reviewRepository;
+    private final ReviewRepository reviewRepository;
 
-    @Autowired
-    private EnterpriseRepository enterpriseRepository;
+    private final EnterpriseRepository enterpriseRepository;
+
+    public SearchService(JobRepository jobRepository, ReviewRepository reviewRepository, EnterpriseRepository enterpriseRepository) {
+        this.jobRepository = jobRepository;
+        this.reviewRepository = reviewRepository;
+        this.enterpriseRepository = enterpriseRepository;
+    }
 
     public List<Job> searchJobs(String keyword) {
         return jobRepository.searchJobs(keyword);
