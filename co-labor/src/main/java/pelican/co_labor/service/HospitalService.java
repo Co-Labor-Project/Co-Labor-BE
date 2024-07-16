@@ -2,6 +2,7 @@ package pelican.co_labor.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -23,10 +24,12 @@ public class HospitalService {
     private String serviceKey;
 
     private final HospitalRepository hospitalRepository;
+    private final JdbcTemplate jdbcTemplate;
 
     @Autowired
-    public HospitalService(HospitalRepository hospitalRepository) {
+    public HospitalService(HospitalRepository hospitalRepository, JdbcTemplate jdbcTemplate) {
         this.hospitalRepository = hospitalRepository;
+        this.jdbcTemplate = jdbcTemplate;
     }
 
     public void fetchAndSaveHospitalData() {
@@ -36,6 +39,10 @@ public class HospitalService {
         int totalPages = (totalCount / numOfRows) + 1; // 전체 페이지 수
 
         try {
+            // 데이터 삭제 및 테이블 초기화
+            hospitalRepository.deleteAll();
+            //jdbcTemplate.execute("ALTER TABLE hospital AUTO_INCREMENT = 1");
+
             for (int pageNo = 1; pageNo <= totalPages; pageNo++) {
                 String urlStr = apiUrl + "?serviceKey=" + serviceKey + "&numOfRows=" + numOfRows + "&pageNo=" + pageNo;
                 URL url = new URL(urlStr);
@@ -56,6 +63,7 @@ public class HospitalService {
                         Element eElement = (Element) nNode;
 
                         Hospital hospital = new Hospital();
+                        hospital.setRnum(Long.parseLong(getTagValue("rnum", eElement)));
                         hospital.setDutyAddr(getTagValue("dutyAddr", eElement));
                         hospital.setDutyName(getTagValue("dutyName", eElement));
                         hospital.setDutyTel1(getTagValue("dutyTel1", eElement));

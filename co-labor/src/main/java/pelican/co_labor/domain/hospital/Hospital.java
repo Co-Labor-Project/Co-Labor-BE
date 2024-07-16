@@ -11,8 +11,8 @@ import lombok.Setter;
 public class Hospital {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(nullable = false)
+    private Long rnum;
 
     @Column(nullable = false)
     private String dutyAddr;
