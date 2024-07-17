@@ -53,7 +53,7 @@ public class AuthService {
         if (byLaborUserID.isPresent()) {
             return byLaborUserID.map(user -> {
                 LaborUserDTO laborUserDTO = new LaborUserDTO();
-                laborUserDTO.setUsername(user.getLabor_user_id());
+                laborUserDTO.setUsername(user.getLaborUserId());    // 메서드명 변경
                 laborUserDTO.setEmail(user.getEmail());
                 laborUserDTO.setName(user.getName());
                 return laborUserDTO;
@@ -63,7 +63,7 @@ public class AuthService {
             if (byEnterpriseUserID.isPresent()) {
                 return byEnterpriseUserID.map(user -> {
                     EnterpriseUserDTO enterpriseUserDTO = new EnterpriseUserDTO();
-                    enterpriseUserDTO.setUsername(user.getEnterprise_user_id());
+                    enterpriseUserDTO.setUsername(user.getEnterprise_user_id());    // 메서드명 변경 아직 안 함.
                     enterpriseUserDTO.setEmail(user.getEmail());
                     enterpriseUserDTO.setName(user.getName());
                     enterpriseUserDTO.setEnterprise(user.getEnterprise());
@@ -73,5 +73,9 @@ public class AuthService {
         }
 
         return Optional.empty();
+    }
+
+    public Optional<LaborUser> findLaborUserById(String userId) {
+        return laborUserRepository.findByLaborUserId(userId);
     }
 }

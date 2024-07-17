@@ -14,7 +14,8 @@ import java.time.LocalDateTime;
 public class LaborUser {
 
     @Id
-    private String labor_user_id;
+    @Column(name = "labor_user_id")
+    private String laborUserId;
 
     @Column(nullable = false)
     private String password;
@@ -30,7 +31,7 @@ public class LaborUser {
 
     public static LaborUser toLaborUser(LaborUserDTO laborUserDTO) {
         LaborUser laborUser = new LaborUser();
-        laborUser.setLabor_user_id(laborUserDTO.getUsername());
+        laborUser.setLaborUserId(laborUserDTO.getUsername());
         laborUser.setPassword(laborUserDTO.getPassword());
         laborUser.setName(laborUserDTO.getName());
         laborUser.setEmail(laborUserDTO.getEmail());
