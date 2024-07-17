@@ -1,14 +1,18 @@
 package pelican.co_labor.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pelican.co_labor.domain.enterprise.Enterprise;
+import pelican.co_labor.dto.EnterpriseQueueDTO;
 import pelican.co_labor.service.EnterpriseFetchApiService;
 import pelican.co_labor.service.EnterpriseRegistrationService;
 import pelican.co_labor.service.EnterpriseService;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -70,4 +74,19 @@ public class EnterpriseController {
         return ResponseEntity.status(response.getStatusCode()).body(response.getBody());
     }
 
+    // 기업 등록 대기열에 추가
+    @PostMapping("/queue")
+    public Map<String, Object> createEnterpriseQueue(@RequestBody EnterpriseQueueDTO enterpriseQueueDTO) {
+        try {
+            enterpriseRegistrationService.registerEnterpriseQueue(enterpriseQueueDTO);
+            Map<String, Object> response = new HashMap<>();
+            response.put("message", "Enterprise queue created successfully");
+            response.put("enterpriseQueue", enterpriseQueueDTO);
+            return response;
+        } catch (DataAccessException e) {
+            Map<String, Object> response = new HashMap<>();
+            response.put("message", "An error occurred while creating enterprise queue: " + e.getMessage());
+            return response;
+        }
+    }
 }
