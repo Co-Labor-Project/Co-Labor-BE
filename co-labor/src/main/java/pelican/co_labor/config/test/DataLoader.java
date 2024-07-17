@@ -78,14 +78,14 @@ public class DataLoader {
 
         // LaborUser 더미 데이터 생성
         LaborUser laborUser1 = new LaborUser();
-        laborUser1.setLabor_user_id("Alice Johnson");
+        laborUser1.setLaborUserId("Alice Johnson");
         laborUser1.setName("Alice Johnson");
         laborUser1.setEmail("alice.johnson@example.com");
         laborUser1.setPassword("password123");
         laborUserRepository.save(laborUser1);
 
         LaborUser laborUser2 = new LaborUser();
-        laborUser2.setLabor_user_id("Bob Brown");
+        laborUser2.setLaborUserId("Bob Brown");
         laborUser2.setName("Bob Brown");
         laborUser2.setEmail("bob.brown@example.com");
         laborUser2.setPassword("password123");
