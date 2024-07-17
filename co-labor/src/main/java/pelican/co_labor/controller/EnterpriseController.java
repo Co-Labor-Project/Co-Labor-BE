@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pelican.co_labor.domain.enterprise.Enterprise;
 import pelican.co_labor.service.EnterpriseFetchApiService;
+import pelican.co_labor.service.EnterpriseRegistrationService;
 import pelican.co_labor.service.EnterpriseService;
 
 import java.util.List;
@@ -16,11 +17,13 @@ public class EnterpriseController {
 
     private final EnterpriseService enterpriseService;
     private final EnterpriseFetchApiService enterpriseFetchApiService;
+    private final EnterpriseRegistrationService enterpriseRegistrationService;
 
     @Autowired
-    public EnterpriseController(EnterpriseService enterpriseService, EnterpriseFetchApiService enterpriseFetchApiService) {
+    public EnterpriseController(EnterpriseService enterpriseService, EnterpriseFetchApiService enterpriseFetchApiService, EnterpriseRegistrationService enterpriseRegistrationService) {
         this.enterpriseService = enterpriseService;
         this.enterpriseFetchApiService = enterpriseFetchApiService;
+        this.enterpriseRegistrationService = enterpriseRegistrationService;
     }
 
     @GetMapping
@@ -60,5 +63,11 @@ public class EnterpriseController {
         return updatedEnterprise.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    // 사업자 등록 번호 조회해서 기업 상태 확인
+    @GetMapping("/status")
+    public ResponseEntity<String> getBusinessStatus(@RequestParam("enterpriseId") String enterpriseId) {
+        ResponseEntity<String> response = enterpriseRegistrationService.isValidEnterpriseId(enterpriseId);
+        return ResponseEntity.status(response.getStatusCode()).body(response.getBody());
+    }
 
 }
