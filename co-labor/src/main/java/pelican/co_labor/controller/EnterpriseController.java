@@ -1,7 +1,10 @@
 package pelican.co_labor.controller;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pelican.co_labor.domain.enterprise.Enterprise;
@@ -36,9 +39,21 @@ public class EnterpriseController {
     }
 
     @GetMapping("/{enterprise_id}")
-    public ResponseEntity<Enterprise> getEnterpriseById(@PathVariable Long enterprise_id) {
-        Optional<Enterprise> enterprise = enterpriseService.getEnterpriseById(enterprise_id);
-        return enterprise.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    public ResponseEntity<?> getEnterpriseById(@PathVariable("enterprise_id") String enterprise_id) {
+        try {
+            Optional<Enterprise> enterprise = enterpriseService.getEnterpriseById(enterprise_id);
+            if (enterprise.isPresent()) {
+                return ResponseEntity.ok(enterprise.get());
+            } else {
+                throw new EnterpriseNotFoundException(enterprise_id);
+            }
+        } catch (EnterpriseNotFoundException ex) {
+            ErrorResponse errorResponse = new ErrorResponse(HttpStatus.NOT_FOUND.value(), ex.getMessage());
+            return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+        } catch (Exception ex) {
+            ErrorResponse errorResponse = new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), "An unexpected error occurred");
+            return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @GetMapping("/fetch")
@@ -62,7 +77,7 @@ public class EnterpriseController {
     }
 
     @PutMapping("/{enterprise_id}")
-    public ResponseEntity<Enterprise> updateEnterprise(@PathVariable Long enterprise_id, @RequestBody Enterprise enterpriseDetails) {
+    public ResponseEntity<Enterprise> updateEnterprise(@PathVariable String enterprise_id, @RequestBody Enterprise enterpriseDetails) {
         Optional<Enterprise> updatedEnterprise = enterpriseService.updateEnterprise(enterprise_id, enterpriseDetails);
         return updatedEnterprise.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
@@ -87,6 +102,19 @@ public class EnterpriseController {
             Map<String, Object> response = new HashMap<>();
             response.put("message", "An error occurred while creating enterprise queue: " + e.getMessage());
             return response;
+        }
+    }
+
+    @Getter
+    @AllArgsConstructor
+    static class ErrorResponse {
+        private int status;
+        private String message;
+    }
+
+    static class EnterpriseNotFoundException extends RuntimeException {
+        public EnterpriseNotFoundException(String enterpriseId) {
+            super("Enterprise not found with id: " + enterpriseId);
         }
     }
 }
