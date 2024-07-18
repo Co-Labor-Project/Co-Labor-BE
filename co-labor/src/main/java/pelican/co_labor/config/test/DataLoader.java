@@ -38,7 +38,7 @@ public class DataLoader {
     public void loadData() {
         // Enterprise 더미 데이터 생성
         Enterprise enterprise1 = new Enterprise();
-        enterprise1.setEnterprise_id("1234");
+        enterprise1.setEnterprise_id("1111111111");
         enterprise1.setName("Tech Company");
         enterprise1.setAddress1("서울특별시");
         enterprise1.setAddress2("강동구");
@@ -49,7 +49,7 @@ public class DataLoader {
         enterpriseRepository.save(enterprise1);
 
         Enterprise enterprise2 = new Enterprise();
-        enterprise2.setEnterprise_id("5678");
+        enterprise2.setEnterprise_id("2222222222");
         enterprise2.setName("Data Corp");
         enterprise2.setAddress1("대구광역시");
         enterprise2.setAddress2("달서구");

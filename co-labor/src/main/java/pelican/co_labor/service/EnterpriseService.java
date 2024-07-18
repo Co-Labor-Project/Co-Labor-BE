@@ -22,7 +22,7 @@ public class EnterpriseService {
         return enterpriseRepository.findAll();
     }
 
-    public Optional<Enterprise> getEnterpriseById(Long enterpriseId) {
+    public Optional<Enterprise> getEnterpriseById(String enterpriseId) {
         return enterpriseRepository.findById(enterpriseId);
     }
 
@@ -30,7 +30,7 @@ public class EnterpriseService {
         return enterpriseRepository.save(enterprise);
     }
 
-    public Optional<Enterprise> updateEnterprise(Long enterpriseId, Enterprise enterpriseDetails) {
+    public Optional<Enterprise> updateEnterprise(String enterpriseId, Enterprise enterpriseDetails) {
         return enterpriseRepository.findById(enterpriseId).map(enterprise -> {
             enterprise.setName(enterpriseDetails.getName());
             enterprise.setAddress1(enterpriseDetails.getAddress1());
