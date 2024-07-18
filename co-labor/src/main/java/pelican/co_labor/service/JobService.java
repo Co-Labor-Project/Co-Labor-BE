@@ -26,6 +26,14 @@ public class JobService {
         return jobRepository.findById(jobId);
     }
 
+    public Optional<Job> incrementAndGetJobById(Long jobId) {
+        return jobRepository.findById(jobId).map(job -> {
+            job.setViews(job.getViews() + 1);
+            jobRepository.save(job);
+            return job;
+        });
+    }
+
     public Job createJob(Job job) {
         return jobRepository.save(job);
     }
