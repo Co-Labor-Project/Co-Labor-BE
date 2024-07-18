@@ -99,7 +99,7 @@ public class DataLoader {
         job1.setDead_date(LocalDateTime.now().plusDays(30));
         job1.setEnterprise(enterprise1);
         job1.setEnterpriseUser(enterpriseUser1);
-        job1.setRequirement("");
+        job1.setRequirement("제약조건 1");
         jobRepository.save(job1);
 
         Job job2 = new Job();
@@ -109,7 +109,7 @@ public class DataLoader {
         job2.setDead_date(LocalDateTime.now().plusDays(45));
         job2.setEnterprise(enterprise2);
         job2.setEnterpriseUser(enterpriseUser2);
-        job2.setRequirement("");
+        job2.setRequirement("제약조건 2");
         jobRepository.save(job2);
 
         // Review 더미 데이터 생성
