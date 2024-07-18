@@ -28,18 +28,18 @@ public class AuthService {
     }
 
     public boolean authenticateUser(String username, String password) {
-        Optional<LaborUser> byLaborUserID = laborUserRepository.findByLaborUserId(username);
+        Optional<LaborUser> byLaborUserId = laborUserRepository.findByLaborUserId(username);
 
-        if (byLaborUserID.isPresent()) {
+        if (byLaborUserId.isPresent()) {
             // 조회 결과가 존재하면 비밀번호 비교
-            LaborUser laborUser = byLaborUserID.get();
+            LaborUser laborUser = byLaborUserId.get();
             return laborUser.getPassword().equals(password);
         } else {
             // 조회 결과가 없으면 기업 사용자 테이블에서 조회
-            Optional<EnterpriseUser> byEnterpriseUserID = enterpriseUserRepository.findByEnterpriseUserId(username);
-            if (byEnterpriseUserID.isPresent()) {
+            Optional<EnterpriseUser> byEnterpriseUserId = enterpriseUserRepository.findByEnterpriseUserId(username);
+            if (byEnterpriseUserId.isPresent()) {
                 // 조회 결과가 존재하면 비밀번호 비교
-                EnterpriseUser enterpriseUser = byEnterpriseUserID.get();
+                EnterpriseUser enterpriseUser = byEnterpriseUserId.get();
                 return enterpriseUser.getPassword().equals(password);
             }
         }
@@ -77,5 +77,21 @@ public class AuthService {
 
     public Optional<LaborUser> findLaborUserById(String userId) {
         return laborUserRepository.findByLaborUserId(userId);
+    }
+
+    public String getUserType(String username) {
+        Optional<LaborUser> byLaborUserId = laborUserRepository.findByLaborUserId(username);
+
+        if (byLaborUserId.isPresent()) {
+            return "labor";
+        } else {
+            Optional<EnterpriseUser> byEnterpriseUserId = enterpriseUserRepository.findByEnterpriseUserId(username);
+
+            if (byEnterpriseUserId.isPresent()) {
+                return "enterprise";
+            }
+
+            return null;
+        }
     }
 }
