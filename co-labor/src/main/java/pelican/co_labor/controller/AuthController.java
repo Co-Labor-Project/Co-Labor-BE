@@ -1,5 +1,6 @@
 package pelican.co_labor.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -21,12 +22,29 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<Map<String, Object>> login(@RequestParam("username") String username,
-                                                     @RequestParam("password") String password) {
+                                                     @RequestParam("password") String password,
+                                                     HttpServletRequest httpServletRequest) {
         try {
             boolean authenticated = authService.authenticateUser(username, password);
 
             Map<String, Object> response = new HashMap<>();
             if (authenticated) {
+                // 로그인 성공 -> 세션 생성
+
+                // 세션을 생성하기 전에 기존의 세션 파기
+                httpServletRequest.getSession().invalidate();
+                HttpSession session = httpServletRequest.getSession(true);  // 세션 없으면 생성
+
+                // 세션에 username, 일반 or 기업 회원 넣어줌
+                session.setAttribute("username", username);
+                if (authService.getUserType(username).equals("labor")) {
+                    session.setAttribute("userType", "labor");
+                } else if (authService.getUserType(username).equals("enterprise")) {
+                    session.setAttribute("userType", "enterprise");
+                }
+
+                session.setMaxInactiveInterval(1800); // 세션 만료 시간 30분
+
                 response.put("message", "Login successful");
                 response.put("redirect", "/index");
                 return ResponseEntity.ok(response);
@@ -75,12 +93,39 @@ public class AuthController {
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<Map<String, String>> logout(HttpSession session) {
+    public ResponseEntity<Map<String, String>> logout(HttpServletRequest httpServletRequest) {
+        HttpSession session = httpServletRequest.getSession(false);  // 세션이 없으면 null 리턴
+
         try {
-            session.invalidate();
+            if (session != null) {
+                session.invalidate();
+            }
+
             return ResponseEntity.ok(Map.of("message", "Logout successful"));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("message", "Failed to logout: " + e.getMessage()));
+        }
+    }
+
+    @GetMapping("/current-user")
+    public ResponseEntity<Map<String, Object>> getCurrentUser(HttpServletRequest httpServletRequest) {
+        Map<String, Object> response = new HashMap<>();
+
+        try {
+            HttpSession session = httpServletRequest.getSession(false); // 세션이 없으면 null 리턴
+
+            if (session != null && session.getAttribute("username") != null) {
+                response.put("message", "Current user found");
+                response.put("username", session.getAttribute("username"));
+                response.put("userType", session.getAttribute("userType"));
+                return ResponseEntity.ok(response);
+            } else {
+                response.put("message", "No user logged in");
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+            }
+        } catch (Exception e) {
+            response.put("message", "Failed to retrieve current user: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
     }
 }
