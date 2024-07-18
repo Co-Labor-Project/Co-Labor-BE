@@ -27,7 +27,7 @@ public class JobController {
 
     @GetMapping("/{job_id}")
     public ResponseEntity<Job> getJobById(@PathVariable Long job_id) {
-        Optional<Job> job = jobService.getJobById(job_id);
+        Optional<Job> job = jobService.incrementAndGetJobById(job_id);
         return job.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
