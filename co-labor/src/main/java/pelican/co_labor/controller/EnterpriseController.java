@@ -1,5 +1,7 @@
 package pelican.co_labor.controller;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -84,9 +86,35 @@ public class EnterpriseController {
 
     // 사업자 등록 번호 조회해서 기업 상태 확인
     @GetMapping("/status")
-    public ResponseEntity<String> getBusinessStatus(@RequestParam("enterpriseId") String enterpriseId) {
-        ResponseEntity<String> response = enterpriseRegistrationService.isValidEnterpriseId(enterpriseId);
-        return ResponseEntity.status(response.getStatusCode()).body(response.getBody());
+    public ResponseEntity<Map<String, Object>> getBusinessStatus(@RequestParam("enterpriseId") String enterpriseId) {
+        try {
+            ResponseEntity<String> responseEntity = enterpriseRegistrationService.isValidEnterpriseId(enterpriseId);
+
+            // JSON 문자열을 JsonNode로 매핑
+            ObjectMapper mapper = new ObjectMapper();
+            JsonNode responseData = mapper.readTree(responseEntity.getBody());
+
+            // tax_type 값을 추출
+            String taxType = responseData.get("data").get(0).get("tax_type").asText();
+
+            // Response 생성
+            Map<String, Object> response = new HashMap<>();
+            if ("국세청에 등록되지 않은 사업자등록번호입니다.".equals(taxType)) {
+                response.put("status", 0);
+                response.put("message", "국세청에 등록되지 않은 사업자등록번호입니다.");
+            } else {
+                response.put("status", 1);
+                response.put("message", "사업자등록번호가 확인되었습니다.");
+            }
+
+            return ResponseEntity.status(responseEntity.getStatusCode()).body(response);
+        } catch (Exception e) {
+            // 예외 발생 시 에러 응답
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("status", 0);
+            errorResponse.put("message", "에러 발생: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+        }
     }
 
     // 기업 등록 대기열에 추가
