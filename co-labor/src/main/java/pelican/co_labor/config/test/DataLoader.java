@@ -112,6 +112,37 @@ public class DataLoader {
         job2.setRequirement("제약조건 2");
         jobRepository.save(job2);
 
+        Job job3 = new Job();
+        job3.setTitle("Tech Engineer");
+        job3.setDescription("Develop and maintain software solutions.");
+        job3.setViews(100);
+        job3.setDead_date(LocalDateTime.now().plusDays(30));
+        job3.setEnterprise(enterprise1);
+        job3.setEnterpriseUser(enterpriseUser1);
+        job3.setRequirement("제약조건 3");
+        jobRepository.save(job3);
+
+        Job job4 = new Job();
+        job4.setTitle("Tech Engineer");
+        job4.setDescription("Develop and maintain software solutions.");
+        job4.setViews(100);
+        job4.setDead_date(LocalDateTime.now().plusDays(30));
+        job4.setEnterprise(enterprise1);
+        job4.setEnterpriseUser(enterpriseUser1);
+        job4.setRequirement("제약조건 4");
+        jobRepository.save(job4);
+
+        Job job5 = new Job();
+        job5.setTitle("Tech Engineer");
+        job5.setDescription("Develop and maintain software solutions.");
+        job5.setViews(100);
+        job5.setDead_date(LocalDateTime.now().plusDays(30));
+        job5.setEnterprise(enterprise1);
+        job5.setEnterpriseUser(enterpriseUser1);
+        job5.setRequirement("제약조건 5");
+        jobRepository.save(job5);
+
+
         // Review 더미 데이터 생성
         Review review1 = new Review();
         review1.setTitle("Tech Place to Work");
