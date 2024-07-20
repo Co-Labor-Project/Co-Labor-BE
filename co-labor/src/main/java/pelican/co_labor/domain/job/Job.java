@@ -49,6 +49,9 @@ public class Job {
     @Column(nullable = false)
     private LocalDateTime modified_at;
 
+    @Column(nullable = true)
+    private String imageName;
+
     @PrePersist
     protected void onCreate() {
         LocalDateTime now = LocalDateTime.now();
