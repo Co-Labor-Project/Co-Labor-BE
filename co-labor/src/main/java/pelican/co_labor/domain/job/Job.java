@@ -35,7 +35,22 @@ public class Job {
 
     @Column(columnDefinition = "TEXT")
     private String requirement;
+    // 추가 시작
+    @Column(columnDefinition = "TEXT")
+    private String jobRole;
 
+    @Column(columnDefinition = "TEXT")
+    private String experience;
+
+    @Column(columnDefinition = "TEXT")
+    private String employmentType;
+
+    @Column(columnDefinition = "TEXT")
+    private String location;
+
+    @Column(columnDefinition = "TEXT")
+    private String skills;
+    // 추가 끝
     @Column(nullable = false)
     private int views;
 
@@ -45,8 +60,6 @@ public class Job {
     @Column(nullable = false, updatable = false)
     private LocalDateTime created_at;
 
-    // 현재 Job 엔티티에는 modified_at 필드가 null일 수 있는 문제를 해결하기 위해
-    // @PrePersist 메서드에서 modified_at을 설정하도록 수정
     @Column(nullable = false)
     private LocalDateTime modified_at;
 

@@ -65,6 +65,11 @@ public class JobService {
             job.setTitle(jobDetails.getTitle());
             job.setDescription(jobDetails.getDescription());
             job.setRequirement(jobDetails.getRequirement());
+            job.setJobRole(jobDetails.getJobRole());
+            job.setExperience(jobDetails.getExperience());
+            job.setEmploymentType(jobDetails.getEmploymentType());
+            job.setLocation(jobDetails.getLocation());
+            job.setSkills(jobDetails.getSkills());
             job.setViews(jobDetails.getViews());
             job.setDeadDate(jobDetails.getDeadDate());
             job.setModified_at(jobDetails.getModified_at());
@@ -100,7 +105,6 @@ public class JobService {
         Files.write(imagePath, image.getBytes());
         return imageName; // 전체 경로 대신 파일 이름만 반환
     }
-
 
     public Job mapJobFromJson(String jobJson) throws IOException {
         return objectMapper.readValue(jobJson, Job.class);

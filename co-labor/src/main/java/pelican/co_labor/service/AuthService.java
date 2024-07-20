@@ -27,6 +27,10 @@ public class AuthService {
         enterpriseUserRepository.save(enterpriseUser);
     }
 
+    public void saveEnterpriseUser(EnterpriseUser enterpriseUser) {
+        enterpriseUserRepository.save(enterpriseUser);
+    }
+
     public boolean authenticateUser(String username, String password) {
         Optional<LaborUser> byLaborUserId = laborUserRepository.findByLaborUserId(username);
 
