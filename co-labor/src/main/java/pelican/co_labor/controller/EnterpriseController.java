@@ -2,6 +2,8 @@ package pelican.co_labor.controller;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +12,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pelican.co_labor.domain.enterprise.Enterprise;
+import pelican.co_labor.domain.enterprise_user.EnterpriseUser;
 import pelican.co_labor.dto.EnterpriseQueueDTO;
+import pelican.co_labor.service.AuthService;
 import pelican.co_labor.service.EnterpriseFetchApiService;
 import pelican.co_labor.service.EnterpriseRegistrationService;
 import pelican.co_labor.service.EnterpriseService;
@@ -24,12 +28,14 @@ import java.util.Optional;
 @RequestMapping("/api/enterprises")
 public class EnterpriseController {
 
+    private final AuthService authService;
     private final EnterpriseService enterpriseService;
     private final EnterpriseFetchApiService enterpriseFetchApiService;
     private final EnterpriseRegistrationService enterpriseRegistrationService;
 
     @Autowired
-    public EnterpriseController(EnterpriseService enterpriseService, EnterpriseFetchApiService enterpriseFetchApiService, EnterpriseRegistrationService enterpriseRegistrationService) {
+    public EnterpriseController(AuthService authService, EnterpriseService enterpriseService, EnterpriseFetchApiService enterpriseFetchApiService, EnterpriseRegistrationService enterpriseRegistrationService) {
+        this.authService = authService;
         this.enterpriseService = enterpriseService;
         this.enterpriseFetchApiService = enterpriseFetchApiService;
         this.enterpriseRegistrationService = enterpriseRegistrationService;
@@ -76,6 +82,43 @@ public class EnterpriseController {
     @PostMapping
     public Enterprise createEnterprise(@RequestBody Enterprise enterprise) {
         return enterpriseService.createEnterprise(enterprise);
+    }
+
+    // 사업자 등록 번호 조회해서 기업 회원에 매핑
+    @PostMapping("/map")
+    public ResponseEntity<Map<String, Object>> mapEnterprise(@RequestParam("enterpriseId") String enterpriseId, HttpServletRequest httpServletRequest) {
+        HttpSession session = httpServletRequest.getSession(false);  // 세션이 없으면 null 리턴
+
+        Map<String, Object> response = new HashMap<>();
+
+        if (session == null || session.getAttribute("username") == null) {
+            response.put("status", 0);
+            response.put("message", "사용자 세션이 존재하지 않습니다.");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+        }
+
+        String username = session.getAttribute("username").toString();
+
+        Optional<EnterpriseUser> enterpriseUserOpt = authService.findEnterpriseUserById(username);
+        if (enterpriseUserOpt.isEmpty()) {
+            response.put("status", 0);
+            response.put("message", "기업 회원이 아닙니다.");
+            return ResponseEntity.badRequest().body(response);
+        }
+
+        Enterprise enterprise = enterpriseService.getEnterpriseById(enterpriseId).orElse(null);
+        if (enterprise == null) {
+            response.put("status", 0);
+            response.put("message", "유효하지 않은 기업 ID입니다.");
+            return ResponseEntity.badRequest().body(response);
+        }
+
+        EnterpriseUser enterpriseUser = enterpriseUserOpt.get();
+        enterpriseUser.setEnterprise(enterprise);
+        response.put("status", 1);
+        response.put("message", "기업 등록이 완료되었습니다.");
+
+        return ResponseEntity.ok(response);
     }
 
     @PutMapping("/{enterprise_id}")
