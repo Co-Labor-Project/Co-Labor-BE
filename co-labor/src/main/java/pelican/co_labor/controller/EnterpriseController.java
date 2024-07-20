@@ -86,18 +86,18 @@ public class EnterpriseController {
 
     // 사업자 등록 번호 조회해서 기업 회원에 매핑
     @PostMapping("/map")
-    public ResponseEntity<Map<String, Object>> mapEnterprise(@RequestParam("enterpriseId") String enterpriseId, HttpServletRequest httpServletRequest) {
-        HttpSession session = httpServletRequest.getSession(false);  // 세션이 없으면 null 리턴
+    public ResponseEntity<Map<String, Object>> mapEnterprise(@RequestParam("enterpriseId") String enterpriseId,@RequestParam("username") String username ,HttpServletRequest httpServletRequest) {
+//        HttpSession session = httpServletRequest.getSession(false);  // 세션이 없으면 null 리턴
 
         Map<String, Object> response = new HashMap<>();
-
-        if (session == null || session.getAttribute("username") == null) {
-            response.put("status", 0);
-            response.put("message", "사용자 세션이 존재하지 않습니다.");
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
-        }
-
-        String username = session.getAttribute("username").toString();
+//
+//        if (session == null || session.getAttribute("username") == null) {
+//            response.put("status", 0);
+//            response.put("message", "사용자 세션이 존재하지 않습니다.");
+//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+//        }
+//
+//        String username = session.getAttribute("username").toString();
 
         Optional<EnterpriseUser> enterpriseUserOpt = authService.findEnterpriseUserById(username);
         if (enterpriseUserOpt.isEmpty()) {
@@ -113,8 +113,9 @@ public class EnterpriseController {
             return ResponseEntity.badRequest().body(response);
         }
 
-        EnterpriseUser enterpriseUser = enterpriseUserOpt.get();
-        enterpriseUser.setEnterprise(enterprise);
+        enterpriseUserOpt.get().setEnterprise(enterprise);
+//        System.out.println("enterpriseUser = " + enterpriseUser.getName());
+//        System.out.println("enterpriseUser = " + enterpriseUser.getEnterprise().getEnterprise_id());
         response.put("status", 1);
         response.put("message", "기업 등록이 완료되었습니다.");
 

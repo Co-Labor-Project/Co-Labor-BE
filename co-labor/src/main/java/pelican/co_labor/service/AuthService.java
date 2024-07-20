@@ -36,7 +36,7 @@ public class AuthService {
             return laborUser.getPassword().equals(password);
         } else {
             // 조회 결과가 없으면 기업 사용자 테이블에서 조회
-            Optional<EnterpriseUser> byEnterpriseUserId = enterpriseUserRepository.findByEnterpriseUserId(username);
+            Optional<EnterpriseUser> byEnterpriseUserId = Optional.ofNullable(enterpriseUserRepository.findByEnterpriseUserId(username));
             if (byEnterpriseUserId.isPresent()) {
                 // 조회 결과가 존재하면 비밀번호 비교
                 EnterpriseUser enterpriseUser = byEnterpriseUserId.get();
@@ -59,7 +59,7 @@ public class AuthService {
                 return laborUserDTO;
             });
         } else {
-            Optional<EnterpriseUser> byEnterpriseUserID = enterpriseUserRepository.findByEnterpriseUserId(username);
+            Optional<EnterpriseUser> byEnterpriseUserID = Optional.ofNullable(enterpriseUserRepository.findByEnterpriseUserId(username));
             if (byEnterpriseUserID.isPresent()) {
                 return byEnterpriseUserID.map(user -> {
                     EnterpriseUserDTO enterpriseUserDTO = new EnterpriseUserDTO();
@@ -81,7 +81,7 @@ public class AuthService {
 
 
     public Optional<EnterpriseUser> findEnterpriseUserById(String username) {
-        return enterpriseUserRepository.findByEnterpriseUserId(username);
+        return Optional.ofNullable(enterpriseUserRepository.findByEnterpriseUserId(username));
 
     }
 
@@ -91,7 +91,7 @@ public class AuthService {
         if (byLaborUserId.isPresent()) {
             return "labor";
         } else {
-            Optional<EnterpriseUser> byEnterpriseUserId = enterpriseUserRepository.findByEnterpriseUserId(username);
+            Optional<EnterpriseUser> byEnterpriseUserId = Optional.ofNullable(enterpriseUserRepository.findByEnterpriseUserId(username));
 
             if (byEnterpriseUserId.isPresent()) {
                 return "enterprise";

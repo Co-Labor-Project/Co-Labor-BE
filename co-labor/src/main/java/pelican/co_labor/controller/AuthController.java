@@ -1,17 +1,21 @@
 package pelican.co_labor.controller;
 
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import pelican.co_labor.domain.enterprise_user.EnterpriseUser;
 import pelican.co_labor.dto.auth.EnterpriseUserDTO;
 import pelican.co_labor.dto.auth.LaborUserDTO;
+import pelican.co_labor.repository.enterprise_user.EnterpriseUserRepository;
 import pelican.co_labor.service.AuthService;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -20,11 +24,14 @@ public class AuthController {
     // 생성자 주입
     private final AuthService authService;
 
+    private final EnterpriseUserRepository enterpriseUserRepository;
+
     @PostMapping("/login")
     public ResponseEntity<Map<String, Object>> login(@RequestParam("username") String username,
                                                      @RequestParam("password") String password,
                                                      HttpServletRequest httpServletRequest) {
         try {
+            Cookie[] cookies = httpServletRequest.getCookies();
             boolean authenticated = authService.authenticateUser(username, password);
 
             Map<String, Object> response = new HashMap<>();
@@ -128,5 +135,14 @@ public class AuthController {
             response.put("message", "Failed to retrieve current user: " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
+    }
+
+    @GetMapping("/hasEnterprise")
+    public ResponseEntity<Boolean> hasEnterprise(@RequestParam("username") String userName) {
+        EnterpriseUser user = enterpriseUserRepository.findByEnterpriseUserId(userName);
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(false);
+        }
+        return ResponseEntity.ok(user.getEnterprise() != null);
     }
 }
