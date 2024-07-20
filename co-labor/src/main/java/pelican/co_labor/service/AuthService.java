@@ -79,6 +79,10 @@ public class AuthService {
         return laborUserRepository.findByLaborUserId(userId);
     }
 
+    public Optional<EnterpriseUser> findEnterpriseUserById(String userId) {
+        return enterpriseUserRepository.findByEnterpriseUserId(userId);
+    }
+
     public String getUserType(String username) {
         Optional<LaborUser> byLaborUserId = laborUserRepository.findByLaborUserId(username);
 
