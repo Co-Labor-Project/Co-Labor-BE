@@ -91,56 +91,117 @@ public class DataLoader {
         laborUser2.setPassword("password123");
         laborUserRepository.save(laborUser2);
 
-//        // Job 더미 데이터 생성
-//        Job job1 = new Job();
-//        job1.setTitle("Tech Engineer");
-//        job1.setDescription("Develop and maintain software solutions.");
-//        job1.setViews(100);
-//        job1.setDead_date(LocalDate.now().plusDays(30));
-//        job1.setEnterprise(enterprise1);
-//        job1.setEnterpriseUser(enterpriseUser1);
-//        job1.setRequirement("제약조건 1");
-//        jobRepository.save(job1);
-//
-//        Job job2 = new Job();
-//        job2.setTitle("Data Scientist");
-//        job2.setDescription("Analyze and interpret complex data sets.");
-//        job2.setViews(150);
-//        job2.setDead_date(LocalDate.now().plusDays(45));
-//        job2.setEnterprise(enterprise2);
-//        job2.setEnterpriseUser(enterpriseUser2);
-//        job2.setRequirement("제약조건 2");
-//        jobRepository.save(job2);
-//
-//        Job job3 = new Job();
-//        job3.setTitle("Tech Engineer");
-//        job3.setDescription("Develop and maintain software solutions.");
-//        job3.setViews(100);
-//        job3.setDead_date(LocalDate.now().plusDays(30));
-//        job3.setEnterprise(enterprise1);
-//        job3.setEnterpriseUser(enterpriseUser1);
-//        job3.setRequirement("제약조건 3");
-//        jobRepository.save(job3);
-//
-//        Job job4 = new Job();
-//        job4.setTitle("Tech Engineer");
-//        job4.setDescription("Develop and maintain software solutions.");
-//        job4.setViews(100);
-//        job4.setDead_date(LocalDate.now().plusDays(30));
-//        job4.setEnterprise(enterprise1);
-//        job4.setEnterpriseUser(enterpriseUser1);
-//        job4.setRequirement("제약조건 4");
-//        jobRepository.save(job4);
-//
-//        Job job5 = new Job();
-//        job5.setTitle("Tech Engineer");
-//        job5.setDescription("Develop and maintain software solutions.");
-//        job5.setViews(100);
-//        job5.setDead_date(LocalDate.now().plusDays(30));
-//        job5.setEnterprise(enterprise1);
-//        job5.setEnterpriseUser(enterpriseUser1);
-//        job5.setRequirement("제약조건 5");
-//        jobRepository.save(job5);
+
+        // Job 더미 데이터 생성
+        Job job1 = new Job();
+        job1.setTitle("Tech Engineer");
+        job1.setViews(100);
+        job1.setDead_date(LocalDate.now().plusDays(30));
+        job1.setEnterprise(enterprise1);
+        job1.setEnterpriseUser(enterpriseUser1);
+        job1.setImageName("tech_engineer1.jpg");
+        job1.setCareer("Junior");
+        job1.setEmploymentType("Full-time");
+        job1.setWorkLocation("Seoul, Korea");
+        job1.setSkills("Java, Spring, SQL");
+        job1.setMainTasks("Develop and maintain software solutions.");
+        job1.setQualifications("Bachelor's degree in Computer Science or related field.");
+        job1.setPreferences("Experience with cloud services.");
+        job1.setHiringProcess("Online assessment, Technical interview, HR interview");
+        job1.setBenefits("Health insurance, Stock options, Free lunch");
+        jobRepository.save(job1);
+
+        Job job2 = new Job();
+        job2.setTitle("Data Scientist");
+        job2.setViews(150);
+        job2.setDead_date(LocalDate.now().plusDays(45));
+        job2.setEnterprise(enterprise2);
+        job2.setEnterpriseUser(enterpriseUser2);
+        job2.setImageName("data_scientist1.jpg");
+        job2.setCareer("Mid-level");
+        job2.setEmploymentType("Part-time");
+        job2.setWorkLocation("Busan, Korea");
+        job2.setSkills("Python, R, SQL, Machine Learning");
+        job2.setMainTasks("Analyze and interpret complex data sets.");
+        job2.setQualifications("Master's degree in Data Science or related field.");
+        job2.setPreferences("Experience with big data tools.");
+        job2.setHiringProcess("Technical interview, HR interview, Final interview");
+        job2.setBenefits("Health insurance, Flexible working hours");
+        jobRepository.save(job2);
+
+        Job job3 = new Job();
+        job3.setTitle("Backend Developer");
+        job3.setViews(80);
+        job3.setDead_date(LocalDate.now().plusDays(20));
+        job3.setEnterprise(enterprise1);
+        job3.setEnterpriseUser(enterpriseUser1);
+        job3.setImageName("backend_dev.jpg");
+        job3.setCareer("Senior");
+        job3.setEmploymentType("Full-time");
+        job3.setWorkLocation("Incheon, Korea");
+        job3.setSkills("Java, Spring Boot, PostgreSQL");
+        job3.setMainTasks("Develop and maintain backend systems.");
+        job3.setQualifications("5+ years of experience in backend development.");
+        job3.setPreferences("Experience with microservices architecture.");
+        job3.setHiringProcess("Coding test, Technical interview, HR interview");
+        job3.setBenefits("Health insurance, Retirement plan, Free snacks");
+        jobRepository.save(job3);
+
+        Job job4 = new Job();
+        job4.setTitle("Frontend Developer");
+        job4.setViews(120);
+        job4.setDead_date(LocalDate.now().plusDays(25));
+        job4.setEnterprise(enterprise2);
+        job4.setEnterpriseUser(enterpriseUser2);
+        job4.setImageName("frontend_dev.jpg");
+        job4.setCareer("Mid-level");
+        job4.setEmploymentType("Contract");
+        job4.setWorkLocation("Daejeon, Korea");
+        job4.setSkills("React, JavaScript, HTML, CSS");
+        job4.setMainTasks("Develop and maintain frontend systems.");
+        job4.setQualifications("3+ years of experience in frontend development.");
+        job4.setPreferences("Experience with responsive design.");
+        job4.setHiringProcess("Portfolio review, Technical interview, HR interview");
+        job4.setBenefits("Health insurance, Paid time off");
+        jobRepository.save(job4);
+
+        Job job5 = new Job();
+        job5.setTitle("UX/UI Designer");
+        job5.setViews(90);
+        job5.setDead_date(LocalDate.now().plusDays(35));
+        job5.setEnterprise(enterprise1);
+        job5.setEnterpriseUser(enterpriseUser1);
+        job5.setImageName("ux_ui_designer.jpg");
+        job5.setCareer("Junior");
+        job5.setEmploymentType("Internship");
+        job5.setWorkLocation("Seoul, Korea");
+        job5.setSkills("Adobe XD, Figma, Sketch");
+        job5.setMainTasks("Design user-friendly interfaces.");
+        job5.setQualifications("Bachelor's degree in Design or related field.");
+        job5.setPreferences("Experience with prototyping tools.");
+        job5.setHiringProcess("Design challenge, Technical interview, HR interview");
+        job5.setBenefits("Health insurance, Free meals");
+        jobRepository.save(job5);
+
+        // 한국어 채용공고 더미 데이터 생성
+        Job job6 = new Job();
+        job6.setTitle("소프트웨어 엔지니어");
+        job6.setViews(70);
+        job6.setDead_date(LocalDate.now().plusDays(40));
+        job6.setEnterprise(enterprise2);
+        job6.setEnterpriseUser(enterpriseUser2);
+        job6.setImageName("software_engineer.jpg");
+        job6.setCareer("신입");
+        job6.setEmploymentType("정규직");
+        job6.setWorkLocation("서울, 한국");
+        job6.setSkills("Java, Spring, MySQL");
+        job6.setMainTasks("소프트웨어 애플리케이션 개발 및 유지보수.");
+        job6.setQualifications("컴퓨터 공학 학사 학위 소지자.");
+        job6.setPreferences("클라우드 서비스 경험 우대.");
+        job6.setHiringProcess("온라인 평가, 기술 면접, 인사 면접");
+        job6.setBenefits("건강 보험, 주식 옵션, 무료 점심 제공");
+        jobRepository.save(job6);
+
 
 
         // Review 더미 데이터 생성
