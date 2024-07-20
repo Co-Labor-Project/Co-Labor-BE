@@ -230,6 +230,11 @@ public class DataLoader {
         job1.setDeadDate(LocalDate.now().plusDays(30));
         job1.setEnterprise(enterprise1);
         job1.setEnterpriseUser(enterpriseUser1);
+        job1.setJobRole("Frontend Development");
+        job1.setExperience("2 ~ 5년");
+        job1.setEmploymentType("정규직");
+        job1.setLocation("서울");
+        job1.setSkills("HTML, CSS, JavaScript, React, Vue.js, 디자인 툴");
         jobRepository.save(job1);
 
         Job job2 = new Job();
@@ -262,6 +267,11 @@ public class DataLoader {
         job2.setDeadDate(LocalDate.now().plusDays(45));
         job2.setEnterprise(enterprise2);
         job2.setEnterpriseUser(enterpriseUser2);
+        job2.setJobRole("Data Science");
+        job2.setExperience("3 ~ 7년");
+        job2.setEmploymentType("정규직");
+        job2.setLocation("서울");
+        job2.setSkills("Python, R, 통계, 머신러닝, 빅데이터, 클라우드");
         jobRepository.save(job2);
 
         Job job3 = new Job();
@@ -294,6 +304,11 @@ public class DataLoader {
         job3.setDeadDate(LocalDate.now().plusDays(40));
         job3.setEnterprise(enterprise3);
         job3.setEnterpriseUser(enterpriseUser3);
+        job3.setJobRole("Mobile App Development");
+        job3.setExperience("2 ~ 6년");
+        job3.setEmploymentType("정규직");
+        job3.setLocation("서울");
+        job3.setSkills("Kotlin, Swift, iOS, Android, React Native");
         jobRepository.save(job3);
 
         Job job4 = new Job();
@@ -326,7 +341,13 @@ public class DataLoader {
         job4.setDeadDate(LocalDate.now().plusDays(50));
         job4.setEnterprise(enterprise4);
         job4.setEnterpriseUser(enterpriseUser4);
+        job4.setJobRole("Backend Development");
+        job4.setExperience("3 ~ 8년");
+        job4.setEmploymentType("정규직");
+        job4.setLocation("서울");
+        job4.setSkills("Java, Python, Node.js, SQL, NoSQL, AWS, GCP, CI/CD");
         jobRepository.save(job4);
+
 
         Job job5 = new Job();
         job5.setTitle("HR 매니저");
@@ -407,6 +428,11 @@ public class DataLoader {
         job5.setDeadDate(LocalDate.now().plusDays(60));
         job5.setEnterprise(enterprise5);
         job5.setEnterpriseUser(enterpriseUser5);
+        job5.setJobRole("DevOps Engineering");
+        job5.setExperience("4 ~ 9년");
+        job5.setEmploymentType("정규직");
+        job5.setLocation("서울");
+        job5.setSkills("Jenkins, Docker, Kubernetes, 서버 관리, 네트워크 관리, 클라우드 운영");
         jobRepository.save(job5);
 
 
