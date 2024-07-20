@@ -115,6 +115,7 @@ public class EnterpriseController {
 
         EnterpriseUser enterpriseUser = enterpriseUserOpt.get();
         enterpriseUser.setEnterprise(enterprise);
+        authService.saveEnterpriseUser(enterpriseUser);
         response.put("status", 1);
         response.put("message", "기업 등록이 완료되었습니다.");
 
