@@ -41,19 +41,50 @@ public class DataPreparationService {
         try {
             logger.info("Starting data extraction and model training...");
 
-            // 데이터 추출
-            logger.info("Extracting data from Job repository...");
-            List<String> jobDescriptions = getSafeList(jobRepository.findAll().stream()
-                    .map(Job::getDescription)
+            // 각각의 새로운 필드에 접근하여 데이터를 추출합니다.
+            List<String> jobCareers = getSafeList(jobRepository.findAll().stream()
+                    .map(Job::getCareer)
+                    .collect(Collectors.toList()));
+
+            List<String> jobEmploymentTypes = getSafeList(jobRepository.findAll().stream()
+                    .map(Job::getEmploymentType)
+                    .collect(Collectors.toList()));
+
+            List<String> jobWorkLocations = getSafeList(jobRepository.findAll().stream()
+                    .map(Job::getWorkLocation)
+                    .collect(Collectors.toList()));
+
+            List<String> jobSkills = getSafeList(jobRepository.findAll().stream()
+                    .map(Job::getSkills)
+                    .collect(Collectors.toList()));
+
+            List<String> jobMainTasks = getSafeList(jobRepository.findAll().stream()
+                    .map(Job::getMainTasks)
+                    .collect(Collectors.toList()));
+
+            List<String> jobQualifications = getSafeList(jobRepository.findAll().stream()
+                    .map(Job::getQualifications)
+                    .collect(Collectors.toList()));
+
+            List<String> jobPreferences = getSafeList(jobRepository.findAll().stream()
+                    .map(Job::getPreferences)
+                    .collect(Collectors.toList()));
+
+            List<String> jobHiringProcesses = getSafeList(jobRepository.findAll().stream()
+                    .map(Job::getHiringProcess)
+                    .collect(Collectors.toList()));
+
+            List<String> jobBenefits = getSafeList(jobRepository.findAll().stream()
+                    .map(Job::getBenefits)
                     .collect(Collectors.toList()));
 
             List<String> jobTitles = getSafeList(jobRepository.findAll().stream()
                     .map(Job::getTitle)
                     .collect(Collectors.toList()));
 
-            List<String> jobConditions = getSafeList(jobRepository.findAll().stream()
-                    .map(Job::getRequirement)
-                    .collect(Collectors.toList()));
+//            List<String> jobConditions = getSafeList(jobRepository.findAll().stream()
+//                    .map(Job::getRequirement)
+//                    .collect(Collectors.toList()));
 
             logger.info("Extracting data from Review repository...");
             List<String> reviewPros = getSafeList(reviewRepository.findAll().stream()
@@ -95,7 +126,11 @@ public class DataPreparationService {
 
             // 모든 데이터를 하나의 리스트로 합치기
             logger.info("Combining all extracted data into a single list...");
-            List<String> sentences = Stream.of(jobDescriptions, jobTitles, jobConditions, reviewPros, reviewCons, reviewTitles, enterpriseDescriptions, enterpriseNames, enterpriseAddresses1, enterpriseAddresses2, enterpriseAddresses3 , enterpriseTypes)
+            List<String> sentences = Stream.of(
+                            jobTitles, reviewPros, reviewCons, reviewTitles, enterpriseDescriptions, enterpriseNames,
+                            enterpriseAddresses1, enterpriseAddresses2, enterpriseAddresses3, enterpriseTypes,
+                            jobCareers, jobEmploymentTypes, jobWorkLocations, jobSkills, jobMainTasks,
+                            jobQualifications, jobPreferences, jobHiringProcesses, jobBenefits)
                     .flatMap(List::stream)
                     .collect(Collectors.toList());
 
