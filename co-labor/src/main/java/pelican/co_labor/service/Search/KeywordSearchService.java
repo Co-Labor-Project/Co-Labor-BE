@@ -46,6 +46,12 @@ public class KeywordSearchService {
             return Collections.emptyList();
         }
 
-        return (List<String>) word2Vec.wordsNearestSum(keyword, 10);
+        List<String> similarWords = (List<String>) word2Vec.wordsNearestSum(keyword, 10);
+
+        // Filter out unrelated words (e.g., non-alphabetic or very common words)
+        similarWords.removeIf(word -> word.length() < 2 || word.matches(".*[^a-zA-Z가-힣].*"));
+        similarWords.add(keyword);
+        logger.info("Similar words for '{}': {}", keyword, similarWords);
+        return similarWords;
     }
 }

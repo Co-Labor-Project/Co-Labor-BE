@@ -12,6 +12,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -32,7 +33,7 @@ public class OpenAiService {
         try {
             boolean isKorean = Pattern.matches(".*[ㄱ-ㅎㅏ-ㅣ가-힣]+.*", sentence);
             String systemPrompt = isKorean ?
-                    "당신은 데이터 추출 도우미입니다. 주어진 문장에서 주요 키워드를 추출하세요. 간결하고 관련성 있는 키워드를 제공하세요. 또한 키워드만 제공하고 추가적인 키워드도 제공해주세요. DB 검색 용도이니 키워드로 제공해야 하고 sentence에 존재하지 않는 연관된 키워드도 유추해서 추가로 제공해주세요." :
+                    "당신은 데이터 추출 도우미입니다. sentence에서 키워드를 추출하세요. 추출된 키워드는 데이터베이스 검색용입니다. sentece에서 기업이나 채용 공고와 관련성 높을 것 같은 키워드를 4개 생성하세요. 추출된 키워드는 한 문장이 되어서는 안됩니다. 띄어쓰기로 구분해주세요. 추출된 키워드 외에 다른 단어는 넣지 마세요." :
                     "You are a data extraction assistant. Extract key phrases and concepts from the provided sentences. Just provide only keywords. Provide additional keywords including input sentence's primary keywords.";
             String userPrompt = isKorean ?
                     "이 문장에서 키워드를 추출하세요: " + sentence :
@@ -72,8 +73,8 @@ public class OpenAiService {
                     }
                 }
             }
-
-            logger.info("Extracted keywords: {}", keywords);
+            keywords.addAll(Arrays.asList(sentence.split("\\s+")));
+            logger.info("Extracted keywords in OpenAiService: {}", keywords);
             return keywords;
         } catch (Exception e) {
             logger.error("An error occurred while calling OpenAI API", e);
