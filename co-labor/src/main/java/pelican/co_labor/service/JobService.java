@@ -12,11 +12,13 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 @Service
+@Transactional
 public class JobService {
 
     private final JobRepository jobRepository;
@@ -64,7 +66,7 @@ public class JobService {
             job.setDescription(jobDetails.getDescription());
             job.setRequirement(jobDetails.getRequirement());
             job.setViews(jobDetails.getViews());
-            job.setDead_date(jobDetails.getDead_date());
+            job.setDeadDate(jobDetails.getDeadDate());
             job.setModified_at(jobDetails.getModified_at());
             if (image != null && !image.isEmpty()) {
                 try {
@@ -102,5 +104,11 @@ public class JobService {
 
     public Job mapJobFromJson(String jobJson) throws IOException {
         return objectMapper.readValue(jobJson, Job.class);
+    }
+
+    @Transactional
+    public void deleteExpiredJobs() {
+        LocalDate today = LocalDate.now();
+        jobRepository.deleteByDeadDateBefore(today);
     }
 }

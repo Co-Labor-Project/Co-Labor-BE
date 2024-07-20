@@ -47,6 +47,7 @@ public class AuthController {
 
                 response.put("message", "Login successful");
                 response.put("redirect", "/index");
+                response.put("userType", session.getAttribute("userType"));
                 return ResponseEntity.ok(response);
             } else {
                 response.put("message", "Invalid username or password");

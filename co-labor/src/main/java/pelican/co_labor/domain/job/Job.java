@@ -39,8 +39,8 @@ public class Job {
     @Column(nullable = false)
     private int views;
 
-    @Column(nullable = false)
-    private LocalDate dead_date;
+    @Column(name = "dead_date", nullable = false)
+    private LocalDate deadDate;
 
     @Column(nullable = false, updatable = false)
     private LocalDateTime created_at;
