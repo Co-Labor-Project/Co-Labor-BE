@@ -61,8 +61,15 @@ public class JobService {
     public Optional<Job> updateJob(Long jobId, Job jobDetails, MultipartFile image) {
         return jobRepository.findById(jobId).map(job -> {
             job.setTitle(jobDetails.getTitle());
-            job.setDescription(jobDetails.getDescription());
-            job.setRequirement(jobDetails.getRequirement());
+            job.setCareer(jobDetails.getCareer());
+            job.setEmploymentType(jobDetails.getEmploymentType());
+            job.setWorkLocation(jobDetails.getWorkLocation());
+            job.setSkills(jobDetails.getSkills());
+            job.setMainTasks(jobDetails.getMainTasks());
+            job.setQualifications(jobDetails.getQualifications());
+            job.setPreferences(jobDetails.getPreferences());
+            job.setHiringProcess(jobDetails.getHiringProcess());
+            job.setBenefits(jobDetails.getBenefits());
             job.setViews(jobDetails.getViews());
             job.setDead_date(jobDetails.getDead_date());
             job.setModified_at(jobDetails.getModified_at());
