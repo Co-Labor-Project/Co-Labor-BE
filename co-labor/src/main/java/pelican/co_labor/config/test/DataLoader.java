@@ -14,7 +14,7 @@ import pelican.co_labor.repository.job.JobRepository;
 import pelican.co_labor.repository.labor_user.LaborUserRepository;
 import pelican.co_labor.repository.review.ReviewRepository;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Configuration
 public class DataLoader {
@@ -96,7 +96,7 @@ public class DataLoader {
         job1.setTitle("Tech Engineer");
         job1.setDescription("Develop and maintain software solutions.");
         job1.setViews(100);
-        job1.setDead_date(LocalDateTime.now().plusDays(30));
+        job1.setDead_date(LocalDate.now().plusDays(30));
         job1.setEnterprise(enterprise1);
         job1.setEnterpriseUser(enterpriseUser1);
         job1.setRequirement("제약조건 1");
@@ -106,7 +106,7 @@ public class DataLoader {
         job2.setTitle("Data Scientist");
         job2.setDescription("Analyze and interpret complex data sets.");
         job2.setViews(150);
-        job2.setDead_date(LocalDateTime.now().plusDays(45));
+        job2.setDead_date(LocalDate.now().plusDays(45));
         job2.setEnterprise(enterprise2);
         job2.setEnterpriseUser(enterpriseUser2);
         job2.setRequirement("제약조건 2");
@@ -116,7 +116,7 @@ public class DataLoader {
         job3.setTitle("Tech Engineer");
         job3.setDescription("Develop and maintain software solutions.");
         job3.setViews(100);
-        job3.setDead_date(LocalDateTime.now().plusDays(30));
+        job3.setDead_date(LocalDate.now().plusDays(30));
         job3.setEnterprise(enterprise1);
         job3.setEnterpriseUser(enterpriseUser1);
         job3.setRequirement("제약조건 3");
@@ -126,7 +126,7 @@ public class DataLoader {
         job4.setTitle("Tech Engineer");
         job4.setDescription("Develop and maintain software solutions.");
         job4.setViews(100);
-        job4.setDead_date(LocalDateTime.now().plusDays(30));
+        job4.setDead_date(LocalDate.now().plusDays(30));
         job4.setEnterprise(enterprise1);
         job4.setEnterpriseUser(enterpriseUser1);
         job4.setRequirement("제약조건 4");
@@ -136,7 +136,7 @@ public class DataLoader {
         job5.setTitle("Tech Engineer");
         job5.setDescription("Develop and maintain software solutions.");
         job5.setViews(100);
-        job5.setDead_date(LocalDateTime.now().plusDays(30));
+        job5.setDead_date(LocalDate.now().plusDays(30));
         job5.setEnterprise(enterprise1);
         job5.setEnterpriseUser(enterpriseUser1);
         job5.setRequirement("제약조건 5");

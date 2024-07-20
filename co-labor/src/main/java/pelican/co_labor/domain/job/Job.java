@@ -6,6 +6,7 @@ import lombok.Setter;
 import pelican.co_labor.domain.enterprise.Enterprise;
 import pelican.co_labor.domain.enterprise_user.EnterpriseUser;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
@@ -39,7 +40,7 @@ public class Job {
     private int views;
 
     @Column(nullable = false)
-    private LocalDateTime dead_date;
+    private LocalDate dead_date;
 
     @Column(nullable = false, updatable = false)
     private LocalDateTime created_at;

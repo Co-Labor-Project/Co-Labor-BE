@@ -6,7 +6,7 @@ import lombok.Setter;
 import pelican.co_labor.domain.enterprise.Enterprise;
 import pelican.co_labor.domain.labor_user.LaborUser;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Getter
 @Setter
@@ -57,20 +57,20 @@ public class Review {
     private int like_count;
 
     @Column(nullable = false, updatable = false)
-    private LocalDateTime created_at;
+    private LocalDate  created_at;
 
     @PrePersist
     protected void onCreate() {
-        created_at = LocalDateTime.now();
-        modified_at = LocalDateTime.now();
+        created_at = LocalDate.now();
+        modified_at = LocalDate.now();
     }
 
     @Column(nullable = false)
-    private LocalDateTime modified_at;
+    private LocalDate  modified_at;
 
     @PreUpdate
     protected void onUpdate() {
-        modified_at = LocalDateTime.now();
+        modified_at = LocalDate.now();
     }
 
 }
