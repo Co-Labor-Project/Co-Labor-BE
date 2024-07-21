@@ -34,6 +34,4 @@ public class Chatting {
     protected void onCreate() {
         created_at = LocalDateTime.now();
     }
-
-
 }

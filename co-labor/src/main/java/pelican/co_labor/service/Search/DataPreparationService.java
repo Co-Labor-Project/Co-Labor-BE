@@ -41,11 +41,7 @@ public class DataPreparationService {
         try {
             logger.info("Starting data extraction and model training...");
 
-            // 데이터 추출
-            logger.info("Extracting data from Job repository...");
-            List<String> jobDescriptions = getSafeList(jobRepository.findAll().stream()
-                    .map(Job::getDescription)
-                    .collect(Collectors.toList()));
+            // 각각의 새로운 필드에 접근하여 데이터를 추출합니다.
 
             List<String> jobTitles = getSafeList(jobRepository.findAll().stream()
                     .map(Job::getTitle)
@@ -53,6 +49,10 @@ public class DataPreparationService {
 
             List<String> jobConditions = getSafeList(jobRepository.findAll().stream()
                     .map(Job::getRequirement)
+                    .collect(Collectors.toList()));
+
+            List<String> jobDescription = getSafeList(jobRepository.findAll().stream()
+                    .map(Job::getDescription)
                     .collect(Collectors.toList()));
 
             logger.info("Extracting data from Review repository...");
@@ -95,7 +95,10 @@ public class DataPreparationService {
 
             // 모든 데이터를 하나의 리스트로 합치기
             logger.info("Combining all extracted data into a single list...");
-            List<String> sentences = Stream.of(jobDescriptions, jobTitles, jobConditions, reviewPros, reviewCons, reviewTitles, enterpriseDescriptions, enterpriseNames, enterpriseAddresses1, enterpriseAddresses2, enterpriseAddresses3 , enterpriseTypes)
+            List<String> sentences = Stream.of(
+                            jobDescription,jobTitles, reviewPros, reviewCons, reviewTitles, enterpriseDescriptions, enterpriseNames,
+                            enterpriseAddresses1, enterpriseAddresses2, enterpriseAddresses3, enterpriseTypes
+                            )
                     .flatMap(List::stream)
                     .collect(Collectors.toList());
 

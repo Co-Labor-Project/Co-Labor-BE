@@ -33,6 +33,8 @@ public class SearchController {
         response.put("reviews", reviews);
         response.put("enterprises", enterprises);
 
+        System.out.println("response = " + response);
+
         return response;
     }
 }

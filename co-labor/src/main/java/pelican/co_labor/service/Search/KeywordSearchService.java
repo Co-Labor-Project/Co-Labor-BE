@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import java.io.File;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class KeywordSearchService {
@@ -46,6 +47,16 @@ public class KeywordSearchService {
             return Collections.emptyList();
         }
 
-        return (List<String>) word2Vec.wordsNearestSum(keyword, 10);
+        List<String> similarWords = word2Vec.wordsNearest(keyword, 10).stream()
+                .filter(word -> word.matches("[가-힣]+"))  // Filter to include only Korean words
+                .collect(Collectors.toList());
+
+        // Add the original keyword to the result list
+        if (!similarWords.contains(keyword) && keyword.matches("[가-힣]+")) {
+            similarWords.add(keyword);
+        }
+
+        logger.info("Similar words for '{}': {}", keyword, similarWords);
+        return similarWords;
     }
 }

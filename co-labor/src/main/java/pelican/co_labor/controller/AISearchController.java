@@ -39,7 +39,7 @@ public class AISearchController {
 
         // 문장을 키워드로 변환
         List<String> keywords = openAiService.extractKeywords(sentence);
-        logger.info("Extracted keywords: {}", keywords);
+        logger.info("Extracted keywords In Controller: {}", keywords);
 
         if (keywords.isEmpty()) {
             response.put("message", "No keywords extracted from the given sentence.");
