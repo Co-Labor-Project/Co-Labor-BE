@@ -6,6 +6,7 @@ import org.springframework.session.web.http.CookieSerializer;
 import org.springframework.session.web.http.DefaultCookieSerializer;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
@@ -25,5 +26,11 @@ public class WebConfig implements WebMvcConfigurer {
         serializer.setSameSite("None");
         serializer.setUseSecureCookie(false); // 로컬 개발 환경에서 false로 설정, 배포 시에는 true로 설정
         return serializer;
+    }
+
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/static/images/**")
+                .addResourceLocations("classpath:/static/images/");
     }
 }
