@@ -223,7 +223,7 @@ public class DataLoader implements CommandLineRunner {
         job1.setEmploymentType("정규직");
         job1.setLocation("서울특별시 종로구 낙원동");
         job1.setSkills("재고 관리, 물류 시스템, 물류 프로세스 개선");
-        job1.setImageName("company1.png");
+        job1.setImageName("company2.jpg");
         jobRepository.save(job1);
 
         Job job2 = new Job();
@@ -309,7 +309,7 @@ public class DataLoader implements CommandLineRunner {
         job2.setEmploymentType("정규직");
         job2.setLocation("서울");
         job2.setSkills("Python, R, 통계, 머신러닝, 빅데이터, 클라우드");
-        job2.setImageName("company1.png");
+        job2.setImageName("company3.jpg");
         jobRepository.save(job2);
 
         Job job3 = new Job();
@@ -339,7 +339,7 @@ public class DataLoader implements CommandLineRunner {
         job4.setEmploymentType("정규직");
         job4.setLocation("서울특별시 종로구 관철동");
         job4.setSkills("프로젝트 일정 관리, 팀 조정, 성과 보고");
-        job4.setImageName("company1.png");
+        job4.setImageName("company4.jpg");
         jobRepository.save(job4);
 
         Job job5 = new Job();
@@ -354,23 +354,122 @@ public class DataLoader implements CommandLineRunner {
         job5.setEmploymentType("정규직");
         job5.setLocation("서울특별시 종로구 삼일대로");
         job5.setSkills("마케팅 전략 수립, 예산 관리, 성과 분석");
-        job5.setImageName("company1.png");
+        job5.setImageName("company5.jpeg");
         jobRepository.save(job5);
 
         Job job6 = new Job();
-        job6.setTitle("물류 관리자");
-        job6.setDescription("물류 센터 운영 및 관리.\n업무 내용: 재고 관리, 출고 관리, 물류 프로세스 개선.\n자격 요건: 물류 관리 경험 3년 이상, 물류 시스템 이해.\n우대 사항: 물류 관련 자격증 소지자.\n복지: 건강 검진, 연간 성과 보너스.");
-        job6.setViews(100);
+        job6.setTitle("건설 현장 작업자");
+        job6.setDescription(
+                "기업 소개\n" +
+                        "CFS (Coupang Fulfillment Services) 는 쿠팡의 물류를 총괄하는 쿠팡의 계열사입니다. CFS는 물류센터 또는 FC (Fulfillment Center) 운영을 책임지고 있으며, 업무 효율성과 전문성 제고를 통해 글로벌 이커머스 기업으로 성장하기 위한 혁신을 이끌어 가고 있습니다.\n" +
+                        "쿠팡의 FC는 상품의 입고, 적재, 포장, 출고 및 반품 등 사후 처리에 이르는 다양한 분야의 전문가들이 함께 일하고 있습니다. FC는 단순한 물류 창고와 다르게 공장 자동화 (Factory Automation) 솔루션과 첨단 기술을 활용하고 있습니다. 제조업 생산 공장과 같이 각각의 업무를 전문화하고, 입고부터 출고까지 데이터를 기반으로 시공간을 효율적으로 관리하여 낭비를 최소화하는 등 최적의 물류 시스템을 구현해 나가고 있습니다.\n" +
+                        "CFS는 물류 혁신을 통해 고객이 “쿠팡 없이 어떻게 살았을까?” 라고 말하는 세상을 만들고자 합니다. 우리의 역동적인 미래를 함께 만들고 싶다면 CFS와 함께하세요.\n" +
+                        "\n" +
+                        "해당 직무에 관련한 자세한 사항은 우측 '홈페이지 지원' 버튼을 통해 자사 홈페이지에 접속하여 확인해주세요 : )\n" +
+                        "\n" +
+                        "주요 업무\n" +
+                        "건설 현장에서의 다양한 작업을 수행합니다. 주요 업무는 다음과 같습니다:\n" +
+                        "- 건설 자재 운반\n" +
+                        "- 현장 청소 및 정리\n" +
+                        "- 간단한 건설 작업 지원\n" +
+                        "\n" +
+                        "자격 요건\n" +
+                        "- 관련 경험이 있으면 우대\n" +
+                        "- 체력과 성실함 필수\n" +
+                        "\n" +
+                        "우대 사항\n" +
+                        "- 건설 현장에서의 일 경험\n" +
+                        "\n" +
+                        "복지 및 혜택\n" +
+                        "- 간식 제공\n" +
+                        "- 일일 급여 지급\n" +
+                        "\n" +
+                        "채용 절차\n" +
+                        "서류전형 - 전화면접 - 대면면접 - 최종 합격\n" +
+                        "전형 절차는 직무별로 다르게 운영될 수 있으며, 일정 및 상황에 따라 변동될 수 있습니다. 전형 일정 및 결과는 지원서에 등록하신 이메일로 개별 안내드립니다.\n" +
+                        "\n" +
+                        "참고 사항\n" +
+                        "본 공고는 모집 완료 시 조기 마감될 수 있습니다. 해당 채용은 수습기간 12주를 포함합니다. 지원서 내용 중 허위사실이 있는 경우에는 합격이 취소될 수 있습니다. 보훈대상자 및 장애인 여부는 채용 과정에서 어떠한 불이익도 미치지 않습니다. 직급과 담당 업무 범위는 후보자의 전반적인 경력과 경험 등 제반 사정을 고려하여 변경될 수 있습니다. 이러한 변경이 필요할 경우, 최종 합격 통지 전 적절한 시기에 후보자와 커뮤니케이션 될 예정입니다.\n" +
+                        "\n" +
+                        "근무지 : 서울특별시 강남구\n" +
+                        "\n" +
+                        "개인정보 처리방침\n" +
+                        "쿠팡 그룹은 입사지원자 개인정보 처리방침(아래 링크)에 따라 귀하의 개인정보를 수집하여 처리합니다.\n" +
+                        "https://www.coupang.jobs/kr/privacy-policy/\n" +
+                        "\n" +
+                        "서류 반환 정책\n" +
+                        "본 고지는 『채용절차의 공정화에 관한 법률』 제11조 제6항에 따른 것입니다. 당사 채용에 응시한 구직자 중 최종합격이 되지 못한 구직자는 『채용절차의 공정화에 관한 법률』에 따라 제출한 채용서류의 반환을 청구할 수 있음을 알려 드립니다. 다만, 홈페이지 또는 전자우편으로 제출된 경우나 구직자가 당사의 요구 없이 자발적으로 제출한 경우에는 그러하지 아니하며, 천재지변이나 그 밖에 당사에게 책임 없는 사유로 채용서류가 멸실된 경우에는 반환한 것으로 봅니다. 위 2항 본문에 따라 채용서류 반환 청구를 하는 구직자는 채용서류 반환청구서 [채용절차의 공정화에 관한 법률 시행규칙 별지 제3호 서식]를 작성하여 당사 채용팀 (서울시 송파구 송파대로 570 타워730 쿠팡채용팀) 으로 제출하면, 제출이 확인된 날로부터 14일 이내에 지정한 주소지로 등기우편을 통하여 발송해 드립니다. 당사는 위 2항 본문에 따른 구직자의 반환 청구에 대비하여 채용 여부가 확정된 날로부터 180일간 구직자가 제출한 채용서류 원본을 보관하게 되며, 그때까지 채용서류의 반환을 청구하지 아니할 경우에는 『개인정보 보호법』에 따라 지체 없이 채용서류 일체를 파기할 예정입니다.\n" +
+                        "채용 및 업무 수행과 관련하여 요구되는 법령상 자격이 갖추어지지 않은 경우 채용이 제한될 수 있습니다."
+        );
+        job6.setViews(80);
         job6.setDeadDate(LocalDate.now().plusDays(30));
         job6.setEnterprise(enterprise1);
         job6.setEnterpriseUser(enterpriseUser1);
-        job6.setJobRole("Logistics Management");
-        job6.setExperience("3년 이상");
-        job6.setEmploymentType("정규직");
-        job6.setLocation("서울특별시 종로구 낙원동");
-        job6.setSkills("재고 관리, 물류 시스템, 물류 프로세스 개선");
-        job6.setImageName("company1.png");
+        job6.setJobRole("Construction Worker");
+        job6.setExperience("경험 무관");
+        job6.setEmploymentType("일용직");
+        job6.setLocation("대전광역시 중구");
+        job6.setSkills("체력, 성실함, 기본 건설 지식");
+        job6.setImageName("company6.jpg");
         jobRepository.save(job6);
+
+        Job job7 = new Job();
+        job7.setTitle("주방 보조");
+        job7.setDescription(
+                "기업 소개\n" +
+                        "CFS (Coupang Fulfillment Services) 는 쿠팡의 물류를 총괄하는 쿠팡의 계열사입니다. CFS는 물류센터 또는 FC (Fulfillment Center) 운영을 책임지고 있으며, 업무 효율성과 전문성 제고를 통해 글로벌 이커머스 기업으로 성장하기 위한 혁신을 이끌어 가고 있습니다.\n" +
+                        "쿠팡의 FC는 상품의 입고, 적재, 포장, 출고 및 반품 등 사후 처리에 이르는 다양한 분야의 전문가들이 함께 일하고 있습니다. FC는 단순한 물류 창고와 다르게 공장 자동화 (Factory Automation) 솔루션과 첨단 기술을 활용하고 있습니다. 제조업 생산 공장과 같이 각각의 업무를 전문화하고, 입고부터 출고까지 데이터를 기반으로 시공간을 효율적으로 관리하여 낭비를 최소화하는 등 최적의 물류 시스템을 구현해 나가고 있습니다.\n" +
+                        "CFS는 물류 혁신을 통해 고객이 “쿠팡 없이 어떻게 살았을까?” 라고 말하는 세상을 만들고자 합니다. 우리의 역동적인 미래를 함께 만들고 싶다면 CFS와 함께하세요.\n" +
+                        "\n" +
+                        "해당 직무에 관련한 자세한 사항은 우측 '홈페이지 지원' 버튼을 통해 자사 홈페이지에 접속하여 확인해주세요 : )\n" +
+                        "\n" +
+                        "주요 업무\n" +
+                        "음식 준비와 주방 청소를 담당합니다. 주요 업무는 다음과 같습니다:\n" +
+                        "- 재료 손질\n" +
+                        "- 간단한 요리 준비\n" +
+                        "- 주방 정리 및 청소\n" +
+                        "\n" +
+                        "자격 요건\n" +
+                        "- 관련 경험이 있으면 우대\n" +
+                        "- 체력과 성실함 필수\n" +
+                        "\n" +
+                        "우대 사항\n" +
+                        "- 요식업에서의 일 경험\n" +
+                        "\n" +
+                        "복지 및 혜택\n" +
+                        "- 식사 제공\n" +
+                        "- 일일 급여 지급\n" +
+                        "\n" +
+                        "채용 절차\n" +
+                        "서류전형 - 전화면접 - 대면면접 - 최종 합격\n" +
+                        "전형 절차는 직무별로 다르게 운영될 수 있으며, 일정 및 상황에 따라 변동될 수 있습니다. 전형 일정 및 결과는 지원서에 등록하신 이메일로 개별 안내드립니다.\n" +
+                        "\n" +
+                        "참고 사항\n" +
+                        "본 공고는 모집 완료 시 조기 마감될 수 있습니다. 해당 채용은 수습기간 12주를 포함합니다. 지원서 내용 중 허위사실이 있는 경우에는 합격이 취소될 수 있습니다. 보훈대상자 및 장애인 여부는 채용 과정에서 어떠한 불이익도 미치지 않습니다. 직급과 담당 업무 범위는 후보자의 전반적인 경력과 경험 등 제반 사정을 고려하여 변경될 수 있습니다. 이러한 변경이 필요할 경우, 최종 합격 통지 전 적절한 시기에 후보자와 커뮤니케이션 될 예정입니다.\n" +
+                        "\n" +
+                        "근무지 : 서울특별시 강남구\n" +
+                        "\n" +
+                        "개인정보 처리방침\n" +
+                        "쿠팡 그룹은 입사지원자 개인정보 처리방침(아래 링크)에 따라 귀하의 개인정보를 수집하여 처리합니다.\n" +
+                        "https://www.coupang.jobs/kr/privacy-policy/\n" +
+                        "\n" +
+                        "서류 반환 정책\n" +
+                        "본 고지는 『채용절차의 공정화에 관한 법률』 제11조 제6항에 따른 것입니다. 당사 채용에 응시한 구직자 중 최종합격이 되지 못한 구직자는 『채용절차의 공정화에 관한 법률』에 따라 제출한 채용서류의 반환을 청구할 수 있음을 알려 드립니다. 다만, 홈페이지 또는 전자우편으로 제출된 경우나 구직자가 당사의 요구 없이 자발적으로 제출한 경우에는 그러하지 아니하며, 천재지변이나 그 밖에 당사에게 책임 없는 사유로 채용서류가 멸실된 경우에는 반환한 것으로 봅니다. 위 2항 본문에 따라 채용서류 반환 청구를 하는 구직자는 채용서류 반환청구서 [채용절차의 공정화에 관한 법률 시행규칙 별지 제3호 서식]를 작성하여 당사 채용팀 (서울시 송파구 송파대로 570 타워730 쿠팡채용팀) 으로 제출하면, 제출이 확인된 날로부터 14일 이내에 지정한 주소지로 등기우편을 통하여 발송해 드립니다. 당사는 위 2항 본문에 따른 구직자의 반환 청구에 대비하여 채용 여부가 확정된 날로부터 180일간 구직자가 제출한 채용서류 원본을 보관하게 되며, 그때까지 채용서류의 반환을 청구하지 아니할 경우에는 『개인정보 보호법』에 따라 지체 없이 채용서류 일체를 파기할 예정입니다.\n" +
+                        "채용 및 업무 수행과 관련하여 요구되는 법령상 자격이 갖추어지지 않은 경우 채용이 제한될 수 있습니다."
+        );
+        job7.setViews(100);
+        job7.setDeadDate(LocalDate.now().plusDays(30));
+        job7.setEnterprise(enterprise2);
+        job7.setEnterpriseUser(enterpriseUser2);
+        job7.setJobRole("Kitchen Assistant");
+        job7.setExperience("경험 무관");
+        job7.setEmploymentType("일용직");
+        job7.setLocation("서울특별시 강남구");
+        job7.setSkills("재료 손질, 청소, 기본 요리 지식");
+        job7.setImageName("company7.png");
+        jobRepository.save(job7);
+
+
     }
 }
 
