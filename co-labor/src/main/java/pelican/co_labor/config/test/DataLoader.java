@@ -134,20 +134,6 @@ public class DataLoader {
         enterpriseUser5.setEnterprise(enterprise5);
         enterpriseUserRepository.save(enterpriseUser5);
 
-        // LaborUser 더미 데이터 생성
-        LaborUser laborUser1 = new LaborUser();
-        laborUser1.setLaborUserId("Alice Johnson");
-        laborUser1.setName("Alice Johnson");
-        laborUser1.setEmail("alice.johnson@example.com");
-        laborUser1.setPassword("password123");
-        laborUserRepository.save(laborUser1);
-
-        LaborUser laborUser2 = new LaborUser();
-        laborUser2.setLaborUserId("Bob Brown");
-        laborUser2.setName("Bob Brown");
-        laborUser2.setEmail("bob.brown@example.com");
-        laborUser2.setPassword("password123");
-        laborUserRepository.save(laborUser2);
 
         // Job 더미 데이터 생성
         // Job 더미 데이터 생성 (한국어 및 상세 Description 포함)
@@ -435,6 +421,22 @@ public class DataLoader {
         job5.setSkills("Jenkins, Docker, Kubernetes, 서버 관리, 네트워크 관리, 클라우드 운영");
         jobRepository.save(job5);
 
+        /* ----------------------------------------------------------------------------------------------------------------------------------------------------- */
+
+        // LaborUser 더미 데이터 생성
+        LaborUser laborUser1 = new LaborUser();
+        laborUser1.setLaborUserId("Alice Johnson");
+        laborUser1.setName("Alice Johnson");
+        laborUser1.setEmail("alice.johnson@example.com");
+        laborUser1.setPassword("password123");
+        laborUserRepository.save(laborUser1);
+
+        LaborUser laborUser2 = new LaborUser();
+        laborUser2.setLaborUserId("Bob Brown");
+        laborUser2.setName("Bob Brown");
+        laborUser2.setEmail("bob.brown@example.com");
+        laborUser2.setPassword("password123");
+        laborUserRepository.save(laborUser2);
 
         // Review 더미 데이터 생성
         Review review1 = new Review();
