@@ -23,8 +23,19 @@ public class HospitalController {
         hospitalService.fetchAndSaveHospitalData();
     }
 
+    @GetMapping("/fetch/{region}")
+    public void fetchHospitalDataByRegion(@PathVariable String region) {
+        hospitalService.fetchAndSaveHospitalData(region);
+    }
+
     @GetMapping("/all")
     public List<Hospital> getAllHospitals() {
         return hospitalService.getAllHospitals();
     }
+
+    @GetMapping("/region/{region}")
+    public List<Hospital> getHospitalsByRegion(@PathVariable String region) {
+        return hospitalService.getHospitalsByRegion(region);
+    }
 }
+

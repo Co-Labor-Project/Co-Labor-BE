@@ -14,6 +14,7 @@ import pelican.co_labor.repository.hospital.HospitalRepository;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,19 +33,31 @@ public class HospitalService {
         this.jdbcTemplate = jdbcTemplate;
     }
 
+    // 전체 병원 데이터 가져오기
     public void fetchAndSaveHospitalData() {
+        fetchAndSaveHospitalData(null);
+    }
+
+    // 특정 지역 병원 데이터 가져오기
+    public void fetchAndSaveHospitalData(String region) {
         String apiUrl = "http://apis.data.go.kr/B552657/HsptlAsembySearchService/getHsptlMdcncListInfoInqire";
         int numOfRows = 1000; // 한 번에 가져올 행 수
-        int totalCount = getTotalCount(apiUrl); // 전체 데이터 개수
+        int totalCount = getTotalCount(apiUrl, region); // 전체 데이터 개수
         int totalPages = (totalCount / numOfRows) + 1; // 전체 페이지 수
 
         try {
             // 데이터 삭제 및 테이블 초기화
-            hospitalRepository.deleteAll();
-            //jdbcTemplate.execute("ALTER TABLE hospital AUTO_INCREMENT = 1");
+            if (region == null) {
+                hospitalRepository.deleteAll();
+            } else {
+                hospitalRepository.deleteByDutyAddrStartingWith(region);
+            }
 
             for (int pageNo = 1; pageNo <= totalPages; pageNo++) {
                 String urlStr = apiUrl + "?serviceKey=" + serviceKey + "&numOfRows=" + numOfRows + "&pageNo=" + pageNo;
+                if (region != null) {
+                    urlStr += "&Q0=" + URLEncoder.encode(region, "UTF-8");
+                }
                 URL url = new URL(urlStr);
                 DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
                 DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
@@ -101,9 +114,12 @@ public class HospitalService {
         }
     }
 
-    private int getTotalCount(String apiUrl) {
+    private int getTotalCount(String apiUrl, String region) {
         try {
             String urlStr = apiUrl + "?serviceKey=" + serviceKey + "&numOfRows=1&pageNo=1";
+            if (region != null) {
+                urlStr += "&Q0=" + URLEncoder.encode(region, "UTF-8");
+            }
             URL url = new URL(urlStr);
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
@@ -125,4 +141,9 @@ public class HospitalService {
     public List<Hospital> getAllHospitals() {
         return hospitalRepository.findAll();
     }
+
+    public List<Hospital> getHospitalsByRegion(String region) {
+        return hospitalRepository.findByDutyAddrStartingWith(region);
+    }
 }
+
