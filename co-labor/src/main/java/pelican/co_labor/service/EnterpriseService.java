@@ -2,11 +2,17 @@ package pelican.co_labor.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import pelican.co_labor.domain.enterprise.Enterprise;
 import pelican.co_labor.repository.enterprise.EnterpriseRepository;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class EnterpriseService {
@@ -42,4 +48,12 @@ public class EnterpriseService {
         });
     }
 
+    public String saveImage(MultipartFile image) throws IOException {
+        String imageDirectory = "path/to/save/images";
+        String imageName = UUID.randomUUID().toString() + "_" + image.getOriginalFilename();
+        Path imagePath = Paths.get(imageDirectory, imageName);
+        Files.createDirectories(imagePath.getParent());
+        Files.write(imagePath, image.getBytes());
+        return imageName;
+    }
 }

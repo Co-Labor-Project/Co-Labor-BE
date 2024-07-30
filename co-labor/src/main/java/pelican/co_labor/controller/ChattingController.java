@@ -29,7 +29,9 @@ public class ChattingController {
         if (optionalUser.isPresent()) {
             LaborUser user = optionalUser.get();
             chattingService.saveUserMessage(user, message);
-            String gptResponse = chattingService.getGptResponse(message);
+
+            String gptResponse = chattingService.getGptResponse(user.getLaborUserId(), message);
+
             chattingService.saveGptResponse(user, gptResponse);
         } else {
             throw new RuntimeException("User not found");
@@ -47,3 +49,4 @@ public class ChattingController {
         }
     }
 }
+
