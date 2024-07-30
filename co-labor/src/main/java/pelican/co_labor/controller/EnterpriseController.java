@@ -3,14 +3,18 @@ package pelican.co_labor.controller;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.dao.DataAccessException;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import pelican.co_labor.domain.enterprise.Enterprise;
 import pelican.co_labor.domain.enterprise_user.EnterpriseUser;
 import pelican.co_labor.dto.EnterpriseQueueDTO;
@@ -19,6 +23,8 @@ import pelican.co_labor.service.EnterpriseFetchApiService;
 import pelican.co_labor.service.EnterpriseRegistrationService;
 import pelican.co_labor.service.EnterpriseService;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -80,8 +86,26 @@ public class EnterpriseController {
      * @return
      */
     @PostMapping
-    public Enterprise createEnterprise(@RequestBody Enterprise enterprise) {
-        return enterpriseService.createEnterprise(enterprise);
+    public ResponseEntity<Map<String, Object>> createEnterprise(@RequestPart("enterprise") Enterprise enterprise,
+                                                                @RequestPart("logo") MultipartFile logo) {
+        Map<String, Object> response = new HashMap<>();
+        try {
+            // 로고 이미지 저장
+            String logoPath = enterpriseService.saveImage(logo);
+            enterprise.setImageName(logoPath);
+
+            // 엔터프라이즈 저장
+            Enterprise savedEnterprise = enterpriseService.createEnterprise(enterprise);
+
+            response.put("status", 1);
+            response.put("message", "Enterprise created successfully.");
+            response.put("enterprise", savedEnterprise);
+            return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        } catch (Exception e) {
+            response.put("status", 0);
+            response.put("message", "Error creating enterprise: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
     }
 
     // 사업자 등록 번호 조회해서 기업 회원에 매핑
@@ -174,6 +198,31 @@ public class EnterpriseController {
             Map<String, Object> response = new HashMap<>();
             response.put("message", "An error occurred while creating enterprise queue: " + e.getMessage());
             return response;
+        }
+    }
+
+    // 로고 이미지 조회 엔드포인트 추가
+    @GetMapping("/{enterprise_id}/logo")
+    public ResponseEntity<Resource> getEnterpriseLogo(@PathVariable("enterprise_id") String enterpriseId) {
+        Optional<Enterprise> enterpriseOpt = enterpriseService.getEnterpriseById(enterpriseId);
+        if (enterpriseOpt.isPresent()) {
+            String logoPath = enterpriseOpt.get().getImageName();
+            try {
+                Path filePath = Paths.get("path/to/save/images").resolve(logoPath).normalize();
+                Resource resource = new UrlResource(filePath.toUri());
+                if (resource.exists()) {
+                    return ResponseEntity.ok()
+                            .contentType(MediaType.IMAGE_JPEG)
+                            .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
+                            .body(resource);
+                } else {
+                    return ResponseEntity.notFound().build();
+                }
+            } catch (Exception e) {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            }
+        } else {
+            return ResponseEntity.notFound().build();
         }
     }
 
