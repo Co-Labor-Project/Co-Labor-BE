@@ -41,6 +41,9 @@ public class Enterprise {
     @Column(nullable = false, updatable = false)
     private LocalDateTime created_at;
 
+    @Column(name = "image_name", nullable = true)
+    private String imageName;
+
     @PrePersist
     protected void onCreate() {
         created_at = LocalDateTime.now();
