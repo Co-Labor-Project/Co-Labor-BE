@@ -25,7 +25,7 @@ public class OpenAIChatService {
     }
 
     public String getGptResponse(String userMessage) {
-        String prompt = userMessage + " 가독성 좋게 문단으로 보기좋게 답변을 해줘. 이 질문에 대해 공감적으로 상담사처럼 답변을 해주고 한국 헌법과 관련해서 법률 명과 관련된 판례와 키워드를 자세하게 구체적으로 알려줘. 그리고 주요 키워드를 이용하고 내가 외국인 근로자인 것을 감안해서 법률적 조언을 부탁해. 그리고 자세한 방법도 알려줘.";
+        String prompt = userMessage + " 가독성 좋게 보기좋게 문단으로 대답해주고 문단 끝날때 마다 구분선을 '<hr>'을 추가해서 답변을 해줘. 이 질문에 대해 공감적으로 상담사처럼 답변을 해주고 한국 헌법과 관련해서 법률 명과 관련된 판례와 키워드를 자세하게 구체적으로 알려줘. 그리고 주요 키워드를 이용하고 내가 외국인 근로자인 것을 감안해서 법률적 조언을 부탁해. 그리고 자세한 방법도 알려줘.";
 
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", "Bearer " + openaiApiKey);

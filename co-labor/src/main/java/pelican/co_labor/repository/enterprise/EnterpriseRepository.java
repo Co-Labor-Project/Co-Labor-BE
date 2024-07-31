@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 import pelican.co_labor.domain.enterprise.Enterprise;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface EnterpriseRepository extends JpaRepository<Enterprise, String> {
@@ -16,4 +17,7 @@ public interface EnterpriseRepository extends JpaRepository<Enterprise, String> 
 //
 //    @Query("SELECT e FROM Enterprise e WHERE e.enterprise_id = :enterpriseId")
 //    Optional<Enterprise> findByEnterpriseId(@Param("enterprise_id") String enterpriseId);
+
+    @Query("SELECT e FROM Enterprise e WHERE e.enterprise_id = :enterpriseId")
+    Optional<Enterprise> findByEnterpriseId(@Param("enterpriseId") String enterpriseId);
 }
