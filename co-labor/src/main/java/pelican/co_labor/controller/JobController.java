@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import pelican.co_labor.domain.job.Job;
+import pelican.co_labor.domain.job.JobEng;
 import pelican.co_labor.service.AuthService;
 import pelican.co_labor.service.JobService;
 
@@ -37,7 +38,7 @@ public class JobController {
     }
 
     @GetMapping("/{job_id}")
-    public ResponseEntity<Job> getJobById(@PathVariable Long job_id) {
+    public ResponseEntity<Job> getJobById(@PathVariable("job_id") Long job_id) {
         Optional<Job> job = jobService.incrementAndGetJobById(job_id);
         return job.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
@@ -85,5 +86,17 @@ public class JobController {
         }
     }
 
+    // 영어 채용 공고 조회 엔드포인트 추가
+
+    @GetMapping("/eng")
+    public List<JobEng> getAllJobsEng() {
+        return jobService.getAllJobsEng();
+    }
+
+    @GetMapping("/eng/{job_id}")
+    public ResponseEntity<JobEng> getJobEngById(@PathVariable("job_id") Long job_id) {
+        Optional<JobEng> job = jobService.incrementAndGetJobEngById(job_id);
+        return job.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    }
 
 }

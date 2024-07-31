@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import pelican.co_labor.domain.enterprise.Enterprise;
+import pelican.co_labor.domain.enterprise.EnterpriseEng;
 import pelican.co_labor.domain.enterprise_user.EnterpriseUser;
 import pelican.co_labor.dto.EnterpriseQueueDTO;
 import pelican.co_labor.service.AuthService;
@@ -223,6 +224,31 @@ public class EnterpriseController {
             }
         } else {
             return ResponseEntity.notFound().build();
+        }
+    }
+
+    // 영어 기업 정보 조회 엔드포인트 추가
+
+    @GetMapping("/eng")
+    public List<EnterpriseEng> getAllEnterprisesEng() {
+        return enterpriseService.getAllEnterprisesEng();
+    }
+
+    @GetMapping("/eng/{enterprise_id}")
+    public ResponseEntity<?> getEnterpriseEngById(@PathVariable("enterprise_id") String enterprise_id) {
+        try {
+            Optional<EnterpriseEng> enterprise = enterpriseService.getEnterpriseEngById(enterprise_id);
+            if (enterprise.isPresent()) {
+                return ResponseEntity.ok(enterprise.get());
+            } else {
+                throw new EnterpriseNotFoundException(enterprise_id);
+            }
+        } catch (EnterpriseNotFoundException ex) {
+            ErrorResponse errorResponse = new ErrorResponse(HttpStatus.NOT_FOUND.value(), ex.getMessage());
+            return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+        } catch (Exception ex) {
+            ErrorResponse errorResponse = new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), "An unexpected error occurred");
+            return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

@@ -5,6 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import pelican.co_labor.domain.job.Job;
+import pelican.co_labor.domain.job.JobEng;
+import pelican.co_labor.repository.job.JobEngRepository;
 import pelican.co_labor.repository.job.JobRepository;
 
 import javax.transaction.Transactional;
@@ -23,15 +25,21 @@ public class JobService {
 
     private final JobRepository jobRepository;
     private final ObjectMapper objectMapper;
+    private final JobEngRepository jobEngRepository;
 
     @Autowired
-    public JobService(JobRepository jobRepository, ObjectMapper objectMapper) {
+    public JobService(JobRepository jobRepository, ObjectMapper objectMapper, JobEngRepository jobEngRepository) {
         this.jobRepository = jobRepository;
         this.objectMapper = objectMapper;
+        this.jobEngRepository = jobEngRepository;
     }
 
     public List<Job> getAllJobs() {
         return jobRepository.findAll();
+    }
+
+    public List<JobEng> getAllJobsEng() {
+        return jobEngRepository.findAll();
     }
 
     public Optional<Job> getJobById(Long jobId) {
@@ -45,6 +53,15 @@ public class JobService {
             return job;
         });
     }
+
+    public Optional<JobEng> incrementAndGetJobEngById(Long jobId) {
+        return jobEngRepository.findById(jobId).map(job -> {
+            job.setViews(job.getViews() + 1);
+            jobEngRepository.save(job);
+            return job;
+        });
+    }
+
 
     @Transactional
     public Job createJob(Job job, MultipartFile image) {

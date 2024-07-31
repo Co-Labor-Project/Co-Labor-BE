@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import pelican.co_labor.domain.enterprise.Enterprise;
+import pelican.co_labor.domain.enterprise.EnterpriseEng;
+import pelican.co_labor.repository.enterprise.EnterpriseEngRepository;
 import pelican.co_labor.repository.enterprise.EnterpriseRepository;
 
 import java.io.IOException;
@@ -18,18 +20,28 @@ import java.util.UUID;
 public class EnterpriseService {
 
     private final EnterpriseRepository enterpriseRepository;
+    private final EnterpriseEngRepository enterpriseEngRepository;
 
     @Autowired
-    public EnterpriseService(EnterpriseRepository enterpriseRepository) {
+    public EnterpriseService(EnterpriseRepository enterpriseRepository, EnterpriseEngRepository enterpriseEngRepository) {
         this.enterpriseRepository = enterpriseRepository;
+        this.enterpriseEngRepository = enterpriseEngRepository;
     }
 
     public List<Enterprise> getAllEnterprises() {
         return enterpriseRepository.findAll();
     }
 
+    public List<EnterpriseEng> getAllEnterprisesEng() {
+        return enterpriseEngRepository.findAll();
+    }
+
     public Optional<Enterprise> getEnterpriseById(String enterpriseId) {
         return enterpriseRepository.findById(enterpriseId);
+    }
+
+    public Optional<EnterpriseEng> getEnterpriseEngById(String enterpriseId) {
+        return enterpriseEngRepository.findById(enterpriseId);
     }
 
     public Enterprise createEnterprise(Enterprise enterprise) {
