@@ -50,7 +50,7 @@ public class ChattingService {
                 .map(Chatting::getContent)
                 .collect(Collectors.joining(" "));
 
-        String prompt = previousResponses + " " + userMessage + " 가독성 좋게 문단으로 보기좋게 답변을 해줘. 이 질문에 대해 공감적으로 상담사처럼 답변을 해주고 그리고 주요 키워드를 이용하고 내가 외국인 근로자인 것을 감안해서 대답해주고 법률적 조언이 필요하다면 법률적 조언을 부탁해.";
+        String prompt = previousResponses + " " + userMessage + " 가독성 좋게 보기좋게 문단으로 대답해주고 문단 끝날때 마다 구분선 '<hr>'을 추가해서 답변을 해줘. 이 질문에 대해 공감적으로 상담사처럼 답변을 해주고 그리고 주요 키워드를 이용하고 내가 외국인 근로자인 것을 감안해서 대답해주고 법률적 조언이 필요하다면 법률적 조언을 부탁해.";
 
         String firstResponse = openAIChatService.getGptResponse(prompt);
 
