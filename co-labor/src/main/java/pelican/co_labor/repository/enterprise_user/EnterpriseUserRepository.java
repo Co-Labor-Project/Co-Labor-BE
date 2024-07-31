@@ -21,5 +21,8 @@ public interface EnterpriseUserRepository extends JpaRepository<EnterpriseUser, 
     @Query("SELECT e FROM EnterpriseUser e WHERE e.enterpriseEng = :enterprise")
     List<EnterpriseUser> findByEnterpriseEng(@Param("enterprise") EnterpriseEng enterprise);
 
+    @Query("SELECT e.enterprise.id FROM EnterpriseUser e WHERE e.enterprise_user_id = :userId")
+    String findEnterpriseIDByUserId(@Param("userId") String userId);
+
     boolean existsByEmail(String email); // 추가된 부분
 }
