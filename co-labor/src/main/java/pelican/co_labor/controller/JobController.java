@@ -11,6 +11,8 @@ import pelican.co_labor.domain.job.Job;
 import pelican.co_labor.domain.job.JobEng;
 import pelican.co_labor.service.AuthService;
 import pelican.co_labor.service.JobService;
+import pelican.co_labor.repository.enterprise_user.EnterpriseUserRepository;
+
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -25,11 +27,13 @@ public class JobController {
 
     private final JobService jobService;
     private final AuthService authService;
+    private final EnterpriseUserRepository enterpriseUserRepository;
 
     @Autowired
-    public JobController(JobService jobService, AuthService authService) {
+    public JobController(JobService jobService, AuthService authService, EnterpriseUserRepository enterpriseUserRepository) {
         this.jobService = jobService;
         this.authService = authService;
+        this.enterpriseUserRepository = enterpriseUserRepository;
     }
 
     @GetMapping
@@ -46,11 +50,22 @@ public class JobController {
     @PostMapping
     public Job createJob(@RequestParam("job") String jobJson,
                          @RequestParam("image") MultipartFile image,
-                         @RequestParam("enterprise_user_id") String enterpriseUserId) throws IOException {
+                         @RequestParam("enterprise_user_id") String enterpriseUser) throws IOException {
+        System.out.println("Received enterprise_user_id: " + enterpriseUser);
+
         Job job = jobService.mapJobFromJson(jobJson);
-        authService.findEnterpriseUserById(enterpriseUserId).ifPresent(job::setEnterpriseUser);
+        authService.findEnterpriseUserById(enterpriseUser).ifPresentOrElse(job::setEnterpriseUser, () -> {
+            throw new IllegalArgumentException("Invalid enterprise user ID: " + enterpriseUser);
+        });
+
+        String enterpriseId = enterpriseUserRepository.findEnterpriseIDByUserId(enterpriseUser);
+        System.out.println("Found enterprise_id: " + enterpriseId);
+
+        authService.findEnterpriseById(enterpriseId).ifPresent(job::setEnterprise);
         return jobService.createJob(job, image);
     }
+
+
 
     @PutMapping("/{job_id}")
     public ResponseEntity<Job> updateJob(@PathVariable Long job_id,
