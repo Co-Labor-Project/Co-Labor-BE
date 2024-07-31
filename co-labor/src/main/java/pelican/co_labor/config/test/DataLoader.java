@@ -4,15 +4,18 @@
 //import org.springframework.boot.CommandLineRunner;
 //import org.springframework.stereotype.Component;
 //import pelican.co_labor.domain.enterprise.Enterprise;
+//import pelican.co_labor.domain.enterprise.EnterpriseEng;
 //import pelican.co_labor.domain.enterprise_user.EnterpriseUser;
 //import pelican.co_labor.domain.job.Job;
+//import pelican.co_labor.domain.job.JobEng;
+//import pelican.co_labor.repository.enterprise.EnterpriseEngRepository;
 //import pelican.co_labor.repository.enterprise.EnterpriseRepository;
 //import pelican.co_labor.repository.enterprise_user.EnterpriseUserRepository;
+//import pelican.co_labor.repository.job.JobEngRepository;
 //import pelican.co_labor.repository.job.JobRepository;
 //
 //import java.time.LocalDate;
 //import java.time.LocalDateTime;
-//import java.util.List;
 //import java.util.UUID;
 //
 //@Component
@@ -21,20 +24,70 @@
 //    private final EnterpriseRepository enterpriseRepository;
 //    private final EnterpriseUserRepository enterpriseUserRepository;
 //    private final JobRepository jobRepository;
+//    private final EnterpriseEngRepository enterpriseEngRepository;
+//    private final JobEngRepository jobEngRepository;
 //
 //    @Autowired
-//    public DataLoader(EnterpriseRepository enterpriseRepository, EnterpriseUserRepository enterpriseUserRepository, JobRepository jobRepository) {
+//    public DataLoader(EnterpriseRepository enterpriseRepository, EnterpriseUserRepository enterpriseUserRepository, JobRepository jobRepository, EnterpriseEngRepository enterpriseEngRepository, JobEngRepository jobEngRepository) {
 //        this.enterpriseRepository = enterpriseRepository;
 //        this.enterpriseUserRepository = enterpriseUserRepository;
 //        this.jobRepository = jobRepository;
+//        this.enterpriseEngRepository = enterpriseEngRepository;
+//        this.jobEngRepository = jobEngRepository;
 //    }
 //
 //    @Override
 //    public void run(String... args) {
 //        createDummyEnterprises();
+//        createDummyEnterprisesEng();
 //        createDummyEnterpriseUsers();
 //        createDummyJobs();
+//        createDummyJobsEng();
 //    }
+//
+//    // 기업 더미데이터 (영문)
+//    private void createDummyEnterprisesEng() {
+//        createEnterpriseEng("1018100132", "Nakwon Sangga Co., Ltd.", "Seoul Special City", "Jongno-gu", "Nakwon-dong", "Nakwon Sangga description", "Distribution", "82-02-743-4200");
+//        createEnterpriseEng("1018100205", "Daesung Joint Holdings Co., Ltd.", "Seoul Special City", "Guro-gu", "Gyeongin-ro 662 (Sindorim-dong, D-Cube City)", "Daesung Joint Holdings description", "Construction", "02-2170-2164");
+//        createEnterpriseEng("1018100210", "Daewang Industry Co., Ltd.", "Seoul Special City", "Jongno-gu", "Ujeongguk-ro 2-gil 21 (Gwancheol-dong, Daewang Building)", "Daewang Industry description", "IT", "02-734-9188");
+//        createEnterpriseEng("1018100277", "Hanahreum Kumho Tourism Co., Ltd.", "Seoul Special City", "Jongno-gu", "252 Gwancheol-dong", "Hanahreum Kumho Tourism description", "Tourism", "(02) 730-8805");
+//        createEnterpriseEng("1018100340", "Daeil Construction Co., Ltd.", "Seoul Special City", "Jongno-gu", "428 Samil-daero", "Daeil Construction description", "Construction", "02-743-6131");
+//        createEnterpriseEng("1018100452", "Samwhan Corporation", "Seoul Special City", "Gangnam-gu", "Eonju-ro 547 (Yeoksam-dong) 13th Floor, Samwhan Corporation", "Samwhan Corporation description", "Manufacturing", "02-740-2391");
+//        createEnterpriseEng("1018100700", "Daeho Construction Co., Ltd.", "Seoul Special City", "Jongno-gu", "56 Myo-dong", "Daeho Construction description", "Service", "02-764-3745");
+//        createEnterpriseEng("1018100729", "Piccadilly Theater Co., Ltd.", "Seoul Special City", "Jongno-gu", "139 Donui-dong", "Piccadilly Theater description", "Service", "02-501-5933");
+//        createEnterpriseEng("1018100772", "Central Tourism Hotel Co., Ltd.", "Seoul Special City", "Jongno-gu", "227-1(48-3) Jangsa-dong", "Central Tourism Hotel description", "Tourism", "02-2265-4120");
+//        createEnterpriseEng("1018101107", "Blessing Hallelujah Co., Ltd.", "Seoul Special City", "Jongno-gu", "156-1 Jangsa-dong", "Blessing Hallelujah description", "Religion", "(02)2276-1881");
+//        createEnterpriseEng("1018101126", "Woseong Development Co., Ltd.", "Seoul Special City", "Jongno-gu", "98-78 Unni-dong, Garden Tower", "Woseong Development description", "Construction", "02-765-3472");
+//        createEnterpriseEng("1018101242", "Coa Total System Co., Ltd.", "Seoul Special City", "Jongno-gu", "33-1 Gwancheol-dong", "Coa Total System description", "IT", "730-8196");
+//        createEnterpriseEng("1018101354", "Inju E&E Co., Ltd.", "Seoul Special City", "Jung-gu", "14 Toegye-ro 18-gil (Namsan-dong 1-ga)", "Inju E&E description", "Manufacturing", "02-771-2250");
+//        createEnterpriseEng("1018102940", "Motonic Co., Ltd.", "Seoul Special City", "Jung-gu", "100 Cheonggyecheon-ro, Donggwan 9th Floor (Supyo-dong, Signature Tower)", "Motonic description", "IT", "053-589-6262");
+//        createEnterpriseEng("1018103406", "Seoul Dongbang Tourism Co., Ltd.", "Seoul Special City", "Jongno-gu", "70 Gyeongun-dong", "Seoul Dongbang Tourism description", "Tourism", "02-730-9004");
+//        createEnterpriseEng("1018103518", "Kyungjin Trading Co., Ltd.", "Seoul Special City", "Jongno-gu", "Gwancheol-dong", "Kyungjin Trading description", "Distribution", "82-02-2265-7284");
+//        createEnterpriseEng("1018103594", "Geumyong Trading Co., Ltd.", "Seoul Special City", "Jongno-gu", "Gwansoo-dong", "Geumyong Trading description", "Distribution", "82-02-2265-7490");
+//        createEnterpriseEng("1058133940", "Dae-Nong Co., Ltd.", "Seoul Special City", "Jongno-gu", "Jongno 1-ga", "Dae-Nong description", "Agriculture", "02-1234-5678");
+//        createEnterpriseEng("2028143564", "Best Long Industry Co., Ltd.", "Seoul Special City", "Jongno-gu", "Jongno 2-ga", "Best Long Industry description", "Manufacturing", "02-8765-4321");
+//        createEnterpriseEng("3038107177", "Clover Hi-Tech Co., Ltd.", "Seoul Special City", "Jongno-gu", "Jongno 3-ga", "Clover Hi-Tech description", "IT", "02-2468-1357");
+//        createEnterpriseEng("3158120251", "Korea Applied Magnetics Co., Ltd.", "Seoul Special City", "Jongno-gu", "Jongno 4-ga", "Korea Applied Magnetics description", "Electronics", "02-1357-2468");
+//        createEnterpriseEng("3158102011", "Cosmo Catalyst Co., Ltd.", "Seoul Special City", "Jongno-gu", "Jongno 5-ga", "Cosmo Catalyst description", "Chemicals", "02-2468-1357");
+//        createEnterpriseEng("3158102480", "Yuhyun Construction Co., Ltd.", "Seoul Special City", "Jongno-gu", "Jongno 6-ga", "Yuhyun Construction description", "Construction", "02-5678-1234");
+//        createEnterpriseEng("3158103757", "Lotte Nestle Korea Co., Ltd.", "Seoul Special City", "Jongno-gu", "Jongno 7-ga", "Lotte Nestle Korea description", "Food", "02-8765-4321");
+//        createEnterpriseEng("3158105416", "Kingtex Co., Ltd.", "Seoul Special City", "Jongno-gu", "Jongno 8-ga", "Kingtex description", "Textiles", "02-1357-2468");
+//        createEnterpriseEng("5028115309", "Haksan Co., Ltd.", "Seoul Special City", "Jongno-gu", "Jongno 9-ga", "Haksan description", "Publishing", "02-5678-1234");
+//    }
+//
+//    private void createEnterpriseEng(String enterpriseId, String name, String address1, String address2, String address3, String description, String type, String phoneNumber) {
+//        EnterpriseEng enterprise = new EnterpriseEng();
+//        enterprise.setEnterprise_id(enterpriseId);
+//        enterprise.setName(name);
+//        enterprise.setAddress1(address1);
+//        enterprise.setAddress2(address2);
+//        enterprise.setAddress3(address3);
+//        enterprise.setDescription(description);
+//        enterprise.setType(type);
+//        enterprise.setPhone_number(phoneNumber);
+//        enterpriseEngRepository.save(enterprise);
+//    }
+//
 //    // 기업 더미데이터
 //    private void createDummyEnterprises() {
 //        createEnterprise("1018100132", "낙원상가(주)", "서울특별시", "종로구", "낙원동", "낙원상가 설명", "유통", "82-02-743-4200");
@@ -80,47 +133,394 @@
 //
 //    // 기업 유저 더미데이터
 //    private void createDummyEnterpriseUsers() {
-//        createEnterpriseUser("moonki.kim@example.com", "김문기", "password1", enterpriseRepository.findById("1018100132").orElse(null));
-//        createEnterpriseUser("hanul.jung@example.com", "정한울", "password2", enterpriseRepository.findById("1018100205").orElse(null));
-//        createEnterpriseUser("junhwa.cho@example.com", "조준화", "password3", enterpriseRepository.findById("1018100210").orElse(null));
-//        createEnterpriseUser("dohyun.kim@example.com", "김도현", "password4", enterpriseRepository.findById("1018100277").orElse(null));
-//        createEnterpriseUser("jihoon.park@example.com", "박지훈", "password5", enterpriseRepository.findById("1018100340").orElse(null));
-//        createEnterpriseUser("younghee.lee@example.com", "이영희", "password6", enterpriseRepository.findById("1018100452").orElse(null));
-//        createEnterpriseUser("minsu.choi@example.com", "최민수", "password7", enterpriseRepository.findById("1018100700").orElse(null));
-//        createEnterpriseUser("minho.jang@example.com", "장민호", "password8", enterpriseRepository.findById("1018100729").orElse(null));
-//        createEnterpriseUser("jimin.han@example.com", "한지민", "password9", enterpriseRepository.findById("1018100772").orElse(null));
-//        createEnterpriseUser("sumin.park@example.com", "박수민", "password10", enterpriseRepository.findById("1018101107").orElse(null));
-//        createEnterpriseUser("james.smith@example.com", "James Smith", "password11", enterpriseRepository.findById("1018101126").orElse(null));
-//        createEnterpriseUser("emma.johnson@example.com", "Emma Johnson", "password12", enterpriseRepository.findById("1018101242").orElse(null));
-//        createEnterpriseUser("michael.brown@example.com", "Michael Brown", "password13", enterpriseRepository.findById("1018101354").orElse(null));
-//        createEnterpriseUser("david.wilson@example.com", "David Wilson", "password14", enterpriseRepository.findById("1018102940").orElse(null));
-//        createEnterpriseUser("john.taylor@example.com", "John Taylor", "password15", enterpriseRepository.findById("1018103406").orElse(null));
-//        createEnterpriseUser("sophie.lee@example.com", "Sophie Lee", "password16", enterpriseRepository.findById("1018103518").orElse(null));
-//        createEnterpriseUser("daniel.harris@example.com", "Daniel Harris", "password17", enterpriseRepository.findById("1018103594").orElse(null));
-//        createEnterpriseUser("emily.clark@example.com", "Emily Clark", "password18", enterpriseRepository.findById("1058133940").orElse(null));
-//        createEnterpriseUser("olivia.lewis@example.com", "Olivia Lewis", "password19", enterpriseRepository.findById("2028143564").orElse(null));
-//        createEnterpriseUser("lucas.young@example.com", "Lucas Young", "password20", enterpriseRepository.findById("3038107177").orElse(null));
-//        createEnterpriseUser("alex.kim@example.com", "Alex Kim", "password21", enterpriseRepository.findById("3158120251").orElse(null));
-//        createEnterpriseUser("bella.martinez@example.com", "Bella Martinez", "password22", enterpriseRepository.findById("3158102011").orElse(null));
-//        createEnterpriseUser("chris.evans@example.com", "Chris Evans", "password23", enterpriseRepository.findById("3158102480").orElse(null));
-//        createEnterpriseUser("daniel.parker@example.com", "Daniel Parker", "password24", enterpriseRepository.findById("3158103757").orElse(null));
-//        createEnterpriseUser("ethan.lee@example.com", "Ethan Lee", "password25", enterpriseRepository.findById("3158105416").orElse(null));
-//        createEnterpriseUser("fiona.green@example.com", "Fiona Green", "password26", enterpriseRepository.findById("5028115309").orElse(null));
-//        createEnterpriseUser("george.king@example.com", "George King", "password27", enterpriseRepository.findById("1018100132").orElse(null));
-//        createEnterpriseUser("henry.white@example.com", "Henry White", "password28", enterpriseRepository.findById("1018100205").orElse(null));
-//        createEnterpriseUser("ivy.thomas@example.com", "Ivy Thomas", "password29", enterpriseRepository.findById("1018100210").orElse(null));
-//        createEnterpriseUser("jack.davis@example.com", "Jack Davis", "password30", enterpriseRepository.findById("1018100277").orElse(null));
+//        createEnterpriseUser("moonki.kim@example.com", "김문기", "password1", enterpriseRepository.findById("1018100132").orElse(null), enterpriseEngRepository.findById("1018100132").orElse(null));
+//        createEnterpriseUser("hanul.jung@example.com", "정한울", "password2", enterpriseRepository.findById("1018100205").orElse(null), enterpriseEngRepository.findById("1018100205").orElse(null));
+//        createEnterpriseUser("junhwa.cho@example.com", "조준화", "password3", enterpriseRepository.findById("1018100210").orElse(null), enterpriseEngRepository.findById("1018100210").orElse(null));
+//        createEnterpriseUser("dohyun.kim@example.com", "김도현", "password4", enterpriseRepository.findById("1018100277").orElse(null), enterpriseEngRepository.findById("1018100277").orElse(null));
+//        createEnterpriseUser("jihoon.park@example.com", "박지훈", "password5", enterpriseRepository.findById("1018100340").orElse(null), enterpriseEngRepository.findById("1018100340").orElse(null));
+//        createEnterpriseUser("younghee.lee@example.com", "이영희", "password6", enterpriseRepository.findById("1018100452").orElse(null), enterpriseEngRepository.findById("1018100452").orElse(null));
+//        createEnterpriseUser("minsu.choi@example.com", "최민수", "password7", enterpriseRepository.findById("1018100700").orElse(null), enterpriseEngRepository.findById("1018100700").orElse(null));
+//        createEnterpriseUser("minho.jang@example.com", "장민호", "password8", enterpriseRepository.findById("1018100729").orElse(null), enterpriseEngRepository.findById("1018100729").orElse(null));
+//        createEnterpriseUser("jimin.han@example.com", "한지민", "password9", enterpriseRepository.findById("1018100772").orElse(null), enterpriseEngRepository.findById("1018100772").orElse(null));
+//        createEnterpriseUser("sumin.park@example.com", "박수민", "password10", enterpriseRepository.findById("1018101107").orElse(null), enterpriseEngRepository.findById("1018101107").orElse(null));
+//        createEnterpriseUser("james.smith@example.com", "James Smith", "password11", enterpriseRepository.findById("1018101126").orElse(null), enterpriseEngRepository.findById("1018101126").orElse(null));
+//        createEnterpriseUser("emma.johnson@example.com", "Emma Johnson", "password12", enterpriseRepository.findById("1018101242").orElse(null), enterpriseEngRepository.findById("1018101242").orElse(null));
+//        createEnterpriseUser("michael.brown@example.com", "Michael Brown", "password13", enterpriseRepository.findById("1018101354").orElse(null), enterpriseEngRepository.findById("1018101354").orElse(null));
+//        createEnterpriseUser("david.wilson@example.com", "David Wilson", "password14", enterpriseRepository.findById("1018102940").orElse(null), enterpriseEngRepository.findById("1018102940").orElse(null));
+//        createEnterpriseUser("john.taylor@example.com", "John Taylor", "password15", enterpriseRepository.findById("1018103406").orElse(null), enterpriseEngRepository.findById("1018103406").orElse(null));
+//        createEnterpriseUser("sophie.lee@example.com", "Sophie Lee", "password16", enterpriseRepository.findById("1018103518").orElse(null), enterpriseEngRepository.findById("1018103518").orElse(null));
+//        createEnterpriseUser("daniel.harris@example.com", "Daniel Harris", "password17", enterpriseRepository.findById("1018103594").orElse(null), enterpriseEngRepository.findById("1018103594").orElse(null));
+//        createEnterpriseUser("emily.clark@example.com", "Emily Clark", "password18", enterpriseRepository.findById("1058133940").orElse(null), enterpriseEngRepository.findById("1058133940").orElse(null));
+//        createEnterpriseUser("olivia.lewis@example.com", "Olivia Lewis", "password19", enterpriseRepository.findById("2028143564").orElse(null), enterpriseEngRepository.findById("2028143564").orElse(null));
+//        createEnterpriseUser("lucas.young@example.com", "Lucas Young", "password20", enterpriseRepository.findById("3038107177").orElse(null), enterpriseEngRepository.findById("3038107177").orElse(null));
+//        createEnterpriseUser("alex.kim@example.com", "Alex Kim", "password21", enterpriseRepository.findById("3158120251").orElse(null), enterpriseEngRepository.findById("3158120251").orElse(null));
+//        createEnterpriseUser("bella.martinez@example.com", "Bella Martinez", "password22", enterpriseRepository.findById("3158102011").orElse(null), enterpriseEngRepository.findById("3158102011").orElse(null));
+//        createEnterpriseUser("chris.evans@example.com", "Chris Evans", "password23", enterpriseRepository.findById("3158102480").orElse(null), enterpriseEngRepository.findById("3158102480").orElse(null));
+//        createEnterpriseUser("daniel.parker@example.com", "Daniel Parker", "password24", enterpriseRepository.findById("3158103757").orElse(null), enterpriseEngRepository.findById("3158103757").orElse(null));
+//        createEnterpriseUser("ethan.lee@example.com", "Ethan Lee", "password25", enterpriseRepository.findById("3158105416").orElse(null), enterpriseEngRepository.findById("3158105416").orElse(null));
+//        createEnterpriseUser("fiona.green@example.com", "Fiona Green", "password26", enterpriseRepository.findById("5028115309").orElse(null), enterpriseEngRepository.findById("5028115309").orElse(null));
+//        createEnterpriseUser("george.king@example.com", "George King", "password27", enterpriseRepository.findById("1018100132").orElse(null), enterpriseEngRepository.findById("1018100132").orElse(null));
+//        createEnterpriseUser("henry.white@example.com", "Henry White", "password28", enterpriseRepository.findById("1018100205").orElse(null), enterpriseEngRepository.findById("1018100205").orElse(null));
+//        createEnterpriseUser("ivy.thomas@example.com", "Ivy Thomas", "password29", enterpriseRepository.findById("1018100210").orElse(null), enterpriseEngRepository.findById("1018100210").orElse(null));
+//        createEnterpriseUser("jack.davis@example.com", "Jack Davis", "password30", enterpriseRepository.findById("1018100277").orElse(null), enterpriseEngRepository.findById("1018100277").orElse(null));
 //    }
 //
-//    private void createEnterpriseUser(String email, String name, String password, Enterprise enterprise) {
+//    private void createEnterpriseUser(String email, String name, String password, Enterprise enterprise, EnterpriseEng enterpriseEng) {
 //        EnterpriseUser enterpriseUser = new EnterpriseUser();
 //        enterpriseUser.setEnterprise_user_id(UUID.randomUUID().toString());
 //        enterpriseUser.setEmail(email);
 //        enterpriseUser.setName(name);
 //        enterpriseUser.setPassword(password);
 //        enterpriseUser.setEnterprise(enterprise);
+//        enterpriseUser.setEnterpriseEng(enterpriseEng);
 //        enterpriseUser.setCreated_at(LocalDateTime.now());
 //        enterpriseUserRepository.save(enterpriseUser);
+//    }
+//
+//    // 채용공고 더미데이터 (영문)
+//    private void createDummyJobsEng() {
+//        EnterpriseEng enterprise1 = enterpriseEngRepository.findById("1018100132").orElse(null);
+//        EnterpriseEng enterprise2 = enterpriseEngRepository.findById("1018100205").orElse(null);
+//        EnterpriseEng enterprise3 = enterpriseEngRepository.findById("1018100210").orElse(null);
+//        EnterpriseEng enterprise4 = enterpriseEngRepository.findById("1018100277").orElse(null);
+//        EnterpriseEng enterprise5 = enterpriseEngRepository.findById("1018100340").orElse(null);
+//        EnterpriseUser enterpriseUser1 = enterpriseUserRepository.findByEnterpriseEng(enterprise1).get(0);
+//        EnterpriseUser enterpriseUser2 = enterpriseUserRepository.findByEnterpriseEng(enterprise2).get(0);
+//        EnterpriseUser enterpriseUser3 = enterpriseUserRepository.findByEnterpriseEng(enterprise3).get(0);
+//        EnterpriseUser enterpriseUser4 = enterpriseUserRepository.findByEnterpriseEng(enterprise4).get(0);
+//        EnterpriseUser enterpriseUser5 = enterpriseUserRepository.findByEnterpriseEng(enterprise5).get(0);
+//
+//        JobEng job1 = new JobEng();
+//        job1.setTitle("Logistics Manager");
+//        job1.setDescription("Logistics Manager\n" +
+//                "\n" +
+//                "Key Responsibilities:\n" +
+//                "The Logistics Manager is responsible for smooth operation and management of the logistics center, handling inventory management, shipment management, and improvement of logistics processes. Our goal is to enhance customer satisfaction through efficient logistics operations and maximize operational efficiency along with cost reduction.\n" +
+//                "\n" +
+//                "Responsibilities:\n" +
+//                "\n" +
+//                "Inventory Management:\n" +
+//                "\n" +
+//                "Continuous monitoring and optimization of inventory levels.\n" +
+//                "Conduct periodic inventory checks and audits to maintain inventory accuracy.\n" +
+//                "Optimize the movement and placement of inventory within the warehouse.\n" +
+//                "Shipment Management:\n" +
+//                "\n" +
+//                "Accurate processing and prompt shipment of customer orders.\n" +
+//                "Address and resolve issues during the shipment process.\n" +
+//                "Plan shipping schedules and routes using logistics systems.\n" +
+//                "Process Improvement:\n" +
+//                "\n" +
+//                "Analyze current logistics processes and suggest improvements.\n" +
+//                "Implement new technologies and optimize logistics systems to increase operational efficiency.\n" +
+//                "Maintain smooth communication and relationships with suppliers.\n" +
+//                "Qualifications:\n" +
+//                "\n" +
+//                "Over 3 years of experience in logistics management.\n" +
+//                "Deep understanding of logistics systems and processes.\n" +
+//                "Ability to analyze logistics data and prepare reports.\n" +
+//                "Strong problem-solving skills and excellent communication skills.\n" +
+//                "Experience in team collaboration and project management.\n" +
+//                "Preferred Qualifications:\n" +
+//                "\n" +
+//                "Certification in logistics (e.g., Logistics Manager, International Logistics Certification, etc.).\n" +
+//                "Experience in various logistics environments in large enterprises or startups.\n" +
+//                "Experience in logistics automation and new technology adoption.\n" +
+//                "Interest in the fitness and sports industry.\n" +
+//                "Benefits:\n" +
+//                "\n" +
+//                "Work Environment:\n" +
+//                "\n" +
+//                "OKR-based goal setting:\n" +
+//                "Maximize job performance through clear goal setting.\n" +
+//                "Performance review system through CFR:\n" +
+//                "Support individual and team growth through regular performance reviews.\n" +
+//                "Growth feedback through peer feedback each quarter:\n" +
+//                "Promote mutual development through team feedback.\n" +
+//                "Salary increase twice a year and additional compensation for outliers:\n" +
+//                "Provide additional compensation for outstanding performers.\n" +
+//                "Reflecting performance through occasional salary claims:\n" +
+//                "Operate a reward system based on achievements.\n" +
+//                "Welfare Benefits:\n" +
+//                "\n" +
+//                "Warm team:\n" +
+//                "Family discount coupons issued.\n" +
+//                "Health check-up cost support.\n" +
+//                "Awards for long-term employees (1/3/5 years).\n" +
+//                "Smart team:\n" +
+//                "Support for education and book purchases.\n" +
+//                "Structured onboarding training.\n" +
+//                "The best welfare is the Buffett Seoul colleague → introduce a member.\n" +
+//                "Sports team:\n" +
+//                "Free participation in team buffet training.\n" +
+//                "Free use of the Buffet Ground branch.\n" +
+//                "Discounts on 1:1 PT and exercise products from our partners (golf/pilates/yoga, etc.).\n" +
+//                "Recruitment Process:\n" +
+//                "\n" +
+//                "Simple application:\n" +
+//                "Submit your resume (portfolio is optional).\n" +
+//                "Request for written interview.\n" +
+//                "First interview:\n" +
+//                "Interview to assess job competence (conversation with team lead and practitioners).\n" +
+//                "Takes about 40 to 70 minutes.\n" +
+//                "Second interview:\n" +
+//                "Verify cultural fit (conversation with C-level and executives).\n" +
+//                "Takes about 40 to 70 minutes.\n" +
+//                "Final acceptance:\n" +
+//                "Final compensation negotiation and onboarding upon passing the second interview.");
+//        job1.setViews(100);
+//        job1.setDeadDate(LocalDate.now().plusDays(30));
+//        job1.setEnterprise(enterprise1);
+//        job1.setEnterpriseUser(enterpriseUser1);
+//        job1.setJobRole("Logistics Management");
+//        job1.setExperience("3+ years");
+//        job1.setEmploymentType("Full-time");
+//        job1.setLocation("Jongno-gu, Seoul");
+//        job1.setSkills("Inventory management, logistics systems, process improvement");
+//        job1.setImageName("company2.jpg");
+//        jobEngRepository.save(job1);
+//
+//        JobEng job2 = new JobEng();
+//        job2.setTitle("Data Scientist");
+//        job2.setDescription("Data Scientist\n" +
+//                "\n" +
+//                "Key Responsibilities:\n" +
+//                "As a Data Scientist, you will analyze and interpret complex data sets from various industries to derive meaningful insights. Additionally, you will support data-driven decision-making to optimize business strategies and drive innovation.\n" +
+//                "\n" +
+//                "Team Introduction:\n" +
+//                "Our team analyzes data from various industries to derive important insights and support data-driven decision-making. We use the latest data analysis techniques and machine learning models to help clients and internal teams derive maximum value from data. Our goal is to lead business success through the establishment of a data-centric culture and continuous growth.\n" +
+//                "\n" +
+//                "Core Responsibilities:\n" +
+//                "\n" +
+//                "Analyzing and visualizing large data sets:\n" +
+//                "\n" +
+//                "Collect and preprocess large data sets from various sources.\n" +
+//                "Derive insights using advanced data analysis techniques.\n" +
+//                "Convey results clearly and effectively using data visualization tools.\n" +
+//                "Developing and optimizing machine learning models:\n" +
+//                "\n" +
+//                "Develop machine learning models to solve business problems.\n" +
+//                "Improve accuracy and efficiency through model performance evaluation and optimization.\n" +
+//                "Real-time operation and maintenance of models.\n" +
+//                "Developing and executing data-driven strategies:\n" +
+//                "\n" +
+//                "Develop business strategies based on data analysis results.\n" +
+//                "Support data-driven decision-making to improve business performance.\n" +
+//                "Provide feedback and measure performance after strategy execution.\n" +
+//                "Qualifications:\n" +
+//                "\n" +
+//                "Deep understanding of data analysis and statistics.\n" +
+//                "Experience using data analysis tools like Python, R.\n" +
+//                "Experience developing machine learning models.\n" +
+//                "Proficiency in database management and SQL.\n" +
+//                "Strong problem-solving and logical thinking skills.\n" +
+//                "Preferred Qualifications:\n" +
+//                "\n" +
+//                "Experience analyzing large data sets.\n" +
+//                "Experience working with data in cloud environments (AWS, GCP, Azure, etc.).\n" +
+//                "Proficiency in data visualization tools (Tableau, Power BI, etc.).\n" +
+//                "Understanding of business and industry.\n" +
+//                "Experience with big data technologies (Hadoop, Spark, etc.).\n" +
+//                "Benefits:\n" +
+//                "\n" +
+//                "Work Environment:\n" +
+//                "\n" +
+//                "Flexible working hours:\n" +
+//                "\n" +
+//                "Support for flexible work arrangements and remote work.\n" +
+//                "Provide a flexible work environment tailored to individual work styles.\n" +
+//                "Health Check-up:\n" +
+//                "\n" +
+//                "Support for regular health check-ups.\n" +
+//                "Manage employee health through comprehensive health check-ups.\n" +
+//                "Education and Self-Development Support:\n" +
+//                "\n" +
+//                "Support for job-related education expenses.\n" +
+//                "Support for self-development through books and lectures.\n" +
+//                "Team Building and Refreshment:\n" +
+//                "\n" +
+//                "Various activities and events for team unity.\n" +
+//                "Provide vacation and refresh time for rest and recharge.\n" +
+//                "Recruitment Process:\n" +
+//                "\n" +
+//                "Application Review:\n" +
+//                "Review resumes and portfolios.\n" +
+//                "Online Test:\n" +
+//                "Conduct a technical skills assessment.\n" +
+//                "Interview:\n" +
+//                "Interview for skills, experience, and cultural fit (may include multiple rounds).\n" +
+//                "Final Interview:\n" +
+//                "Conducted by executives or managers.\n" +
+//                "Final Acceptance:\n" +
+//                "Onboarding upon successful final interview.");
+//        job2.setViews(150);
+//        job2.setDeadDate(LocalDate.now().plusDays(30));
+//        job2.setEnterprise(enterprise2);
+//        job2.setEnterpriseUser(enterpriseUser2);
+//        job2.setJobRole("Data Science");
+//        job2.setExperience("Experience developing machine learning models");
+//        job2.setEmploymentType("Full-time");
+//        job2.setLocation("Gangnam-gu, Seoul");
+//        job2.setSkills("Python, R, SQL, machine learning");
+//        job2.setImageName("company3.jpg");
+//        jobEngRepository.save(job2);
+//
+//        JobEng job3 = new JobEng();
+//        job3.setTitle("Software Engineer");
+//        job3.setDescription("Software development and maintenance.\nJob Description: Design software architecture, write and review code, fix bugs.\nQualifications: Over 5 years of experience in software development, understanding of Java and Spring.\nPreferred: Experience in developing large-scale systems.\nBenefits: Annual performance bonuses, flexible working hours.");
+//        job3.setViews(200);
+//        job3.setDeadDate(LocalDate.now().plusDays(30));
+//        job3.setEnterprise(enterprise3);
+//        job3.setEnterpriseUser(enterpriseUser3);
+//        job3.setJobRole("Software Development");
+//        job3.setExperience("Over 5 years");
+//        job3.setEmploymentType("Full-time");
+//        job3.setLocation("2 Ujeongguk-ro, Jongno-gu, Seoul");
+//        job3.setSkills("Java, Spring, Software Architecture");
+//        job3.setImageName("company1.png");
+//        jobEngRepository.save(job3);
+//
+//        JobEng job4 = new JobEng();
+//        job4.setTitle("Project Manager");
+//        job4.setDescription("Planning and managing projects.\nJob Description: Manage project schedules, coordinate teams, report performance.\nQualifications: Over 7 years of project management experience, PMP certification.\nPreferred: Experience in IT project management.\nBenefits: Health checkups, annual performance bonuses.");
+//        job4.setViews(120);
+//        job4.setDeadDate(LocalDate.now().plusDays(40));
+//        job4.setEnterprise(enterprise4);
+//        job4.setEnterpriseUser(enterpriseUser4);
+//        job4.setJobRole("Project Management");
+//        job4.setExperience("Over 7 years");
+//        job4.setEmploymentType("Full-time");
+//        job4.setLocation("Gwanchul-dong, Jongno-gu, Seoul");
+//        job4.setSkills("Project scheduling, team coordination, performance reporting");
+//        job4.setImageName("company4.jpg");
+//        jobEngRepository.save(job4);
+//
+//        JobEng job5 = new JobEng();
+//        job5.setTitle("Marketing Manager");
+//        job5.setDescription("Planning and executing marketing strategies.\nJob Description: Plan marketing campaigns, manage budgets, analyze performance.\nQualifications: Over 5 years of marketing experience, understanding of digital marketing.\nPreferred: Experience in global marketing.\nBenefits: Flexible working hours, annual performance bonuses.");
+//        job5.setViews(130);
+//        job5.setDeadDate(LocalDate.now().plusDays(35));
+//        job5.setEnterprise(enterprise5);
+//        job5.setEnterpriseUser(enterpriseUser5);
+//        job5.setJobRole("Marketing Management");
+//        job5.setExperience("Over 5 years");
+//        job5.setEmploymentType("Full-time");
+//        job5.setLocation("Samil-daero, Jongno-gu, Seoul");
+//        job5.setSkills("Marketing strategy planning, budget management, performance analysis");
+//        job5.setImageName("company5.jpeg");
+//        jobEngRepository.save(job5);
+//
+//        JobEng job6 = new JobEng();
+//        job6.setTitle("Construction Worker");
+//        job6.setDescription(
+//                "Company Overview\n" +
+//                        "CFS (Coupang Fulfillment Services) is a subsidiary of Coupang that oversees logistics. CFS is responsible for operating fulfillment centers (FCs), driving innovation to grow into a global e-commerce company by enhancing operational efficiency and expertise.\n" +
+//                        "Coupang’s FCs employ experts across various fields, handling tasks such as receiving, storing, packing, shipping, and returns. Unlike typical warehouses, FCs utilize factory automation solutions and advanced technology. They specialize tasks similar to manufacturing plants and optimize logistics systems by managing space and time efficiently based on data.\n" +
+//                        "CFS aims to create a world where customers wonder how they lived without Coupang by driving logistics innovation. Join us to build our dynamic future together.\n" +
+//                        "\n" +
+//                        "For more details on this position, please visit our website using the 'Apply on Company Website' button on the right :)\n" +
+//                        "\n" +
+//                        "Main Responsibilities\n" +
+//                        "Perform various tasks at construction sites. Key responsibilities include:\n" +
+//                        "- Transport construction materials\n" +
+//                        "- Clean and organize the site\n" +
+//                        "- Assist with basic construction work\n" +
+//                        "\n" +
+//                        "Qualifications\n" +
+//                        "- Related experience is preferred\n" +
+//                        "- Physical fitness and reliability are essential\n" +
+//                        "\n" +
+//                        "Preferred Qualifications\n" +
+//                        "- Experience working at construction sites\n" +
+//                        "\n" +
+//                        "Benefits\n" +
+//                        "- Snacks provided\n" +
+//                        "- Daily wages paid\n" +
+//                        "\n" +
+//                        "Recruitment Process\n" +
+//                        "Document screening - Phone interview - In-person interview - Final acceptance\n" +
+//                        "The recruitment process may vary by role and can change based on circumstances. Applicants will be informed individually via the email provided in their application.\n" +
+//                        "\n" +
+//                        "Additional Information\n" +
+//                        "This job posting may close early if the position is filled. A 12-week probationary period is included. Any false information in the application may result in disqualification. Veteran and disabled status will not affect the recruitment process. The job grade and responsibilities may be adjusted based on the candidate's overall experience and qualifications. If such changes are necessary, they will be communicated to the candidate before the final offer.\n" +
+//                        "\n" +
+//                        "Work Location: Jung-gu, Daejeon\n" +
+//                        "\n" +
+//                        "Privacy Policy\n" +
+//                        "Coupang Group collects and processes your personal information in accordance with our Applicant Privacy Policy (link below).\n" +
+//                        "https://www.coupang.jobs/kr/privacy-policy/\n" +
+//                        "\n" +
+//                        "Document Return Policy\n" +
+//                        "This notice complies with Article 11, Paragraph 6 of the 'Act on the Fairness of Recruitment Procedures'. Applicants who do not receive an offer can request the return of their submitted documents according to the 'Act on the Fairness of Recruitment Procedures'. However, this does not apply if the documents were submitted electronically or voluntarily submitted without our request. If the documents are lost due to reasons beyond our control, they are considered returned. To request the return of submitted documents, please complete the Document Return Request Form [Attachment 3, Enforcement Rules of the Act on the Fairness of Recruitment Procedures] and send it to our recruitment team (Coupang Recruiting Team, Tower 730, 570 Songpa-daero, Songpa-gu, Seoul). Upon confirmation of receipt, we will mail the documents to the designated address within 14 days. We will retain the original documents submitted by applicants for 180 days from the confirmation of recruitment status and will destroy all documents without delay under the 'Personal Information Protection Act' if no request for return is made within this period.\n" +
+//                        "Employment may be restricted if required legal qualifications are not met."
+//        );
+//        job6.setViews(80);
+//        job6.setDeadDate(LocalDate.now().plusDays(30));
+//        job6.setEnterprise(enterprise1);
+//        job6.setEnterpriseUser(enterpriseUser1);
+//        job6.setJobRole("Construction Worker");
+//        job6.setExperience("No experience required");
+//        job6.setEmploymentType("Temporary");
+//        job6.setLocation("Jung-gu, Daejeon");
+//        job6.setSkills("Physical strength, reliability, basic construction knowledge");
+//        job6.setImageName("company6.jpg");
+//        jobEngRepository.save(job6);
+//
+//        JobEng job7 = new JobEng();
+//        job7.setTitle("Kitchen Assistant");
+//        job7.setDescription(
+//                "Company Overview\n" +
+//                        "CFS (Coupang Fulfillment Services) is a subsidiary of Coupang that oversees logistics. CFS is responsible for operating fulfillment centers (FCs), driving innovation to grow into a global e-commerce company by enhancing operational efficiency and expertise.\n" +
+//                        "Coupang’s FCs employ experts across various fields, handling tasks such as receiving, storing, packing, shipping, and returns. Unlike typical warehouses, FCs utilize factory automation solutions and advanced technology. They specialize tasks similar to manufacturing plants and optimize logistics systems by managing space and time efficiently based on data.\n" +
+//                        "CFS aims to create a world where customers wonder how they lived without Coupang by driving logistics innovation. Join us to build our dynamic future together.\n" +
+//                        "\n" +
+//                        "For more details on this position, please visit our website using the 'Apply on Company Website' button on the right :)\n" +
+//                        "\n" +
+//                        "Main Responsibilities\n" +
+//                        "Responsible for food preparation and kitchen cleaning. Key tasks include:\n" +
+//                        "- Preparing ingredients\n" +
+//                        "- Assisting with simple cooking tasks\n" +
+//                        "- Organizing and cleaning the kitchen\n" +
+//                        "\n" +
+//                        "Qualifications\n" +
+//                        "- Related experience is preferred\n" +
+//                        "- Physical fitness and reliability are essential\n" +
+//                        "\n" +
+//                        "Preferred Qualifications\n" +
+//                        "- Experience working in the food service industry\n" +
+//                        "\n" +
+//                        "Benefits\n" +
+//                        "- Meals provided\n" +
+//                        "- Daily wages paid\n" +
+//                        "\n" +
+//                        "Recruitment Process\n" +
+//                        "Document screening - Phone interview - In-person interview - Final acceptance\n" +
+//                        "The recruitment process may vary by role and can change based on circumstances. Applicants will be informed individually via the email provided in their application.\n" +
+//                        "\n" +
+//                        "Additional Information\n" +
+//                        "This job posting may close early if the position is filled. A 12-week probationary period is included. Any false information in the application may result in disqualification. Veteran and disabled status will not affect the recruitment process. The job grade and responsibilities may be adjusted based on the candidate's overall experience and qualifications. If such changes are necessary, they will be communicated to the candidate before the final offer.\n" +
+//                        "\n" +
+//                        "Work Location: Gangnam-gu, Seoul\n" +
+//                        "\n" +
+//                        "Privacy Policy\n" +
+//                        "Coupang Group collects and processes your personal information in accordance with our Applicant Privacy Policy (link below).\n" +
+//                        "https://www.coupang.jobs/kr/privacy-policy/\n" +
+//                        "\n" +
+//                        "Document Return Policy\n" +
+//                        "This notice complies with Article 11, Paragraph 6 of the 'Act on the Fairness of Recruitment Procedures'. Applicants who do not receive an offer can request the return of their submitted documents according to the 'Act on the Fairness of Recruitment Procedures'. However, this does not apply if the documents were submitted electronically or voluntarily submitted without our request. If the documents are lost due to reasons beyond our control, they are considered returned. To request the return of submitted documents, please complete the Document Return Request Form [Attachment 3, Enforcement Rules of the Act on the Fairness of Recruitment Procedures] and send it to our recruitment team (Coupang Recruiting Team, Tower 730, 570 Songpa-daero, Songpa-gu, Seoul). Upon confirmation of receipt, we will mail the documents to the designated address within 14 days. We will retain the original documents submitted by applicants for 180 days from the confirmation of recruitment status and will destroy all documents without delay under the 'Personal Information Protection Act' if no request for return is made within this period.\n" +
+//                        "Employment may be restricted if required legal qualifications are not met."
+//        );
+//        job7.setViews(100);
+//        job7.setDeadDate(LocalDate.now().plusDays(30));
+//        job7.setEnterprise(enterprise2);
+//        job7.setEnterpriseUser(enterpriseUser2);
+//        job7.setJobRole("Kitchen Assistant");
+//        job7.setExperience("No experience required");
+//        job7.setEmploymentType("Temporary");
+//        job7.setLocation("Gangnam-gu, Seoul");
+//        job7.setSkills("Ingredient preparation, cleaning, basic cooking knowledge");
+//        job7.setImageName("company7.png");
+//        jobEngRepository.save(job7);
 //    }
 //
 //    // 채용공고 더미데이터

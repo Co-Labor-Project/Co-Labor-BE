@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import pelican.co_labor.domain.enterprise.Enterprise;
+import pelican.co_labor.domain.enterprise.EnterpriseEng;
 import pelican.co_labor.domain.enterprise_user.EnterpriseUser;
 
 import java.util.List;
@@ -16,6 +17,9 @@ public interface EnterpriseUserRepository extends JpaRepository<EnterpriseUser, 
 
     @Query("SELECT e FROM EnterpriseUser e WHERE e.enterprise = :enterprise")
     List<EnterpriseUser> findByEnterprise(@Param("enterprise") Enterprise enterprise);
+
+    @Query("SELECT e FROM EnterpriseUser e WHERE e.enterpriseEng = :enterprise")
+    List<EnterpriseUser> findByEnterpriseEng(@Param("enterprise") EnterpriseEng enterprise);
 
     boolean existsByEmail(String email); // 추가된 부분
 }

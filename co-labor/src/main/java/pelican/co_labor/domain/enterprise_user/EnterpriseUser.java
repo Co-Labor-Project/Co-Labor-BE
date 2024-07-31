@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import pelican.co_labor.domain.enterprise.Enterprise;
+import pelican.co_labor.domain.enterprise.EnterpriseEng;
 import pelican.co_labor.dto.auth.EnterpriseUserDTO;
 
 import java.time.LocalDateTime;
@@ -31,6 +32,10 @@ public class EnterpriseUser {
     @ManyToOne
     @JoinColumn(name = "enterprise_id")
     private Enterprise enterprise;
+    @ManyToOne
+    @JoinColumn(name = "enterprise_eng_id")
+    private EnterpriseEng enterpriseEng;
+
 
     public static EnterpriseUser toEnterpriseUser(EnterpriseUserDTO enterpriseUserDTO) {
         EnterpriseUser enterpriseUser = new EnterpriseUser();
