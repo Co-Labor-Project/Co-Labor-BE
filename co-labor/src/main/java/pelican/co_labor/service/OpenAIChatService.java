@@ -41,7 +41,7 @@ public class OpenAIChatService {
         JSONObject body = new JSONObject();
         body.put("model", "gpt-3.5-turbo");
         body.put("messages", messages);
-        body.put("max_tokens", 800);
+        body.put("max_tokens", 1000);
 
         HttpEntity<String> request = new HttpEntity<>(body.toString(), headers);
 
