@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 public class SupportCenter {
 
     @Id
-    private Long support_center_id; // "순번"을 primary key로 사용
+    private Long support_center_id;
 
     @Column(nullable = false)
     private String name;
@@ -28,10 +28,10 @@ public class SupportCenter {
     private String phone;
 
     @Column(nullable = false)
-    private double latitude; // 위도 추가
+    private double latitude;
 
     @Column(nullable = false)
-    private double longitude; // 경도 추가
+    private double longitude;
 
     @Column(nullable = false, updatable = false)
     private LocalDateTime created_at;

@@ -35,7 +35,7 @@ public class JobEng {
 
     @Column(columnDefinition = "TEXT")
     private String requirement;
-    // 추가 시작
+
     @Column(columnDefinition = "TEXT")
     private String jobRole;
 
@@ -50,7 +50,7 @@ public class JobEng {
 
     @Column(columnDefinition = "TEXT")
     private String skills;
-    // 추가 끝
+
     @Column(nullable = false)
     private int views;
 

@@ -30,10 +30,7 @@ public class SupportCenterService {
         this.naverGeocodingService = naverGeocodingService;
     }
 
-//    @PostConstruct
-//    public void init() {
-//        fetchDataFromApi();
-//    }
+
 
     public void fetchDataFromApi() {
         supportCenterRepository.deleteAll(); // 기존 데이터 삭제

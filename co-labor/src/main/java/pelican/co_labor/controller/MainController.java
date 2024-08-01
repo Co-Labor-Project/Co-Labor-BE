@@ -29,9 +29,7 @@ public class MainController {
 
     @GetMapping
     public Map<String, Object> getMainPageData() {
-        /*
-        로그인관련 클래스 구현 후 수정 필요
-         */
+
         Map<String, Object> response = new HashMap<>();
 
         List<Job> jobs = jobRepository.findAll();

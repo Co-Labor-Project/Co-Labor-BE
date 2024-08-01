@@ -87,10 +87,6 @@ public class AuthService {
     }
 
 
-//    public Optional<EnterpriseUser> findEnterpriseUserById(String username) {
-//        return Optional.ofNullable(enterpriseUserRepository.findByEnterpriseUserId(username));
-//
-//    }
 
     public Optional<EnterpriseUser> findEnterpriseUserById(String enterpriseUserId) {
         return Optional.ofNullable(enterpriseUserRepository.findByEnterpriseUserId(enterpriseUserId));

@@ -112,17 +112,10 @@ public class EnterpriseController {
     // 사업자 등록 번호 조회해서 기업 회원에 매핑
     @PostMapping("/map")
     public ResponseEntity<Map<String, Object>> mapEnterprise(@RequestParam("enterpriseId") String enterpriseId,@RequestParam("username") String username ,HttpServletRequest httpServletRequest) {
-//        HttpSession session = httpServletRequest.getSession(false);  // 세션이 없으면 null 리턴
+
 
         Map<String, Object> response = new HashMap<>();
-//
-//        if (session == null || session.getAttribute("username") == null) {
-//            response.put("status", 0);
-//            response.put("message", "사용자 세션이 존재하지 않습니다.");
-//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
-//        }
-//
-//        String username = session.getAttribute("username").toString();
+
 
         Optional<EnterpriseUser> enterpriseUserOpt = authService.findEnterpriseUserById(username);
         if (enterpriseUserOpt.isEmpty()) {

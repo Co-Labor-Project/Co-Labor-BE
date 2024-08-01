@@ -8,8 +8,8 @@ import lombok.*;
 @AllArgsConstructor
 @ToString
 public class ReviewDTO {
-    private String userId; // laborUser의 ID
-    private String enterpriseId; // enterprise의 ID
+    private String userId;
+    private String enterpriseId;
 
     private String title;
     private int rating;
