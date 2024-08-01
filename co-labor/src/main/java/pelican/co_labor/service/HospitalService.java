@@ -50,7 +50,7 @@ public class HospitalService {
             if (region == null) {
                 hospitalRepository.deleteAll();
             } else {
-                hospitalRepository.deleteByDutyAddrStartingWith(region);
+                hospitalRepository.deleteByAddressStartingWith(region);
             }
 
             for (int pageNo = 1; pageNo <= totalPages; pageNo++) {
@@ -76,12 +76,12 @@ public class HospitalService {
                         Element eElement = (Element) nNode;
 
                         Hospital hospital = new Hospital();
-                        hospital.setRnum(Long.parseLong(getTagValue("rnum", eElement)));
-                        hospital.setDutyAddr(getTagValue("dutyAddr", eElement));
-                        hospital.setDutyName(getTagValue("dutyName", eElement));
-                        hospital.setDutyTel1(getTagValue("dutyTel1", eElement));
-                        hospital.setWgs84Lat(parseDoubleOrDefault(getTagValue("wgs84Lat", eElement)));
-                        hospital.setWgs84Lon(parseDoubleOrDefault(getTagValue("wgs84Lon", eElement)));
+                        hospital.setId(Long.parseLong(getTagValue("rnum", eElement)));
+                        hospital.setAddress(getTagValue("dutyAddr", eElement));
+                        hospital.setName(getTagValue("dutyName", eElement));
+                        hospital.setPhone(getTagValue("dutyTel1", eElement));
+                        hospital.setLatitude(parseDoubleOrDefault(getTagValue("wgs84Lat", eElement)));
+                        hospital.setLongitude(parseDoubleOrDefault(getTagValue("wgs84Lon", eElement)));
 
                         hospitals.add(hospital);
                     }
@@ -143,7 +143,6 @@ public class HospitalService {
     }
 
     public List<Hospital> getHospitalsByRegion(String region) {
-        return hospitalRepository.findByDutyAddrStartingWith(region);
+        return hospitalRepository.findByAddressStartingWith(region);
     }
 }
-

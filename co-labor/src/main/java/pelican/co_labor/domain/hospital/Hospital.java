@@ -12,20 +12,20 @@ public class Hospital {
 
     @Id
     @Column(name = "id", nullable = false)
-    private Long rnum;
+    private Long id;
 
     @Column(name = "address", nullable = false)
-    private String dutyAddr;
+    private String address;
 
     @Column(name = "name", nullable = false)
-    private String dutyName;
+    private String name;
 
     @Column(name = "phone", nullable = false)
-    private String dutyTel1;
+    private String phone;
 
     @Column(name = "latitude", nullable = false)
-    private double wgs84Lat;
+    private double latitude;
 
     @Column(name = "longitude", nullable = false)
-    private double wgs84Lon;
+    private double longitude;
 }

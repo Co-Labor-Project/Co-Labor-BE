@@ -38,4 +38,3 @@ public class HospitalController {
         return hospitalService.getHospitalsByRegion(region);
     }
 }
-

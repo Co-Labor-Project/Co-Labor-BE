@@ -8,7 +8,7 @@ import java.util.List;
 
 @Repository
 public interface HospitalRepository extends JpaRepository<Hospital, Long> {
-    List<Hospital> findByDutyAddrStartingWith(String region);
+    List<Hospital> findByAddressStartingWith(String region);
 
-    void deleteByDutyAddrStartingWith(String region);
+    void deleteByAddressStartingWith(String region);
 }
