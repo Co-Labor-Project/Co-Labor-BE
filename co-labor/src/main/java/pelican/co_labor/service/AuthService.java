@@ -2,10 +2,12 @@ package pelican.co_labor.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import pelican.co_labor.domain.enterprise.Enterprise;
 import pelican.co_labor.domain.enterprise_user.EnterpriseUser;
 import pelican.co_labor.domain.labor_user.LaborUser;
 import pelican.co_labor.dto.auth.EnterpriseUserDTO;
 import pelican.co_labor.dto.auth.LaborUserDTO;
+import pelican.co_labor.repository.enterprise.EnterpriseRepository;
 import pelican.co_labor.repository.enterprise_user.EnterpriseUserRepository;
 import pelican.co_labor.repository.labor_user.LaborUserRepository;
 
@@ -16,6 +18,7 @@ import java.util.Optional;
 public class AuthService {
     private final LaborUserRepository laborUserRepository;
     private final EnterpriseUserRepository enterpriseUserRepository;
+    private final EnterpriseRepository enterpriseRepository;
 
     public void registerLaborUser(LaborUserDTO laborUserDTO) {
         LaborUser laborUser = LaborUser.toLaborUser(laborUserDTO);
@@ -84,10 +87,15 @@ public class AuthService {
     }
 
 
-    public Optional<EnterpriseUser> findEnterpriseUserById(String username) {
-        return Optional.ofNullable(enterpriseUserRepository.findByEnterpriseUserId(username));
+//    public Optional<EnterpriseUser> findEnterpriseUserById(String username) {
+//        return Optional.ofNullable(enterpriseUserRepository.findByEnterpriseUserId(username));
+//
+//    }
 
+    public Optional<EnterpriseUser> findEnterpriseUserById(String enterpriseUserId) {
+        return Optional.ofNullable(enterpriseUserRepository.findByEnterpriseUserId(enterpriseUserId));
     }
+
 
     public String getUserType(String username) {
         Optional<LaborUser> byLaborUserId = laborUserRepository.findByLaborUserId(username);
@@ -103,5 +111,11 @@ public class AuthService {
 
             return null;
         }
+    }
+
+
+
+    public Optional<Enterprise> findEnterpriseById(String enterpriseId) {
+        return enterpriseRepository.findByEnterpriseId(enterpriseId);
     }
 }

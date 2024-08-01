@@ -11,9 +11,12 @@ import pelican.co_labor.domain.job.Job;
 import pelican.co_labor.domain.job.JobEng;
 import pelican.co_labor.service.AuthService;
 import pelican.co_labor.service.JobService;
+import pelican.co_labor.repository.enterprise_user.EnterpriseUserRepository;
+
 
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
@@ -25,11 +28,13 @@ public class JobController {
 
     private final JobService jobService;
     private final AuthService authService;
+    private final EnterpriseUserRepository enterpriseUserRepository;
 
     @Autowired
-    public JobController(JobService jobService, AuthService authService) {
+    public JobController(JobService jobService, AuthService authService, EnterpriseUserRepository enterpriseUserRepository) {
         this.jobService = jobService;
         this.authService = authService;
+        this.enterpriseUserRepository = enterpriseUserRepository;
     }
 
     @GetMapping
@@ -46,11 +51,22 @@ public class JobController {
     @PostMapping
     public Job createJob(@RequestParam("job") String jobJson,
                          @RequestParam("image") MultipartFile image,
-                         @RequestParam("enterprise_user_id") String enterpriseUserId) throws IOException {
+                         @RequestParam("enterprise_user_id") String enterpriseUser) throws IOException {
+        System.out.println("Received enterprise_user_id: " + enterpriseUser);
+
         Job job = jobService.mapJobFromJson(jobJson);
-        authService.findEnterpriseUserById(enterpriseUserId).ifPresent(job::setEnterpriseUser);
+        authService.findEnterpriseUserById(enterpriseUser).ifPresentOrElse(job::setEnterpriseUser, () -> {
+            throw new IllegalArgumentException("Invalid enterprise user ID: " + enterpriseUser);
+        });
+
+        String enterpriseId = enterpriseUserRepository.findEnterpriseIDByUserId(enterpriseUser);
+        System.out.println("Found enterprise_id: " + enterpriseId);
+
+        authService.findEnterpriseById(enterpriseId).ifPresent(job::setEnterprise);
         return jobService.createJob(job, image);
     }
+
+
 
     @PutMapping("/{job_id}")
     public ResponseEntity<Job> updateJob(@PathVariable Long job_id,
@@ -75,16 +91,26 @@ public class JobController {
             Resource resource = new UrlResource(filePath.toUri());
 
             if (resource.exists() || resource.isReadable()) {
+                String contentType = Files.probeContentType(filePath);
+
+                if (contentType == null) {
+                    contentType = "application/octet-stream";
+                }
+
                 return ResponseEntity.ok()
-                        .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
+                        .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + resource.getFilename() + "\"")
+                        .header(HttpHeaders.CONTENT_TYPE, contentType)
                         .body(resource);
             } else {
                 return ResponseEntity.notFound().build();
             }
         } catch (MalformedURLException e) {
             return ResponseEntity.badRequest().build();
+        } catch (IOException e) {
+            return ResponseEntity.status(500).build();
         }
     }
+
 
     // 영어 채용 공고 조회 엔드포인트 추가
 
