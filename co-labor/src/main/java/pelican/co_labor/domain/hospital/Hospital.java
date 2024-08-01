@@ -11,21 +11,21 @@ import lombok.Setter;
 public class Hospital {
 
     @Id
-    @Column(nullable = false)
+    @Column(name = "id", nullable = false)
     private Long rnum;
 
-    @Column(nullable = false)
+    @Column(name = "address", nullable = false)
     private String dutyAddr;
 
-    @Column(nullable = false)
+    @Column(name = "name", nullable = false)
     private String dutyName;
 
-    @Column(nullable = false)
+    @Column(name = "phone", nullable = false)
     private String dutyTel1;
 
-    @Column(nullable = false)
+    @Column(name = "latitude", nullable = false)
     private double wgs84Lat;
 
-    @Column(nullable = false)
+    @Column(name = "longitude", nullable = false)
     private double wgs84Lon;
 }
