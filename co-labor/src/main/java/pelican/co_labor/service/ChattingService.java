@@ -62,6 +62,8 @@ public class ChattingService {
         String summaryResponse = openAIChatService.getGptResponse(summaryPrompt);
 
         return summaryResponse;
+
+        // return firstResponse;
     }
 }
 
