@@ -25,8 +25,7 @@ public class OpenAIChatService {
     }
 
     public String getGptResponse(String userMessage) {
-        String prompt = userMessage + " 가독성 좋게 보기좋게 문단으로 대답해주고 문단 끝날때 마다 구분선을 '<hr>'을 추가해서 답변을 해줘. 이 질문에 대해 공감적으로 상담사처럼 답변을 해주고 한국 헌법과 관련해서 법률 명과 관련된 판례와 키워드를 자세하게 구체적으로 알려줘. 그리고 주요 키워드를 이용하고 내가 외국인 근로자인 것을 감안해서 법률적 조언을 부탁해. 그리고 자세한 방법도 알려줘.";
-
+        String prompt = userMessage + " 방금 질문에 대해서 'html'문법을 사용해서 (예를 들어 </b> <br />, <i> </i> ) 가독성 좋게 보기좋게 최대한 문단으로 자주 끊어서 답변을 해줘.  너는 법률 챗봇이야! 또 이 질문에 대해 공감적으로 상담사처럼 답변을 해주고 한국 헌법과 관련해서 법률 명과 관련된 판례와 키워드를 자세하게 구체적으로 알려줘. 그리고 주요 키워드를 이용하고 내가 외국인 근로자인 것을 감안해서 법률적 조언을 부탁해. 그리고 자세한 방법도 알려줘.";
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", "Bearer " + openaiApiKey);
         headers.set("Content-Type", "application/json");
@@ -41,7 +40,7 @@ public class OpenAIChatService {
         JSONObject body = new JSONObject();
         body.put("model", "gpt-3.5-turbo");
         body.put("messages", messages);
-        body.put("max_tokens", 1000);
+        body.put("max_tokens", 1300);
 
         HttpEntity<String> request = new HttpEntity<>(body.toString(), headers);
 
