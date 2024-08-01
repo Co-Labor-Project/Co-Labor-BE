@@ -55,7 +55,7 @@ public class ChattingService {
         String prev = cleanedResponses + "\n\nThe above is a conversation I had with you before. If it's empty, ignore it, but if it is, remember it.\n\n";
 
         String summaryPrompt = prev + "\nCondition 0 - The English in the prompt is the setting to be referenced in the answer, and the Korean is the actual question. \nCondition 1 - Your role is a legal chatbot consulting with a foreign worker. \nCondition 2 - Now the foreign worker will ask you a question about legal advice, and you must answer the question according to conditions 3 and 4. \nCondition 3 - First paragraph: The main answer to the question. This includes various contents such as solutions, advice, etc. Second paragraph: The law, case law, etc. related to the question. \nCondition 4 - Answer in three paragraphs using indentation and do not put subtitles before the paragraphs.\n"
-                + "Legal Advice Questions: " + userMessage + "\nPlease answer legal advice questions in Korean, subject to conditions 1, 2, 3, 4, and 5.";
+                + "Legal Advice Questions: " + userMessage + "\nPlease answer legal advice questions in Korean according to conditions 1, 2, 3, 4, and 5. \nIf the legal advice question is not relevant, please reply that you did not understand and that you need to ask the correct question.";
 
         String gptResponse = openAIChatService.getGptResponse(summaryPrompt);
         String output = gptResponse.replace("\n", "<br>");
