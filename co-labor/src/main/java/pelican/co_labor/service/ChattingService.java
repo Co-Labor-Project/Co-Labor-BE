@@ -50,20 +50,24 @@ public class ChattingService {
                 .map(Chatting::getContent)
                 .collect(Collectors.joining(" "));
 
-        String prompt = previousResponses + "조건 1번. 너의 역할은 외국인 근로자와 상담하는 법률 챗봇이야.\n" +
-                "조건 2번. 지금부터 외국인 근로자가 너에게 법률 상담 질문을 하고, 넌 그 질문에 대한 대답을 조건 3번에 맞춰서 답변해줘.\n" +
-                "조건 3번. 첫 번째 문단: 질문을 요약.  두 번째 문단: 질문에 대한 답변. 세 번째 문단: 나의 상황에 맞춘 조언 및 참고 판례.\n" +
-                "법률 상담 질문: " + userMessage + "\n 위의 법률 상담 질문에 대한 답변을 조건 1, 2, 3번에 맞게 공감적으고 상담사처럼 친절하게 한국어로 작성해.";
-        String firstResponse = openAIChatService.getGptResponse(prompt);
+        // previousResponses에서 userMessage와 겹치는 부분 제거
+        String cleanedResponses = removeOverlap(previousResponses, userMessage);
+        String prev = cleanedResponses + "\n\nThe above is a conversation I had with you before. If it's empty, ignore it, but if it is, remember it.\n\n";
 
-        System.out.println(prompt);
+        String summaryPrompt = prev + "\nCondition 0 - The English in the prompt is the setting to be referenced in the answer, and the Korean is the actual question. \nCondition 1 - Your role is a legal chatbot consulting with a foreign worker. \nCondition 2 - Now the foreign worker will ask you a question about legal advice, and you must answer the question according to conditions 3 and 4. \nCondition 3 - First paragraph: The main answer to the question. This includes various contents such as solutions, advice, etc. Second paragraph: The law, case law, etc. related to the question. \nCondition 4 - Answer in three paragraphs using indentation and do not put subtitles before the paragraphs.\n"
+                + "Legal Advice Questions: " + userMessage + "\nPlease answer legal advice questions in Korean, subject to conditions 1, 2, 3, 4, and 5.";
 
-        String summaryPrompt = firstResponse + " 이 답변을 간략하게 요약해줘.";
-        String summaryResponse = openAIChatService.getGptResponse(summaryPrompt);
-
-        return summaryResponse;
+        return openAIChatService.getGptResponse(summaryPrompt);
+    }
 
 
+    private String removeOverlap(String previousResponses, String userMessage) {
+        // 이전 응답에서 사용자 메시지를 제거
+        if (previousResponses.contains(userMessage)) {
+            // 겹치는 부분이 있으면 제거
+            return previousResponses.replace(userMessage, "").trim();
+        }
+        // 겹치는 부분이 없으면 이전 응답 반환
+        return previousResponses;
     }
 }
-

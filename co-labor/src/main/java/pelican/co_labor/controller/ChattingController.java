@@ -24,7 +24,7 @@ public class ChattingController {
     }
 
     @PostMapping("/send")
-    public void sendMessage(@RequestParam String userId, @RequestParam String message) {
+    public void sendMessage(@RequestParam("userId") String userId, @RequestParam("message") String message) {
         Optional<LaborUser> optionalUser = authService.findLaborUserById(userId);
         if (optionalUser.isPresent()) {
             LaborUser user = optionalUser.get();
@@ -39,7 +39,7 @@ public class ChattingController {
     }
 
     @GetMapping("/all")
-    public List<Chatting> getAllMessages(@RequestParam String userId) {
+    public List<Chatting> getAllMessages(@RequestParam("userId") String userId) {
         Optional<LaborUser> optionalUser = authService.findLaborUserById(userId);
         if (optionalUser.isPresent()) {
             LaborUser user = optionalUser.get();
