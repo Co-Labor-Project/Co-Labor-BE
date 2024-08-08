@@ -1,4 +1,3 @@
-
 <img src="https://github.com/Co-Labor-Project/demo-repository/blob/main/img/Co-Labor.png" width="100%" height="100%" />
 
 # 👷 Co-Labor: 외국인 근로자 고용 서포트 플랫폼 서비스
@@ -81,10 +80,12 @@
 |                            |                                                                                                                                                                                                                      Skills                                                                                                                                                                                                                       |
 | :------------------------- | :-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
 | **Front-end**              | ![Static Badge](https://img.shields.io/badge/html5-E34F26?style=for-the-badge&logo=html5&logoColor=white) ![Static Badge](https://img.shields.io/badge/css-1572B6?style=for-the-badge&logo=css3&logoColor=white) ![Static Badge](https://img.shields.io/badge/javascript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black) ![Static Badge](https://img.shields.io/badge/react.js-61DAFB?style=for-the-badge&logo=react&logoColor=black) |
-| **Back-end**               |                                                         ![Static Badge](https://img.shields.io/badge/spring-6DB33F?style=for-the-badge&logo=spring&logoColor=white) ![Static Badge](https://img.shields.io/badge/mysql-4479A1?style=for-the-badge&logo=mysql&logoColor=white) ![Static Badge](https://img.shields.io/badge/openai-412991?style=for-the-badge&logo=openai&logoColor=white)                                                         |
+| **Back-end**               |                                                         ![Static Badge](https://img.shields.io/badge/spring-6DB33F?style=for-the-badge&logo=spring&logoColor=white) ![Static Badge](https://img.shields.io/badge/mysql-4479A1?style=for-the-badge&logo=mysql&logoColor=white) ![Static Badge](https://img.shields.io/badge/openai-412991?style=for-the-badge&logo=openai&logoColor=white) ![Static Badge](https://img.shields.io/badge/flask-333333?style=for-the-badge&logo=flask&logoColor=white)                                                        |
 | **Version Control System** |                                                                                     [![Static Badge](https://img.shields.io/badge/github-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Co-Labor-Project/demo-repository/)![Static Badge](https://img.shields.io/badge/git-F05032?style=for-the-badge&logo=git&logoColor=white)                                                                                      |
 | **Collaboration**          |                                                                      ![Static Badge](https://img.shields.io/badge/slack-4A154B?style=for-the-badge&logo=slack&logoColor=white) [![Static Badge](https://img.shields.io/badge/notion-000000?style=for-the-badge&logo=notion&logoColor=white)](https://mixolydian-idea-627.notion.site/7d14829c5a3e4b84930b2c5a8b0c9838?pvs=4)                                                                      |
 | **Design**                 |                                                                                                         [![Static Badge](https://img.shields.io/badge/figma-F24E1E?style=for-the-badge&logo=figma&logoColor=white)](https://www.figma.com/design/YddHONkDl0nqcbQVkUEVTa/%EA%B3%B5%EB%AA%A8%EC%A0%84?node-id=33-251&t=ocRWZPY412U61gb0-0)                                                                                                          |
+| **Deployment**                 |                                                                                                         ![Static Badge](https://img.shields.io/badge/aws_s3-569A31?style=for-the-badge&logo=amazonaws&logoColor=white) ![Static Badge](https://img.shields.io/badge/route_53-232F3E?style=for-the-badge&logo=amazonaws&logoColor=white) ![Static Badge](https://img.shields.io/badge/aws_ec2-FF9900?style=for-the-badge&logo=amazonaws&logoColor=white) ![Static Badge](https://img.shields.io/badge/gabia-4285F4?style=for-the-badge&logo=google&logoColor=white) |                                                                                                          |
+| **AI**                     | ![Static Badge](https://img.shields.io/badge/kobert-4285F4?style=for-the-badge&logoColor=white)
 
 ## 💻 상세 페이지
 
@@ -159,5 +160,6 @@
 
 
 ## 📋 제안서
-[Co-Labor_Proposal.pdf](https://github.com/user-attachments/files/16548421/Co-Labor_Proposal.pdf)
+[Co-Labor_Proposal.pdf](https://github.com/user-attachments/files/16548366/Co-Labor_Proposal.pdf)
+
 
