@@ -1,8 +1,13 @@
 package pelican.co_labor.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestTemplate;
 import pelican.co_labor.domain.chatting.Chatting;
 import pelican.co_labor.domain.labor_user.LaborUser;
 import pelican.co_labor.repository.chatting.ChattingRepository;
@@ -15,11 +20,14 @@ public class ChattingService {
 
     private final ChattingRepository chattingRepository;
     private final OpenAIChatService openAIChatService;
+    private final RestTemplate restTemplate;
+
 
     @Autowired
-    public ChattingService(ChattingRepository chattingRepository, OpenAIChatService openAIChatService) {
+    public ChattingService(ChattingRepository chattingRepository, OpenAIChatService openAIChatService, RestTemplate restTemplate) {
         this.chattingRepository = chattingRepository;
         this.openAIChatService = openAIChatService;
+        this.restTemplate = restTemplate;
     }
 
     @Transactional
@@ -45,6 +53,24 @@ public class ChattingService {
     }
 
     public String getGptResponse(String userId, String userMessage) {
+
+        //관련 법조 얻어오는 url
+        String url = "http://15.165.75.244:8081/arg-chat?message=" + userMessage;
+
+        HttpHeaders lawHeaders = new HttpHeaders();
+        HttpEntity<String> lawRequest = new HttpEntity<>(lawHeaders);
+
+        ResponseEntity<String> lawResponse = restTemplate.exchange(
+                url,
+                HttpMethod.GET,
+                lawRequest,
+                String.class
+        );
+
+        // 리턴된 값을 relatedLaw로 저장
+        String relatedLaw = lawResponse.getBody().trim();
+
+
         List<Chatting> userChats = getAllMessagesByUser(userId);
         String previousResponses = userChats.stream()
                 .map(Chatting::getContent)
@@ -59,6 +85,7 @@ public class ChattingService {
 
         String gptResponse = openAIChatService.getGptResponse(summaryPrompt);
         String output = gptResponse.replace("\n", "<br>");
+        output+="관련 법률 : " + relatedLaw;
         return output;
     }
 
