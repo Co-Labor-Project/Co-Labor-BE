@@ -1,5 +1,8 @@
 package pelican.co_labor.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
@@ -31,6 +34,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+@Tag(name = "Enterprise", description = "기업 관련 API")
 @RestController
 @RequestMapping("/api/enterprises")
 public class EnterpriseController {
@@ -48,13 +52,16 @@ public class EnterpriseController {
         this.enterpriseRegistrationService = enterpriseRegistrationService;
     }
 
+    @Operation(summary = "모든 기업 목록 조회", description = "등록된 모든 기업 정보를 조회합니다.")
     @GetMapping
     public List<Enterprise> getAllEnterprises() {
         return enterpriseService.getAllEnterprises();
     }
 
+    @Operation(summary = "기업 정보 조회", description = "기업 ID를 기반으로 특정 기업의 정보를 조회합니다.")
     @GetMapping("/{enterprise_id}")
-    public ResponseEntity<?> getEnterpriseById(@PathVariable("enterprise_id") String enterprise_id) {
+    public ResponseEntity<?> getEnterpriseById(
+            @Parameter(description = "기업 ID") @PathVariable("enterprise_id") String enterprise_id) {
         try {
             Optional<Enterprise> enterprise = enterpriseService.getEnterpriseById(enterprise_id);
             if (enterprise.isPresent()) {
@@ -71,6 +78,7 @@ public class EnterpriseController {
         }
     }
 
+    @Operation(summary = "기업 데이터 Fetch", description = "외부 API로부터 데이터를 Fetch하여 기업 데이터를 업데이트합니다.")
     @GetMapping("/fetch")
     public String fetchAndSaveEnterpriseData() {
         try {
@@ -81,14 +89,11 @@ public class EnterpriseController {
         }
     }
 
-    /**
-     * 기업 등록, 수정 코드는 보완 필요
-     * @param enterprise
-     * @return
-     */
+    @Operation(summary = "기업 등록", description = "새로운 기업을 등록하고, 기업 로고 이미지를 업로드합니다.")
     @PostMapping
-    public ResponseEntity<Map<String, Object>> createEnterprise(@RequestPart("enterprise") Enterprise enterprise,
-                                                                @RequestPart("logo") MultipartFile logo) {
+    public ResponseEntity<Map<String, Object>> createEnterprise(
+            @Parameter(description = "기업 정보") @RequestPart("enterprise") Enterprise enterprise,
+            @Parameter(description = "기업 로고 이미지 파일") @RequestPart("logo") MultipartFile logo) {
         Map<String, Object> response = new HashMap<>();
         try {
             // 로고 이미지 저장
@@ -109,13 +114,14 @@ public class EnterpriseController {
         }
     }
 
-    // 사업자 등록 번호 조회해서 기업 회원에 매핑
+    @Operation(summary = "기업 사용자 매핑", description = "사업자 등록 번호로 기업 사용자를 기업에 매핑합니다.")
     @PostMapping("/map")
-    public ResponseEntity<Map<String, Object>> mapEnterprise(@RequestParam("enterpriseId") String enterpriseId,@RequestParam("username") String username ,HttpServletRequest httpServletRequest) {
-
+    public ResponseEntity<Map<String, Object>> mapEnterprise(
+            @Parameter(description = "기업 ID") @RequestParam("enterpriseId") String enterpriseId,
+            @Parameter(description = "사용자 이름") @RequestParam("username") String username,
+            HttpServletRequest httpServletRequest) {
 
         Map<String, Object> response = new HashMap<>();
-
 
         Optional<EnterpriseUser> enterpriseUserOpt = authService.findEnterpriseUserById(username);
         if (enterpriseUserOpt.isEmpty()) {
@@ -140,15 +146,19 @@ public class EnterpriseController {
         return ResponseEntity.ok(response);
     }
 
+    @Operation(summary = "기업 정보 수정", description = "기업 ID에 해당하는 기업 정보를 업데이트합니다.")
     @PutMapping("/{enterprise_id}")
-    public ResponseEntity<Enterprise> updateEnterprise(@PathVariable String enterprise_id, @RequestBody Enterprise enterpriseDetails) {
+    public ResponseEntity<Enterprise> updateEnterprise(
+            @Parameter(description = "기업 ID") @PathVariable String enterprise_id,
+            @Parameter(description = "수정할 기업 정보") @RequestBody Enterprise enterpriseDetails) {
         Optional<Enterprise> updatedEnterprise = enterpriseService.updateEnterprise(enterprise_id, enterpriseDetails);
         return updatedEnterprise.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    // 사업자 등록 번호 조회해서 기업 상태 확인
+    @Operation(summary = "사업자 등록 상태 확인", description = "주어진 기업 ID로 사업자 등록 상태를 확인합니다.")
     @GetMapping("/status")
-    public ResponseEntity<Map<String, Object>> getBusinessStatus(@RequestParam("enterpriseId") String enterpriseId) {
+    public ResponseEntity<Map<String, Object>> getBusinessStatus(
+            @Parameter(description = "기업 ID") @RequestParam("enterpriseId") String enterpriseId) {
         try {
             ResponseEntity<String> responseEntity = enterpriseRegistrationService.isValidEnterpriseId(enterpriseId);
 
@@ -179,9 +189,10 @@ public class EnterpriseController {
         }
     }
 
-    // 기업 등록 대기열에 추가
+    @Operation(summary = "기업 등록 대기열 추가", description = "새로운 기업을 등록 대기열에 추가합니다.")
     @PostMapping("/queue")
-    public Map<String, Object> createEnterpriseQueue(@RequestBody EnterpriseQueueDTO enterpriseQueueDTO) {
+    public Map<String, Object> createEnterpriseQueue(
+            @Parameter(description = "기업 대기열 정보") @RequestBody EnterpriseQueueDTO enterpriseQueueDTO) {
         try {
             enterpriseRegistrationService.registerEnterpriseQueue(enterpriseQueueDTO);
             Map<String, Object> response = new HashMap<>();
@@ -195,9 +206,10 @@ public class EnterpriseController {
         }
     }
 
-    // 로고 이미지 조회 엔드포인트 추가
+    @Operation(summary = "기업 로고 조회", description = "기업 ID에 해당하는 기업의 로고 이미지를 조회합니다.")
     @GetMapping("/{enterprise_id}/logo")
-    public ResponseEntity<Resource> getEnterpriseLogo(@PathVariable("enterprise_id") String enterpriseId) {
+    public ResponseEntity<Resource> getEnterpriseLogo(
+            @Parameter(description = "기업 ID") @PathVariable("enterprise_id") String enterpriseId) {
         Optional<Enterprise> enterpriseOpt = enterpriseService.getEnterpriseById(enterpriseId);
         if (enterpriseOpt.isPresent()) {
             String logoPath = enterpriseOpt.get().getImageName();
@@ -220,15 +232,16 @@ public class EnterpriseController {
         }
     }
 
-    // 영어 기업 정보 조회 엔드포인트 추가
-
+    @Operation(summary = "영어로 기업 정보 조회", description = "등록된 모든 기업 정보를 영어로 조회합니다.")
     @GetMapping("/eng")
     public List<EnterpriseEng> getAllEnterprisesEng() {
         return enterpriseService.getAllEnterprisesEng();
     }
 
+    @Operation(summary = "영어 기업 정보 조회", description = "영어로 기업 ID에 해당하는 특정 기업의 정보를 조회합니다.")
     @GetMapping("/eng/{enterprise_id}")
-    public ResponseEntity<?> getEnterpriseEngById(@PathVariable("enterprise_id") String enterprise_id) {
+    public ResponseEntity<?> getEnterpriseEngById(
+            @Parameter(description = "기업 ID") @PathVariable("enterprise_id") String enterprise_id) {
         try {
             Optional<EnterpriseEng> enterprise = enterpriseService.getEnterpriseEngById(enterprise_id);
             if (enterprise.isPresent()) {
