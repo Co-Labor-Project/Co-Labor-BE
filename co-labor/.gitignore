@@ -7,6 +7,7 @@ build/
 word2vecModel.txt
 src/main/resources/application.properties
 co-labor/src/main/resources/application.properties
+dataset
 
 ### STS ###
 .apt_generated
