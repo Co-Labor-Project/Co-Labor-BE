@@ -19,7 +19,7 @@ import java.util.Map;
 
 @Tag(name = "Search", description = "검색 관련 API")
 @RestController
-@RequestMapping("/search")
+@RequestMapping("/api/search")
 public class SearchController {
 
     @Autowired

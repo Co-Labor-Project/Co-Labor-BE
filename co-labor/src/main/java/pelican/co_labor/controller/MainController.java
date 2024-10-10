@@ -17,7 +17,7 @@ import java.util.Map;
 
 @Tag(name = "Main", description = "메인 페이지 데이터 관련 API")
 @RestController
-@RequestMapping("/main")
+@RequestMapping("/api/main")
 public class MainController {
 
     private final JobRepository jobRepository;

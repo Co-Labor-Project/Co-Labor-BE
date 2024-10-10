@@ -23,7 +23,7 @@ public class HospitalController {
     }
 
     @Operation(summary = "병원 데이터 Fetch", description = "외부 API로부터 병원 데이터를 가져와 저장합니다.")
-    @GetMapping("/fetch")
+    @GetMapping("/api/fetch")
     public void fetchHospitalData() {
         hospitalService.fetchAndSaveHospitalData();
     }
