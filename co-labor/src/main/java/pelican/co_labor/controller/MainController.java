@@ -1,6 +1,7 @@
 package pelican.co_labor.controller;
 
-
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,6 +15,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Tag(name = "Main", description = "메인 페이지 데이터 관련 API")
 @RestController
 @RequestMapping("/main")
 public class MainController {
@@ -27,6 +29,7 @@ public class MainController {
         this.reviewRepository = reviewRepository;
     }
 
+    @Operation(summary = "메인 페이지 데이터 조회", description = "메인 페이지에 필요한 채용 공고와 리뷰 데이터를 조회합니다.")
     @GetMapping
     public Map<String, Object> getMainPageData() {
 
