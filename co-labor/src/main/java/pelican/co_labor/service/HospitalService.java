@@ -38,7 +38,7 @@ public class HospitalService {
         fetchAndSaveHospitalData(null);
     }
 
-    // 특정 지역 병원 데이터 가져오기
+    // 지역 병원 데이터 가져오기
     public void fetchAndSaveHospitalData(String region) {
         String apiUrl = "http://apis.data.go.kr/B552657/HsptlAsembySearchService/getHsptlMdcncListInfoInqire";
         int numOfRows = 1000; // 한 번에 가져올 행 수
