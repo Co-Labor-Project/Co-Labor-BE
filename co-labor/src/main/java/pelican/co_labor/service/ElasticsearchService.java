@@ -2,6 +2,8 @@ package pelican.co_labor.service;
 
 import co.elastic.clients.elasticsearch.ElasticsearchClient;
 import co.elastic.clients.elasticsearch._types.mapping.Property;
+import co.elastic.clients.elasticsearch._types.SortOrder;
+import co.elastic.clients.elasticsearch._types.query_dsl.Query;
 import co.elastic.clients.elasticsearch.core.*;
 import co.elastic.clients.elasticsearch.core.bulk.BulkResponseItem;
 import co.elastic.clients.elasticsearch.core.search.Hit;
@@ -24,6 +26,7 @@ public class ElasticsearchService {
 
     private final ElasticsearchClient esClient;
     private static final int BATCH_SIZE = 32;
+    private static final int MAX_RESULTS = 2; // 결과 수 제한
 
     @Value("${elasticsearch.index-name}")
     private String defaultIndexName;
@@ -136,24 +139,29 @@ public class ElasticsearchService {
         return response.deleted();
     }
 
-    public List<Map<String, Object>> searchDocuments(String indexName, String query, int from, int size) throws IOException {
-        SearchRequest.Builder searchBuilder = new SearchRequest.Builder()
+
+    public List<Map<String, Object>> searchDocuments(String indexName, String query) throws IOException {
+        SearchRequest searchRequest = SearchRequest.of(s -> s
                 .index(indexName)
-                .from(from)
-                .size(size);
+                .query(q -> q
+                        .bool(b -> b
+                                .should(
+                                        createFieldQuery("사건명", query),
+                                        createFieldQuery("사건종류명", query),
+                                        createFieldQuery("판시사항", query),
+                                        createFieldQuery("판결요지", query),
+                                        createFieldQuery("참조조문", query)
+                                )
+                                .minimumShouldMatch("75%")
+                        )
+                )
+                .size(MAX_RESULTS)
+                .sort(so -> so
+                        .score(sc -> sc.order(SortOrder.Desc))
+                )
+        );
 
-        if (query != null && !query.isEmpty()) {
-            searchBuilder.query(q -> q
-                    .multiMatch(m -> m
-                            .query(query)
-                            .fields("사건명", "사건종류명", "판시사항", "판결요지", "참조조문")
-                    )
-            );
-        } else {
-            searchBuilder.query(q -> q.matchAll(m -> m));
-        }
-
-        SearchResponse<Map> response = esClient.search(searchBuilder.build(), Map.class);
+        SearchResponse<Map> response = esClient.search(searchRequest, Map.class);
 
         List<Map<String, Object>> results = new ArrayList<>();
         for (Hit<Map> hit : response.hits().hits()) {
@@ -161,5 +169,14 @@ public class ElasticsearchService {
         }
 
         return results;
+    }
+
+    private Query createFieldQuery(String field, String query) {
+        return Query.of(q -> q
+                .match(m -> m
+                        .field(field)
+                        .query(query)
+                )
+        );
     }
 }
