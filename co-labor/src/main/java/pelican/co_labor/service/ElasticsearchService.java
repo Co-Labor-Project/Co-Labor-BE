@@ -1,16 +1,23 @@
 package pelican.co_labor.service;
 
 import co.elastic.clients.elasticsearch.ElasticsearchClient;
-import co.elastic.clients.elasticsearch.core.BulkRequest;
-import co.elastic.clients.elasticsearch.core.BulkResponse;
+import co.elastic.clients.elasticsearch._types.mapping.Property;
+import co.elastic.clients.elasticsearch.core.*;
 import co.elastic.clients.elasticsearch.core.bulk.BulkResponseItem;
+import co.elastic.clients.elasticsearch.core.search.Hit;
+import co.elastic.clients.elasticsearch.indices.CreateIndexResponse;
+import co.elastic.clients.json.jackson.JacksonJsonpMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import pelican.co_labor.dto.CaseDocument;
 
 import java.io.IOException;
+import java.io.StringReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class ElasticsearchService {
@@ -18,12 +25,57 @@ public class ElasticsearchService {
     private final ElasticsearchClient esClient;
     private static final int BATCH_SIZE = 32;
 
+    @Value("${elasticsearch.index-name}")
+    private String defaultIndexName;
+
     @Autowired
     public ElasticsearchService(ElasticsearchClient esClient) {
         this.esClient = esClient;
     }
 
+    public void createIndexWithMapping(String indexName) throws IOException {
+        if (!esClient.indices().exists(e -> e.index(indexName)).value()) {
+            Map<String, Object> settings = Map.of(
+                    "analysis", Map.of(
+                            "analyzer", Map.of(
+                                    "nori_analyzer", Map.of(
+                                            "type", "custom",
+                                            "tokenizer", "nori_tokenizer"
+                                    )
+                            ),
+                            "tokenizer", Map.of(
+                                    "nori_tokenizer", Map.of(
+                                            "type", "nori_tokenizer"
+                                    )
+                            )
+                    )
+            );
+
+            Map<String, Property> properties = new HashMap<>();
+            properties.put("사건명", Property.of(p -> p.text(t -> t.analyzer("nori_analyzer"))));
+            properties.put("사건종류명", Property.of(p -> p.text(t -> t.analyzer("nori_analyzer"))));
+            properties.put("판시사항", Property.of(p -> p.text(t -> t.analyzer("nori_analyzer"))));
+            properties.put("판결요지", Property.of(p -> p.text(t -> t.analyzer("nori_analyzer"))));
+            properties.put("참조조문", Property.of(p -> p.text(t -> t.analyzer("nori_analyzer"))));
+            properties.put("사건번호", Property.of(p -> p.keyword(k -> k)));
+
+            String settingsJson = new JacksonJsonpMapper().objectMapper().writeValueAsString(settings);
+
+            CreateIndexResponse createResponse = esClient.indices().create(c -> c
+                    .index(indexName)
+                    .settings(s -> s.withJson(new StringReader(settingsJson)))
+                    .mappings(m -> m.properties(properties))
+            );
+
+            if (!createResponse.acknowledged()) {
+                throw new RuntimeException("Failed to create index with mapping");
+            }
+        }
+    }
+
     public void bulkIndexDocuments(String indexName, List<CaseDocument> documents) throws IOException {
+        createIndexWithMapping(indexName);  // 인덱스 및 매핑 생성 (존재하지 않는 경우)
+
         List<CaseDocument> filteredDocuments = filterAndPrepareDocuments(documents);
         int totalDocuments = filteredDocuments.size();
         int batches = (int) Math.ceil((double) totalDocuments / BATCH_SIZE);
@@ -59,7 +111,7 @@ public class ElasticsearchService {
         BulkRequest.Builder br = new BulkRequest.Builder();
 
         for (CaseDocument document : batch) {
-            String documentId = document.generateCaseDocumentId(); // 사건번호를 사용하여 ID 생성
+            String documentId = document.generateCaseDocumentId();
             br.operations(op -> op.index(idx -> idx.index(indexName).id(documentId).document(document)));
         }
 
@@ -74,5 +126,40 @@ public class ElasticsearchService {
             }
             throw new RuntimeException("Bulk indexing failed: " + String.join(", ", errorMessages));
         }
+    }
+
+    public long deleteAllDocuments(String indexName) throws IOException {
+        DeleteByQueryResponse response = esClient.deleteByQuery(d -> d
+                .index(indexName)
+                .query(q -> q.matchAll(m -> m))
+        );
+        return response.deleted();
+    }
+
+    public List<Map<String, Object>> searchDocuments(String indexName, String query, int from, int size) throws IOException {
+        SearchRequest.Builder searchBuilder = new SearchRequest.Builder()
+                .index(indexName)
+                .from(from)
+                .size(size);
+
+        if (query != null && !query.isEmpty()) {
+            searchBuilder.query(q -> q
+                    .multiMatch(m -> m
+                            .query(query)
+                            .fields("사건명", "사건종류명", "판시사항", "판결요지", "참조조문")
+                    )
+            );
+        } else {
+            searchBuilder.query(q -> q.matchAll(m -> m));
+        }
+
+        SearchResponse<Map> response = esClient.search(searchBuilder.build(), Map.class);
+
+        List<Map<String, Object>> results = new ArrayList<>();
+        for (Hit<Map> hit : response.hits().hits()) {
+            results.add(hit.source());
+        }
+
+        return results;
     }
 }
