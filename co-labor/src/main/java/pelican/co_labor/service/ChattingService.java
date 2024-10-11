@@ -54,23 +54,6 @@ public class ChattingService {
 
     public String getGptResponse(String userId, String userMessage) {
 
-        //관련 법조 얻어오는 url
-        String url = "http://15.165.75.244:8081/arg-chat?message=" + userMessage;
-
-        HttpHeaders lawHeaders = new HttpHeaders();
-        HttpEntity<String> lawRequest = new HttpEntity<>(lawHeaders);
-
-        ResponseEntity<String> lawResponse = restTemplate.exchange(
-                url,
-                HttpMethod.GET,
-                lawRequest,
-                String.class
-        );
-
-        // 리턴된 값을 relatedLaw로 저장
-        String relatedLaw = lawResponse.getBody().trim();
-
-
         List<Chatting> userChats = getAllMessagesByUser(userId);
         String previousResponses = userChats.stream()
                 .map(Chatting::getContent)
@@ -85,7 +68,6 @@ public class ChattingService {
 
         String gptResponse = openAIChatService.getGptResponse(summaryPrompt);
         String output = gptResponse.replace("\n", "<br>");
-        output+="관련 법률 : " + relatedLaw;
         return output;
     }
 
