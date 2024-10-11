@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -55,11 +56,12 @@ public class JobController {
     }
 
     @Operation(summary = "채용 공고 생성", description = "새로운 채용 공고를 생성합니다. JSON 형식의 공고 정보와 이미지 파일을 함께 업로드할 수 있습니다.")
-    @PostMapping
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public Job createJob(
-            @Parameter(description = "채용 공고 정보(JSON 형식)") @RequestParam("job") String jobJson,
-            @Parameter(description = "채용 공고 이미지 파일") @RequestParam("image") MultipartFile image,
-            @Parameter(description = "기업 회원 ID") @RequestParam("enterprise_user_id") String enterpriseUser) throws IOException {
+            @Parameter(description = "채용 공고 정보(JSON 형식)") @RequestPart("job") String jobJson,
+            @Parameter(description = "채용 공고 이미지 파일") @RequestPart("image") MultipartFile image,
+            @Parameter(description = "기업 회원 ID") @RequestPart("enterprise_user_id") String enterpriseUser) throws IOException {
+
         System.out.println("Received enterprise_user_id: " + enterpriseUser);
 
         Job job = jobService.mapJobFromJson(jobJson);
@@ -75,15 +77,22 @@ public class JobController {
     }
 
     @Operation(summary = "채용 공고 수정", description = "채용 공고 ID에 해당하는 채용 공고를 수정합니다.")
-    @PutMapping("/{job_id}")
+    @PutMapping(value = "/{job_id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Job> updateJob(
             @Parameter(description = "채용 공고 ID") @PathVariable Long job_id,
-            @Parameter(description = "수정할 채용 공고 정보(JSON 형식)") @RequestParam("jobDetails") String jobDetailsJson,
-            @Parameter(description = "수정할 이미지 파일") @RequestParam("image") MultipartFile image) throws IOException {
+            @Parameter(description = "수정할 채용 공고 정보(JSON 형식)") @RequestPart("jobDetails") String jobDetailsJson,
+            @Parameter(description = "수정할 이미지 파일") @RequestPart("image") MultipartFile image) throws IOException {
+
+        // JSON 데이터를 Job 객체로 매핑
         Job jobDetails = jobService.mapJobFromJson(jobDetailsJson);
+
+        // 수정된 Job 객체와 이미지 파일을 사용하여 업데이트
         Optional<Job> updatedJob = jobService.updateJob(job_id, jobDetails, image);
+
+        // 수정된 Job 객체를 반환하거나, 없는 경우 404 응답
         return updatedJob.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
+
 
     @Operation(summary = "채용 공고 삭제", description = "채용 공고 ID에 해당하는 채용 공고를 삭제합니다.")
     @DeleteMapping("/{job_id}")
