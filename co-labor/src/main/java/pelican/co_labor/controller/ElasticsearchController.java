@@ -53,7 +53,7 @@ public class ElasticsearchController {
             @RequestParam(defaultValue = "0") int from,
             @RequestParam(defaultValue = "10") int size) {
         try {
-            List<Map<String, Object>> results = elasticsearchService.searchDocuments(defaultIndexName, query, from, size);
+            List<Map<String, Object>> results = elasticsearchService.searchDocuments(defaultIndexName, query);
             return ResponseEntity.ok(results);
         } catch (IOException e) {
             return ResponseEntity.internalServerError().body("Error searching documents: " + e.getMessage());
