@@ -13,9 +13,6 @@ import org.elasticsearch.client.RestClient;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.apache.http.conn.ssl.NoopHostnameVerifier; // 추가
-import org.apache.http.ssl.SSLContextBuilder; // 추가
-import javax.net.ssl.SSLContext; // 추가
 
 @Configuration
 public class ElasticsearchConfig {
@@ -36,21 +33,17 @@ public class ElasticsearchConfig {
     private String password;
 
     @Bean
-    public ElasticsearchClient elasticsearchClient() throws Exception {
+    public ElasticsearchClient elasticsearchClient() {
         final CredentialsProvider credentialsProvider = new BasicCredentialsProvider();
         credentialsProvider.setCredentials(AuthScope.ANY,
                 new UsernamePasswordCredentials(username, password));
 
-        // SSLContext를 설정하여 인증서 검증을 비활성화합니다.
-        SSLContext sslContext = SSLContextBuilder.create()
-                .loadTrustMaterial((chain, authType) -> true) // 모든 인증서를 신뢰
-                .build();
-
         RestClient restClient = RestClient.builder(new HttpHost(hostname, port, scheme))
                 .setHttpClientConfigCallback(httpClientBuilder -> httpClientBuilder
-                        .setSSLContext(sslContext) // SSLContext 설정
-                        .setSSLHostnameVerifier(NoopHostnameVerifier.INSTANCE) // 호스트 이름 검증 비활성화
                         .setDefaultCredentialsProvider(credentialsProvider))
+                .setRequestConfigCallback(requestConfigBuilder -> requestConfigBuilder
+                        .setConnectTimeout(5000)
+                        .setSocketTimeout(60000))
                 .build();
 
         ElasticsearchTransport transport = new RestClientTransport(restClient, new JacksonJsonpMapper());

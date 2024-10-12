@@ -30,6 +30,7 @@ public class ElasticsearchController {
     public ResponseEntity<String> bulkIndexFromDirectory(@RequestParam String directoryPath) {
         try {
             List<CaseDocument> documents = JsonLoader.loadJsonFromDirectory(directoryPath);
+
             elasticsearchService.bulkIndexDocuments(defaultIndexName, documents);
             return ResponseEntity.ok("Batch indexing from directory completed.");
         } catch (IOException e) {
