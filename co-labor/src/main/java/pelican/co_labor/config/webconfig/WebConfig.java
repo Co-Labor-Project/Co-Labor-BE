@@ -15,7 +15,7 @@ public class WebConfig implements WebMvcConfigurer {
     public void addCorsMappings(CorsRegistry registry) {
 
         registry.addMapping("/**")
-                .allowedOrigins("http://localhost:5173", "http://localhost:3000", "http://localhost:8081", "http://colaborapp.site", "http://colabor-en.site", "http://colabor.site", "http://colabor-en.site.s3-website.ap-northeast-2.amazonaws.com", "http://colabor.site.s3-website.ap-northeast-2.amazonaws.com", "http://colaborapp.site.s3-website.ap-northeast-2.amazonaws.com")
+                .allowedOrigins("http://localhost:5173", "http://localhost:3000", "http://localhost:8081", "http://colaborapp.site", "http://colabor-en.site", "http://colabor.site", "http://colabor-en.site.s3-website.ap-northeast-2.amazonaws.com", "http://colabor.site.s3-website.ap-northeast-2.amazonaws.com", "http://colaborapp.site.s3-website.ap-northeast-2.amazonaws.com", "https://colabor.site")
                 .allowedMethods("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS")
                 .allowedHeaders("*")
                 .allowCredentials(true);

@@ -30,6 +30,7 @@ public class ElasticsearchController {
     public ResponseEntity<String> bulkIndexFromDirectory(@RequestParam String directoryPath) {
         try {
             List<CaseDocument> documents = JsonLoader.loadJsonFromDirectory(directoryPath);
+
             elasticsearchService.bulkIndexDocuments(defaultIndexName, documents);
             return ResponseEntity.ok("Batch indexing from directory completed.");
         } catch (IOException e) {
@@ -53,7 +54,7 @@ public class ElasticsearchController {
             @RequestParam(defaultValue = "0") int from,
             @RequestParam(defaultValue = "10") int size) {
         try {
-            List<Map<String, Object>> results = elasticsearchService.searchDocuments(defaultIndexName, query, from, size);
+            List<Map<String, Object>> results = elasticsearchService.searchDocuments(defaultIndexName, query);
             return ResponseEntity.ok(results);
         } catch (IOException e) {
             return ResponseEntity.internalServerError().body("Error searching documents: " + e.getMessage());
