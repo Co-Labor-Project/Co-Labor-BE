@@ -1,17 +1,16 @@
 package pelican.co_labor.controller;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
-import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -20,8 +19,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import pelican.co_labor.domain.enterprise.Enterprise;
 import pelican.co_labor.domain.enterprise.EnterpriseEng;
+import pelican.co_labor.domain.enterprise_queue.EnterpriseQueue;
 import pelican.co_labor.domain.enterprise_user.EnterpriseUser;
-import pelican.co_labor.dto.EnterpriseQueueDTO;
 import pelican.co_labor.service.AuthService;
 import pelican.co_labor.service.EnterpriseFetchApiService;
 import pelican.co_labor.service.EnterpriseRegistrationService;
@@ -90,7 +89,7 @@ public class EnterpriseController {
     }
 
     @Operation(summary = "기업 등록", description = "새로운 기업을 등록하고, 기업 로고 이미지를 업로드합니다.")
-    @PostMapping
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)  // 요청이 멀티파트 폼 데이터를 처리하도록 지정
     public ResponseEntity<Map<String, Object>> createEnterprise(
             @Parameter(description = "기업 정보") @RequestPart("enterprise") Enterprise enterprise,
             @Parameter(description = "기업 로고 이미지 파일") @RequestPart("logo") MultipartFile logo) {
@@ -190,16 +189,29 @@ public class EnterpriseController {
     }
 
     @Operation(summary = "기업 등록 대기열 추가", description = "새로운 기업을 등록 대기열에 추가합니다.")
-    @PostMapping("/queue")
+    @PostMapping(value = "/queue", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public Map<String, Object> createEnterpriseQueue(
-            @Parameter(description = "기업 대기열 정보") @RequestBody EnterpriseQueueDTO enterpriseQueueDTO) {
+            @Parameter(description = "기업 대기열 정보") @RequestPart("enterpriseQueue") EnterpriseQueue enterpriseQueue,
+            @Parameter(description = "기업 로고 이미지 파일") @RequestPart("logo") MultipartFile logo,
+            HttpServletRequest httpServletRequest) {
         try {
-            enterpriseRegistrationService.registerEnterpriseQueue(enterpriseQueueDTO);
+            // 로고 이미지 저장
+            String logoPath = enterpriseService.saveImage(logo);
+            enterpriseQueue.setImageName(logoPath);
+
+            // 등록 유저 id 저장, 세션 예외 처리
+            if (httpServletRequest.getSession(false).getAttribute("username") == null) {
+                throw new Exception("No user logged in");
+            }
+            String username = (String) httpServletRequest.getSession().getAttribute("username");
+            enterpriseQueue.setEnterprise_user_id(username);
+
+            enterpriseRegistrationService.registerEnterpriseQueue(enterpriseQueue);
             Map<String, Object> response = new HashMap<>();
             response.put("message", "Enterprise queue created successfully");
-            response.put("enterpriseQueue", enterpriseQueueDTO);
+            response.put("enterpriseQueue", enterpriseQueue);
             return response;
-        } catch (DataAccessException e) {
+        } catch (Exception e) {
             Map<String, Object> response = new HashMap<>();
             response.put("message", "An error occurred while creating enterprise queue: " + e.getMessage());
             return response;

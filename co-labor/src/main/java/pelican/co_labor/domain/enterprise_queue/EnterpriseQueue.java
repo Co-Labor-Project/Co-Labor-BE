@@ -42,6 +42,12 @@ public class EnterpriseQueue {
     @Column(nullable = false, updatable = false)
     private LocalDateTime created_at;
 
+    @Column(name = "image_name", nullable = true)
+    private String imageName;
+
+    @Column(name = "enterprise_user_id")
+    private String enterprise_user_id;
+
     @PrePersist
     protected void onCreate() {
         created_at = LocalDateTime.now();
