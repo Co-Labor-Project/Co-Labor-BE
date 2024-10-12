@@ -1,8 +1,9 @@
 package pelican.co_labor.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import pelican.co_labor.dto.CaseDocument; // CaseDocument는 필드에 맞춰 정의되어야 합니다.
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import pelican.co_labor.dto.CaseDocument;
 
 import java.io.File;
 import java.io.IOException;
@@ -10,26 +11,35 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class JsonLoader {
-
-    private static final ObjectMapper objectMapper = new ObjectMapper();
+    private static final Logger logger = LoggerFactory.getLogger(JsonLoader.class);
 
     public static List<CaseDocument> loadJsonFromDirectory(String directoryPath) throws IOException {
-        File folder = new File(directoryPath);
-        File[] listOfFiles = folder.listFiles((dir, name) -> name.endsWith(".json"));
-
-        List<CaseDocument> documents = new ArrayList<>();
-
-        if (listOfFiles != null) {
-            for (File file : listOfFiles) {
-                CaseDocument document = loadJsonAsEntity(file);
-                documents.add(document);
-            }
+        logger.info("Loading JSON files from directory: {}", directoryPath);
+        File dir = new File(directoryPath);
+        if (!dir.exists() || !dir.isDirectory()) {
+            logger.error("Directory does not exist or is not a directory: {}", directoryPath);
+            throw new IOException("Invalid directory path: " + directoryPath);
         }
 
-        return documents;
-    }
+        List<CaseDocument> documents = new ArrayList<>();
+        File[] files = dir.listFiles((d, name) -> name.endsWith(".json"));
+        if (files == null) {
+            logger.warn("No JSON files found in directory: {}", directoryPath);
+            return documents;
+        }
 
-    private static CaseDocument loadJsonAsEntity(File file) throws IOException {
-        return objectMapper.readValue(file, CaseDocument.class);
+        logger.info("Found {} JSON files", files.length);
+        ObjectMapper objectMapper = new ObjectMapper();
+        for (File file : files) {
+            logger.debug("Processing file: {}", file.getName());
+            try {
+                CaseDocument document = objectMapper.readValue(file, CaseDocument.class);
+                documents.add(document);
+            } catch (IOException e) {
+                logger.error("Error reading file: {}", file.getName(), e);
+            }
+        }
+        logger.info("Loaded {} documents", documents.size());
+        return documents;
     }
 }

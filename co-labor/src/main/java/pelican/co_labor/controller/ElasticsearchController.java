@@ -1,5 +1,7 @@
 package pelican.co_labor.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +19,7 @@ import java.util.Map;
 public class ElasticsearchController {
 
     private final ElasticsearchService elasticsearchService;
+    private static final Logger logger = LoggerFactory.getLogger(ElasticsearchController.class);
 
     @Value("${elasticsearch.index-name}")
     private String defaultIndexName;
@@ -28,12 +31,21 @@ public class ElasticsearchController {
 
     @PostMapping("/bulk-index-directory")
     public ResponseEntity<String> bulkIndexFromDirectory(@RequestParam String directoryPath) {
+        logger.info("Received request to bulk index from directory: {}", directoryPath);
         try {
             List<CaseDocument> documents = JsonLoader.loadJsonFromDirectory(directoryPath);
+            logger.info("Loaded {} documents from directory", documents.size());
+            if (documents.isEmpty()) {
+                logger.warn("No documents loaded from directory");
+                return ResponseEntity.ok("No documents found to index.");
+            }
 
             elasticsearchService.bulkIndexDocuments(defaultIndexName, documents);
-            return ResponseEntity.ok("Batch indexing from directory completed.");
+            String message = "Batch indexing from directory completed. Attempted to index " + documents.size() + " documents.";
+            logger.info(message);
+            return ResponseEntity.ok(message);
         } catch (IOException e) {
+            logger.error("Error during bulk indexing", e);
             return ResponseEntity.internalServerError().body("Error during bulk indexing: " + e.getMessage());
         }
     }
