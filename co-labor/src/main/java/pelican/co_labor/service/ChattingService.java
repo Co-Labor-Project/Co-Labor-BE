@@ -30,6 +30,13 @@ public class ChattingService {
         this.restTemplate = restTemplate;
     }
 
+    // 새로운 메서드: 사용자의 모든 메시지 삭제
+    @Transactional
+    public void deleteAllMessagesByUser(String laborUserId) {
+        List<Chatting> chats = chattingRepository.findByLaborUser_LaborUserId(laborUserId);
+        chattingRepository.deleteAll(chats);  // 사용자와 관련된 모든 채팅을 삭제
+    }
+
     @Transactional
     public Chatting saveUserMessage(LaborUser laborUser, String userMessage) {
         Chatting chatting = new Chatting();
