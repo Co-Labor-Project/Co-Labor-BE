@@ -1,6 +1,8 @@
 package pelican.co_labor.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.session.Session;
+import org.springframework.session.SessionRepository;
 import org.springframework.stereotype.Service;
 import pelican.co_labor.domain.enterprise.Enterprise;
 import pelican.co_labor.domain.enterprise_user.EnterpriseUser;
@@ -11,6 +13,9 @@ import pelican.co_labor.repository.enterprise.EnterpriseRepository;
 import pelican.co_labor.repository.enterprise_user.EnterpriseUserRepository;
 import pelican.co_labor.repository.labor_user.LaborUserRepository;
 
+import java.time.Instant;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -19,6 +24,7 @@ public class AuthService {
     private final LaborUserRepository laborUserRepository;
     private final EnterpriseUserRepository enterpriseUserRepository;
     private final EnterpriseRepository enterpriseRepository;
+    private final SessionRepository sessionRepository;
 
     public void registerLaborUser(LaborUserDTO laborUserDTO) {
         LaborUser laborUser = LaborUser.toLaborUser(laborUserDTO);
@@ -87,7 +93,6 @@ public class AuthService {
     }
 
 
-
     public Optional<EnterpriseUser> findEnterpriseUserById(String enterpriseUserId) {
         return Optional.ofNullable(enterpriseUserRepository.findByEnterpriseUserId(enterpriseUserId));
     }
@@ -109,9 +114,24 @@ public class AuthService {
         }
     }
 
-
-
     public Optional<Enterprise> findEnterpriseById(String enterpriseId) {
         return enterpriseRepository.findByEnterpriseId(enterpriseId);
+    }
+
+    public Optional<Map<String, Object>> getCurrentUser(String sessionId) {
+        // 세션 저장소에서 해당 세션을 조회
+        Session session = sessionRepository.findById(sessionId);
+
+        if (session != null && session.getAttribute("username") != null) {
+            Map<String, Object> userInfo = new HashMap<>();
+            userInfo.put("username", session.getAttribute("username"));
+            userInfo.put("userType", session.getAttribute("userType"));
+
+            session.setLastAccessedTime(Instant.now());
+            sessionRepository.save(session);
+            return Optional.of(userInfo);
+        } else {
+            return Optional.empty();
+        }
     }
 }
