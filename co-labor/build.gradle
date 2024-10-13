@@ -24,6 +24,7 @@ configurations {
 
 repositories {
 	mavenCentral()
+	maven { url 'https://repo.spring.io/milestone' }
 }
 
 dependencies {
@@ -78,6 +79,9 @@ dependencies {
 	implementation 'co.elastic.clients:elasticsearch-java:8.15.2'
 	implementation 'com.fasterxml.jackson.core:jackson-databind:2.14.0'
 	implementation 'jakarta.json:jakarta.json-api:2.0.1'
+
+	// Openai
+	implementation 'org.springframework.ai:spring-ai-openai-spring-boot-starter:0.8.0'
 }
 
 

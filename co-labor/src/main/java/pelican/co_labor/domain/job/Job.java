@@ -45,8 +45,14 @@ public class Job {
     @Column(columnDefinition = "TEXT")
     private String employmentType;
 
-    @Column(columnDefinition = "TEXT")
-    private String location;
+    @Column(nullable = false)
+    private String address1;
+
+    @Column(nullable = true)
+    private String address2;
+
+    @Column(nullable = true)
+    private String address3;
 
     @Column(columnDefinition = "TEXT")
     private String skills;

@@ -29,7 +29,7 @@ public class ElasticsearchService {
 
     private final ElasticsearchClient esClient;
 
-    private static final Logger logger = LoggerFactory.getLogger(ElasticsearchController.class);
+    private static final Logger logger = LoggerFactory.getLogger(ElasticsearchService.class);
 
     private static final int BATCH_SIZE = 32;
     private static final int MAX_RESULTS = 2; // 결과 수 제한
