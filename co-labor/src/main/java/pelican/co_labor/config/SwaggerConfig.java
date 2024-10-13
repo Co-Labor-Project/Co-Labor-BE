@@ -17,23 +17,18 @@ public class SwaggerConfig {
                 .title("co-labor API")
                 .version("V1.0");
 
-        //-------------------- 인가 방식 지정 ---------------------
+//-------------------- 인가 방식 지정 ---------------------
         SecurityScheme auth = new SecurityScheme()
-                .type(SecurityScheme.Type.HTTP)
+                .type(SecurityScheme.Type.APIKEY)
                 .in(SecurityScheme.In.COOKIE)
-                .name("JSESSIONID");
-        SecurityRequirement securityRequirement = new SecurityRequirement().addList("basicAuth");
+                .name("JSESSIONID");  // 쿠키 이름 설정
+
+        SecurityRequirement securityRequirement = new SecurityRequirement().addList("Auth");  // 여기를 수정
 
         return new OpenAPI()
-                .info(new Info()
-                        .title("co-labor API")
-                        .version("V1.0"))
-                .addSecurityItem(new SecurityRequirement().addList("cookieAuth"))
-                .components(new Components()
-                        .addSecuritySchemes("cookieAuth", new SecurityScheme()
-                                .type(SecurityScheme.Type.APIKEY)
-                                .in(SecurityScheme.In.COOKIE)
-                                .name("JSESSIONID")));
+                .components(new Components().addSecuritySchemes("JSESSIONID", auth))  // 이름 수정
+                .addSecurityItem(securityRequirement)
+                .info(info);
     }
 
 }

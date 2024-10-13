@@ -13,7 +13,6 @@ import pelican.co_labor.repository.enterprise.EnterpriseRepository;
 import pelican.co_labor.repository.enterprise_user.EnterpriseUserRepository;
 import pelican.co_labor.repository.labor_user.LaborUserRepository;
 
-import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -126,9 +125,6 @@ public class AuthService {
             Map<String, Object> userInfo = new HashMap<>();
             userInfo.put("username", session.getAttribute("username"));
             userInfo.put("userType", session.getAttribute("userType"));
-
-            session.setLastAccessedTime(Instant.now());
-            sessionRepository.save(session);
             return Optional.of(userInfo);
         } else {
             return Optional.empty();

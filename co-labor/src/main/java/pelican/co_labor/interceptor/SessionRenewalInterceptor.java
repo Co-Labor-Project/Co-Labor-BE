@@ -23,12 +23,8 @@ public class SessionRenewalInterceptor implements HandlerInterceptor {
         Cookie[] cookies = request.getCookies();
         String sessionId = null;
 
-        System.out.println("Session Renewal Interceptor: Session Renewal Attempted");
-
         if (cookies == null) return true;
         for (Cookie cookie : cookies) {
-            System.out.println("Cookie Name: " + cookie.getName());
-
             if ("JSESSIONID".equals(cookie.getName())) {
                 sessionId = cookie.getValue();
                 break;
@@ -36,13 +32,10 @@ public class SessionRenewalInterceptor implements HandlerInterceptor {
         }
         Session session = sessionRepository.findById(sessionId);
 
-        System.out.println("Session Renewal Interceptor: Session ID: " + sessionId);
-
         if (session != null) {
             // 세션의 마지막 접근 시간을 갱신
             session.setLastAccessedTime(Instant.now());
             sessionRepository.save(session);
-            System.out.println("Session Renewal Interceptor: Session Renewed");
         }
         return true; // 다음 인터셉터나 핸들러로 진행
     }

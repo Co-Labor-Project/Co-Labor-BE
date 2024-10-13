@@ -58,9 +58,8 @@ public class AuthController {
                         "{\"message\": \"Login successful\", \"redirect\": \"/index\", \"userType\": \"%s\"}",
                         session.getAttribute("userType")
                 );
-                httpServletResponse.setHeader("Set-Cookie", "JSESSIONID=" + session.getId() + "; HttpOnly; SameSite=None; Secure");
+                httpServletResponse.setHeader("Set-Cookie", "JSESSIONID=" + session.getId() + "; Path=/; HttpOnly; SameSite=None; Secure");
                 httpServletResponse.getWriter().write(jsonResponse);
-
             } else {
                 // 인증 실패 응답 설정
                 httpServletResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
