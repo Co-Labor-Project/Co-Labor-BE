@@ -45,6 +45,24 @@ public class ChattingController {
 
     }
 
+    @Operation(summary = "새 채팅 시작 API", description = "이전 메시지를 모두 삭제하고 새로운 채팅 세션을 시작합니다.")
+    @PostMapping("/start-new")
+    public void startNewChat(@Parameter(description = "사용자 ID") @RequestParam("userId") String userId) {
+
+        Optional<LaborUser> optionalUser = authService.findLaborUserById(userId);
+        if (optionalUser.isPresent()) {
+            LaborUser user = optionalUser.get();
+
+            // 1. 기존 채팅 기록 삭제
+            chattingService.deleteAllMessagesByUser(user.getLaborUserId());
+
+            // 새로운 채팅을 시작할 때 초기화만 하고 별도의 메시지는 받지 않음
+            System.out.println("Chat history for user " + userId + " has been deleted. New session started.");
+        } else {
+            throw new RuntimeException("User not found");
+        }
+    }
+
     @Operation(summary = "메시지 전송 API", description = "사용자가 챗봇과 메시지를 주고받습니다.")
     @PostMapping("/send")
     public void sendMessage(
