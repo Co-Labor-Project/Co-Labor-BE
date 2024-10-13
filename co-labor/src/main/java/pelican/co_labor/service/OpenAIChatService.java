@@ -1,56 +1,35 @@
 package pelican.co_labor.service;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
+import org.springframework.ai.chat.ChatClient;
+import org.springframework.ai.chat.ChatResponse;
+import org.springframework.ai.chat.prompt.Prompt;
+import org.springframework.ai.chat.messages.Message;
+import org.springframework.ai.chat.messages.UserMessage;
+import org.springframework.ai.chat.messages.SystemMessage;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class OpenAIChatService {
-
-    private final RestTemplate restTemplate;
-    @Value("${openai.api.key}")
-    private String openaiApiKey;
+    private final ChatClient chatClient;
 
     @Autowired
-    public OpenAIChatService(RestTemplate restTemplate) {
-        this.restTemplate = restTemplate;
+    public OpenAIChatService(ChatClient chatClient) {
+        this.chatClient = chatClient;
     }
 
     public String getGptResponse(String userMessage) {
+        List<Message> messages = new ArrayList<>();
+        messages.add(new SystemMessage("You are a legal chatbot helping foreign workers in Korea."));
+        messages.add(new UserMessage(userMessage));
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization", "Bearer " + openaiApiKey);
-        headers.set("Content-Type", "application/json");
+        Prompt prompt = new Prompt(messages);
 
-        JSONObject message = new JSONObject();
-        message.put("role", "user");
-        message.put("content", userMessage);
+        ChatResponse response = chatClient.call(prompt);
 
-        JSONArray messages = new JSONArray();
-        messages.put(message);
-
-        JSONObject body = new JSONObject();
-        body.put("model", "gpt-3.5-turbo");
-        body.put("messages", messages);
-        body.put("max_tokens", 1300);
-
-        HttpEntity<String> request = new HttpEntity<>(body.toString(), headers);
-
-        ResponseEntity<String> response = restTemplate.exchange(
-                "https://api.openai.com/v1/chat/completions",
-                HttpMethod.POST,
-                request,
-                String.class
-        );
-
-        JSONObject responseBody = new JSONObject(response.getBody());
-        return responseBody.getJSONArray("choices").getJSONObject(0).getJSONObject("message").getString("content").trim();
+        return response.getResult().getOutput().getContent();
     }
 }
