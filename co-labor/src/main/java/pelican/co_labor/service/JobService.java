@@ -85,7 +85,9 @@ public class JobService {
             job.setJobRole(jobDetails.getJobRole());
             job.setExperience(jobDetails.getExperience());
             job.setEmploymentType(jobDetails.getEmploymentType());
-            job.setLocation(jobDetails.getLocation());
+            job.setAddress1(jobDetails.getAddress1());
+            if(jobDetails.getAddress2()!= null) job.setAddress2(jobDetails.getAddress2());
+            if(jobDetails.getAddress3()!= null) job.setAddress3(jobDetails.getAddress3());
             job.setSkills(jobDetails.getSkills());
             job.setViews(jobDetails.getViews());
             job.setDeadDate(jobDetails.getDeadDate());

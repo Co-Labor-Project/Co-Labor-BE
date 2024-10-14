@@ -9,9 +9,12 @@ import co.elastic.clients.elasticsearch.core.bulk.BulkResponseItem;
 import co.elastic.clients.elasticsearch.core.search.Hit;
 import co.elastic.clients.elasticsearch.indices.CreateIndexResponse;
 import co.elastic.clients.json.jackson.JacksonJsonpMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import pelican.co_labor.controller.ElasticsearchController;
 import pelican.co_labor.dto.CaseDocument;
 
 import java.io.IOException;
@@ -25,6 +28,9 @@ import java.util.Map;
 public class ElasticsearchService {
 
     private final ElasticsearchClient esClient;
+
+    private static final Logger logger = LoggerFactory.getLogger(ElasticsearchService.class);
+
     private static final int BATCH_SIZE = 32;
     private static final int MAX_RESULTS = 2; // 결과 수 제한
 
@@ -77,9 +83,13 @@ public class ElasticsearchService {
     }
 
     public void bulkIndexDocuments(String indexName, List<CaseDocument> documents) throws IOException {
-        createIndexWithMapping(indexName);  // 인덱스 및 매핑 생성 (존재하지 않는 경우)
+        logger.info("Starting bulk indexing for {} documents", documents.size());
+        createIndexWithMapping(indexName);
+        logger.info("Index created or already exists: {}", indexName);
 
         List<CaseDocument> filteredDocuments = filterAndPrepareDocuments(documents);
+        logger.info("Filtered documents: {}", filteredDocuments.size());
+
         int totalDocuments = filteredDocuments.size();
         int batches = (int) Math.ceil((double) totalDocuments / BATCH_SIZE);
 
@@ -87,9 +97,11 @@ public class ElasticsearchService {
             int fromIndex = i * BATCH_SIZE;
             int toIndex = Math.min(fromIndex + BATCH_SIZE, totalDocuments);
             List<CaseDocument> batch = filteredDocuments.subList(fromIndex, toIndex);
+            logger.info("Processing batch {} of {}, size: {}", i+1, batches, batch.size());
 
             bulkIndexBatch(indexName, batch);
         }
+        logger.info("Bulk indexing completed");
     }
 
     private List<CaseDocument> filterAndPrepareDocuments(List<CaseDocument> documents) {
@@ -110,24 +122,54 @@ public class ElasticsearchService {
         return filteredDocuments;
     }
 
+//    private void bulkIndexBatch(String indexName, List<CaseDocument> batch) throws IOException {
+//        BulkRequest.Builder br = new BulkRequest.Builder();
+//
+//        for (CaseDocument document : batch) {
+//            String documentId = document.generateCaseDocumentId();
+//            br.operations(op -> op.index(idx -> idx.index(indexName).id(documentId).document(document)));
+//        }
+//
+//        BulkResponse result = esClient.bulk(br.build());
+//
+//        if (result.errors()) {
+//            List<String> errorMessages = new ArrayList<>();
+//            for (BulkResponseItem item : result.items()) {
+//                if (item.error() != null) {
+//                    errorMessages.add(item.error().reason());
+//                }
+//            }
+//            throw new RuntimeException("Bulk indexing failed: " + String.join(", ", errorMessages));
+//        }
+//    }
+
     private void bulkIndexBatch(String indexName, List<CaseDocument> batch) throws IOException {
         BulkRequest.Builder br = new BulkRequest.Builder();
 
         for (CaseDocument document : batch) {
             String documentId = document.generateCaseDocumentId();
-            br.operations(op -> op.index(idx -> idx.index(indexName).id(documentId).document(document)));
+            br.operations(op -> op
+                    .index(idx -> idx
+                            .index(indexName)
+                            .id(documentId)
+                            .document(document)
+                    )
+            );
         }
 
+        logger.info("Sending bulk request for {} documents", batch.size());
         BulkResponse result = esClient.bulk(br.build());
 
         if (result.errors()) {
-            List<String> errorMessages = new ArrayList<>();
+            logger.error("Bulk indexing encountered errors");
             for (BulkResponseItem item : result.items()) {
                 if (item.error() != null) {
-                    errorMessages.add(item.error().reason());
+                    logger.error("Error for document {}: {}", item.id(), item.error().reason());
                 }
             }
-            throw new RuntimeException("Bulk indexing failed: " + String.join(", ", errorMessages));
+            throw new RuntimeException("Bulk indexing failed");
+        } else {
+            logger.info("Bulk indexing successful. Indexed {} documents.", batch.size());
         }
     }
 
