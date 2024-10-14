@@ -8,7 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import pelican.co_labor.domain.enterprise_queue.EnterpriseQueue;
-import pelican.co_labor.dto.EnterpriseQueueDTO;
 import pelican.co_labor.repository.enterprise_queue.EnterpriseQueueRepository;
 
 import java.util.Collections;
@@ -41,8 +40,7 @@ public class EnterpriseRegistrationService {
         );
     }
 
-    public void registerEnterpriseQueue(EnterpriseQueueDTO enterpriseQueueDTO) {
-        EnterpriseQueue enterpriseQueue = EnterpriseQueue.toEnterpriseQueue(enterpriseQueueDTO);
+    public void registerEnterpriseQueue(EnterpriseQueue enterpriseQueue) {
         enterpriseQueueRepository.save(enterpriseQueue);
     }
 }

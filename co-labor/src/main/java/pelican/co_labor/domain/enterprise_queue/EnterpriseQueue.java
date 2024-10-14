@@ -3,7 +3,6 @@ package pelican.co_labor.domain.enterprise_queue;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import pelican.co_labor.dto.EnterpriseQueueDTO;
 
 import java.time.LocalDateTime;
 
@@ -42,23 +41,14 @@ public class EnterpriseQueue {
     @Column(nullable = false, updatable = false)
     private LocalDateTime created_at;
 
+    @Column(name = "image_name", nullable = true)
+    private String imageName;
+
+    @Column(name = "enterprise_user_id")
+    private String enterprise_user_id;
+
     @PrePersist
     protected void onCreate() {
         created_at = LocalDateTime.now();
     }
-
-    public static EnterpriseQueue toEnterpriseQueue(EnterpriseQueueDTO enterpriseQueueDTO) {
-        EnterpriseQueue enterpriseQueue = new EnterpriseQueue();
-        enterpriseQueue.setEnterprise_id(enterpriseQueueDTO.getEnterpriseId());
-        enterpriseQueue.setName(enterpriseQueueDTO.getName());
-        enterpriseQueue.setAddress1(enterpriseQueueDTO.getAddress1());
-        enterpriseQueue.setAddress2(enterpriseQueueDTO.getAddress2());
-        enterpriseQueue.setAddress3(enterpriseQueueDTO.getAddress3());
-        enterpriseQueue.setType(enterpriseQueueDTO.getType());
-        enterpriseQueue.setPhone_number(enterpriseQueueDTO.getPhoneNumber());
-        enterpriseQueue.setDescription(enterpriseQueueDTO.getDescription());
-
-        return enterpriseQueue;
-    }
-
 }
