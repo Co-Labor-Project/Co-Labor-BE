@@ -82,6 +82,12 @@ dependencies {
 
 	// Openai
 	implementation 'org.springframework.ai:spring-ai-openai-spring-boot-starter:0.8.0'
+
+//	// review auth (SecurityConfig)
+//	implementation 'org.springframework.boot:spring-boot-starter-security'
+//	implementation 'org.springframework:spring-core'
+
+
 }
 
 
