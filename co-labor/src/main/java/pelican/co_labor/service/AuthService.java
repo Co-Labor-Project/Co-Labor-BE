@@ -101,12 +101,12 @@ public class AuthService {
         Optional<LaborUser> byLaborUserId = laborUserRepository.findByLaborUserId(username);
 
         if (byLaborUserId.isPresent()) {
-            return "labor";
+            return "labor_user";
         } else {
             Optional<EnterpriseUser> byEnterpriseUserId = Optional.ofNullable(enterpriseUserRepository.findByEnterpriseUserId(username));
 
             if (byEnterpriseUserId.isPresent()) {
-                return "enterprise";
+                return "enterprise_user";
             }
 
             return null;
