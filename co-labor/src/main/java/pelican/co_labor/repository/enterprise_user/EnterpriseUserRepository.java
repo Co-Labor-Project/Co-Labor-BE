@@ -24,5 +24,10 @@ public interface EnterpriseUserRepository extends JpaRepository<EnterpriseUser, 
     @Query("SELECT e.enterprise.id FROM EnterpriseUser e WHERE e.enterprise_user_id = :userId")
     String findEnterpriseIDByUserId(@Param("userId") String userId);
 
+
     boolean existsByEmail(String email);
+
+    @Query("SELECT CASE WHEN COUNT(e) > 0 THEN true ELSE false END FROM EnterpriseUser e WHERE e.enterprise_user_id = :id")
+    boolean existsByEnterprise_user_id(@Param("id") String enterprise_user_id);
+
 }

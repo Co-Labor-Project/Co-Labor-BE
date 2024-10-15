@@ -16,6 +16,7 @@ import pelican.co_labor.dto.auth.EnterpriseUserDTO;
 import pelican.co_labor.dto.auth.LaborUserDTO;
 import pelican.co_labor.dto.auth.LoginDTO;
 import pelican.co_labor.repository.enterprise_user.EnterpriseUserRepository;
+import pelican.co_labor.repository.labor_user.LaborUserRepository;
 import pelican.co_labor.service.AuthService;
 
 import java.io.IOException;
@@ -30,6 +31,7 @@ public class AuthController {
 
     private final AuthService authService;
     private final EnterpriseUserRepository enterpriseUserRepository;
+    private final LaborUserRepository laborUserRepository;
 
     @Operation(summary = "로그인 API", description = "사용자가 제공한 자격 증명을 통해 로그인합니다.")
     @PostMapping("/login")
@@ -88,6 +90,15 @@ public class AuthController {
     public ResponseEntity<Map<String, Object>> signupLabor(@RequestBody LaborUserDTO laborUserDTO) {
         Map<String, Object> response = new HashMap<>();
         try {
+            // 중복체크
+            if (laborUserRepository.existsByLaborUserId(laborUserDTO.getUsername()) ||
+                    laborUserRepository.existsByEmail(laborUserDTO.getEmail()) ||
+                    enterpriseUserRepository.existsByEnterprise_user_id(laborUserDTO.getUsername()) ||
+                    enterpriseUserRepository.existsByEmail(laborUserDTO.getEmail())) {
+                response.put("message", "중복된 아이디 혹은 이메일입니다.");
+                return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
+            }
+
             authService.registerLaborUser(laborUserDTO);
             response.put("message", "Labor user registered successfully");
             response.put("user", laborUserDTO);
@@ -103,6 +114,16 @@ public class AuthController {
     public ResponseEntity<Map<String, Object>> signupEnterprise(@RequestBody EnterpriseUserDTO enterpriseUserDTO) {
         Map<String, Object> response = new HashMap<>();
         try {
+
+            // 중복체크
+            if (laborUserRepository.existsByLaborUserId(enterpriseUserDTO.getUsername()) ||
+                    laborUserRepository.existsByEmail(enterpriseUserDTO.getEmail()) ||
+                    enterpriseUserRepository.existsByEnterprise_user_id(enterpriseUserDTO.getUsername()) ||
+                    enterpriseUserRepository.existsByEmail(enterpriseUserDTO.getEmail())) {
+                response.put("message", "중복된 아이디 혹은 이메일입니다.");
+                return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
+            }
+
             authService.registerEnterpriseUser(enterpriseUserDTO);
             response.put("message", "Enterprise user registered successfully");
             response.put("user", enterpriseUserDTO);
