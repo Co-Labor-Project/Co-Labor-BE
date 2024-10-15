@@ -99,8 +99,8 @@ public class ChattingController {
                     savingResult += "판례를 참고하시려면 클릭해보세요! 👈</summary> ";
 
                     savingResult += caseDocument.get판시사항() +  "<br/>";
-                    savingResult += caseDocument.get판결요지() + "<br/>";
-                    savingResult += caseDocument.get참조조문() + "<br/>";
+                    savingResult += "<br/>" + caseDocument.get판결요지() + "<br/>";
+                    savingResult += "<br/>" + caseDocument.get참조조문() + "<br/>";
 
                     savingResult += "</details> ";
 
