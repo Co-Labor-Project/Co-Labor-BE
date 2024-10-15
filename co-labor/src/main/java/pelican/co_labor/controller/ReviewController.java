@@ -93,7 +93,7 @@ public class ReviewController {
         String userType = userSession.get().get("userType").toString();
 
         // 노동자만 리뷰를 작성할 수 있도록 제한
-        if (!"labor".equals(userType)) {
+        if (!"labor_user".equals(userType)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN)
                     .body(Map.of("message", "리뷰를 작성할 권한이 없습니다. 노동자만 작성할 수 있습니다."));
         }

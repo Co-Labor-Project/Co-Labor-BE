@@ -14,7 +14,8 @@ public interface JobRepository extends JpaRepository<Job, Long> {
 
     @Query("SELECT j FROM Job j " +
             "WHERE LOWER(j.title) LIKE LOWER(CONCAT('%', :keyword, '%')) " +
-            "OR LOWER(j.description) LIKE LOWER(CONCAT('%', :keyword, '%')) " )
+            "OR LOWER(j.description) LIKE LOWER(CONCAT('%', :keyword, '%')) " +
+            "OR LOWER(j.enterprise.name) LIKE LOWER(CONCAT('%', :keyword, '%'))")
     List<Job> searchJobs(@Param("keyword") String keyword);
 
     void deleteByDeadDateBefore(@Param("date") LocalDate date);
