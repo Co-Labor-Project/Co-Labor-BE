@@ -3,26 +3,32 @@ package pelican.co_labor.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import pelican.co_labor.domain.enterprise_user.EnterpriseUser;
 import pelican.co_labor.domain.job.Job;
 import pelican.co_labor.domain.job.JobEng;
+import pelican.co_labor.repository.enterprise_user.EnterpriseUserRepository;
 import pelican.co_labor.service.AuthService;
 import pelican.co_labor.service.JobService;
-import pelican.co_labor.repository.enterprise_user.EnterpriseUserRepository;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Tag(name = "Job", description = "채용 공고 관련 API")
@@ -57,23 +63,44 @@ public class JobController {
 
     @Operation(summary = "채용 공고 생성", description = "새로운 채용 공고를 생성합니다. JSON 형식의 공고 정보와 이미지 파일을 함께 업로드할 수 있습니다.")
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public Job createJob(
-            @Parameter(description = "채용 공고 정보(JSON 형식)") @RequestPart("job") String jobJson,
+    public ResponseEntity<Map<String, Object>> createJob(
+            @Parameter(description = "채용 공고 정보") @RequestPart("job") Job job,
             @Parameter(description = "채용 공고 이미지 파일") @RequestPart("image") MultipartFile image,
-            @Parameter(description = "기업 회원 ID") @RequestPart("enterprise_user_id") String enterpriseUser) throws IOException {
+            HttpServletRequest httpServletRequest) {
 
-        System.out.println("Received enterprise_user_id: " + enterpriseUser);
+        Map<String, Object> response = new HashMap<>();
+        String jsessionId = extractJSessionIdFromCookie(httpServletRequest.getCookies());
 
-        Job job = jobService.mapJobFromJson(jobJson);
-        authService.findEnterpriseUserById(enterpriseUser).ifPresentOrElse(job::setEnterpriseUser, () -> {
-            throw new IllegalArgumentException("Invalid enterprise user ID: " + enterpriseUser);
-        });
+        // 세션에서 JSESSIONID를 찾을 수 없으면 401 UNAUTHORIZED 응답 반환
+        if (jsessionId == null) {
+            response.put("message", "No JSESSIONID found");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+        }
 
-        String enterpriseId = enterpriseUserRepository.findEnterpriseIDByUserId(enterpriseUser);
-        System.out.println("Found enterprise_id: " + enterpriseId);
+        // 세션에서 가져온 userType이 enterprise_user가 아니면 403 FORBIDDEN 응답 반환
+        Optional<Map<String, Object>> currentUser = authService.getCurrentUser(jsessionId);
+        if (currentUser.isEmpty() || !"enterprise_user".equals(currentUser.get().get("userType"))) {
+            response.put("message", "기업 회원이 아닙니다.");
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
+        }
 
-        authService.findEnterpriseById(enterpriseId).ifPresent(job::setEnterprise);
-        return jobService.createJob(job, image);
+        // 사용자의 기업 정보가 없으면 404 NOT FOUND 응답 반환
+        if (currentUser.get().get("enterprise") == null) {
+            response.put("message", "회원의 기업 정보가 없습니다.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+        }
+
+
+        String enterpriseUserId = (String) currentUser.get().get("userType");
+        EnterpriseUser enterpriseUser = enterpriseUserRepository.findByEnterpriseUserId(enterpriseUserId);
+        job.setEnterpriseUser(enterpriseUser);
+        job.setEnterprise(enterpriseUser.getEnterprise());
+
+        // 채용 공고 생성
+        Job createdJob = jobService.createJob(job, image);
+        response.put("message", "채용 공고가 성공적으로 생성되었습니다.");
+        response.put("job", createdJob);
+        return ResponseEntity.ok(response);
     }
 
     @Operation(summary = "채용 공고 수정", description = "채용 공고 ID에 해당하는 채용 공고를 수정합니다.")
@@ -144,5 +171,16 @@ public class JobController {
             @Parameter(description = "영어 채용 공고 ID") @PathVariable("job_id") Long job_id) {
         Optional<JobEng> job = jobService.incrementAndGetJobEngById(job_id);
         return job.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    // 쿠키에서 JSESSIONID 추출하는 헬퍼 메서드
+    private String extractJSessionIdFromCookie(Cookie[] cookies) {
+        if (cookies == null) return null;
+        for (Cookie cookie : cookies) {
+            if ("JSESSIONID".equals(cookie.getName())) {
+                return cookie.getValue();
+            }
+        }
+        return null;
     }
 }
