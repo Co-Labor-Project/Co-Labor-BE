@@ -130,4 +130,8 @@ public class AuthService {
             return Optional.empty();
         }
     }
+
+    public void deleteSession(String jssesionId) {
+        sessionRepository.deleteById(jssesionId);
+    }
 }

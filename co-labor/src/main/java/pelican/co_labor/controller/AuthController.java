@@ -42,14 +42,15 @@ public class AuthController {
         try {
             String username = loginInfo.getUsername();
             String password = loginInfo.getPassword();
-            Cookie[] cookies = httpServletRequest.getCookies();
+            String jssesionId = extractJSessionIdFromCookie(httpServletRequest.getCookies());
             boolean authenticated = authService.authenticateUser(username, password);
 
             if (authenticated) {
                 // 기존 세션 무효화 및 새로운 세션 생성
-                httpServletRequest.getSession().invalidate();
+                if (jssesionId != null) {
+                    authService.deleteSession(jssesionId);
+                }
                 HttpSession session = httpServletRequest.getSession(true);
-
                 session.setAttribute("username", username);
                 session.setAttribute("userType", authService.getUserType(username));
                 session.setMaxInactiveInterval(1800); // 30분 세션 만료
@@ -136,12 +137,37 @@ public class AuthController {
 
     @Operation(summary = "로그아웃 API", description = "사용자의 세션을 종료합니다.")
     @PostMapping("/logout")
-    public ResponseEntity<Map<String, String>> logout(HttpServletRequest httpServletRequest) {
-        HttpSession session = httpServletRequest.getSession(false);
-        try {
-            if (session != null) {
-                session.invalidate();
+    public ResponseEntity<Map<String, String>> logout(HttpServletRequest httpServletRequest,
+                                                      HttpServletResponse httpServletResponse) {
+
+        // 요청받은 쿠키 가져오기
+        Cookie[] cookies = httpServletRequest.getCookies();
+        if (cookies == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("message", "No cookies found"));
+        }
+
+        String jssesionId = null;
+        // JSESSIONID 쿠키 삭제
+        for (Cookie cookie : cookies) {
+            if ("JSESSIONID".equals(cookie.getName())) {
+                jssesionId = cookie.getValue();
+                cookie.setMaxAge(0); // 쿠키의 유효 기간을 0으로 설정하여 삭제
+                cookie.setPath("/"); // 쿠키의 경로를 설정
+                cookie.setHttpOnly(true); // 보안 설정
+                cookie.setSecure(true); // HTTPS 전용 설정
+                httpServletResponse.addCookie(cookie); // 응답에 삭제된 JSESSIONID 쿠키 추가
+            } else {
+                // 나머지 쿠키는 그대로 응답에 추가
+                httpServletResponse.addCookie(cookie);
             }
+        }
+
+        if (jssesionId == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("message", "No JSESSIONID found"));
+        }
+
+        try {
+            authService.deleteSession(jssesionId);
             return ResponseEntity.ok(Map.of("message", "Logout successful"));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("message", "Failed to logout: " + e.getMessage()));
