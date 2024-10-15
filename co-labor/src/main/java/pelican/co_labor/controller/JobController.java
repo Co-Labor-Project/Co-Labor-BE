@@ -102,29 +102,62 @@ public class JobController {
     }
 
     @Operation(summary = "채용 공고 수정", description = "채용 공고 ID에 해당하는 채용 공고를 수정합니다.")
-    @PutMapping(value = "/{job_id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<Job> updateJob(
-            @Parameter(description = "채용 공고 ID") @PathVariable Long job_id,
-            @Parameter(description = "수정할 채용 공고 정보(JSON 형식)") @RequestPart("jobDetails") String jobDetailsJson,
-            @Parameter(description = "수정할 이미지 파일") @RequestPart("image") MultipartFile image) throws IOException {
+    @PatchMapping(value = "/{job_id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Map<String, Object>> updateJob(
+            @Parameter(description = "채용 공고 ID") @PathVariable("job_id") Long job_id,
+            @Parameter(description = "수정할 채용 공고 정보") @RequestPart("job") Job job,
+            @Parameter(description = "수정할 이미지 파일") @RequestPart(value = "image", required = false) MultipartFile image,
+            HttpServletRequest httpServletRequest) {
 
-        // JSON 데이터를 Job 객체로 매핑
-        Job jobDetails = jobService.mapJobFromJson(jobDetailsJson);
+        Map<String, Object> response = new HashMap<>();
+        String jsessionId = extractJSessionIdFromCookie(httpServletRequest.getCookies());
+        if (jsessionId == null) {
+            response.put("message", "No JSESSIONID found");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+        }
+
+        Optional<Map<String, Object>> currentUser = authService.getCurrentUser(jsessionId);
+        // 세션에서 가져온 username이 채용 공고의 enterprise_user_id와 일치하지 않으면 403 FORBIDDEN 응답 반환
+        Optional<Job> jobOptional = jobService.getJobById(job_id);
+        if (currentUser.isEmpty() || !"enterprise_user".equals(currentUser.get().get("userType")) || jobOptional.isEmpty() || !jobOptional.get().getEnterpriseUser().getEnterprise_user_id().equals(currentUser.get().get("username"))) {
+            response.put("message", "채용 공고를 수정할 권한이 없습니다.");
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
+        }
 
         // 수정된 Job 객체와 이미지 파일을 사용하여 업데이트
-        Optional<Job> updatedJob = jobService.updateJob(job_id, jobDetails, image);
+        Optional<Job> updatedJob = jobService.updateJob(job_id, job, image);
 
-        // 수정된 Job 객체를 반환하거나, 없는 경우 404 응답
-        return updatedJob.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+        return updatedJob.map(job1 -> {
+            response.put("message", "채용 공고가 성공적으로 수정되었습니다.");
+            response.put("job", job1);
+            return ResponseEntity.ok(response);
+        }).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
 
     @Operation(summary = "채용 공고 삭제", description = "채용 공고 ID에 해당하는 채용 공고를 삭제합니다.")
     @DeleteMapping("/{job_id}")
-    public ResponseEntity<Void> deleteJob(
-            @Parameter(description = "채용 공고 ID") @PathVariable Long job_id) {
+    public ResponseEntity<Map<String, Object>> deleteJob(
+            @Parameter(description = "채용 공고 ID") @PathVariable("job_id") Long job_id,
+            HttpServletRequest httpServletRequest) {
+        Map<String, Object> response = new HashMap<>();
+        String jsessionId = extractJSessionIdFromCookie(httpServletRequest.getCookies());
+        if (jsessionId == null) {
+            response.put("message", "No JSESSIONID found");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+        }
+
+        Optional<Map<String, Object>> currentUser = authService.getCurrentUser(jsessionId);
+        // 세션에서 가져온 username이 채용 공고의 enterprise_user_id와 일치하지 않으면 403 FORBIDDEN 응답 반환
+        Optional<Job> jobOptional = jobService.getJobById(job_id);
+        if (currentUser.isEmpty() || !"enterprise_user".equals(currentUser.get().get("userType")) || jobOptional.isEmpty() || !jobOptional.get().getEnterpriseUser().getEnterprise_user_id().equals(currentUser.get().get("username"))) {
+            response.put("message", "채용 공고를 삭제할 권한이 없습니다.");
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
+        }
+
         jobService.deleteJob(job_id);
-        return ResponseEntity.noContent().build();
+        response.put("message", "채용 공고가 성공적으로 삭제되었습니다.");
+        return ResponseEntity.ok(response);
     }
 
     @Operation(summary = "채용 공고 이미지 파일 제공", description = "서버에 저장된 채용 공고 이미지를 제공합니다.")
