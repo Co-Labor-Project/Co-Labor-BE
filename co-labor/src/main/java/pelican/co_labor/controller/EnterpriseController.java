@@ -175,7 +175,7 @@ public class EnterpriseController {
 
 
     @Operation(summary = "기업 정보 수정", description = "기업 ID에 해당하는 기업 정보를 업데이트합니다.")
-    @PutMapping("/{enterprise_id}")
+    @PatchMapping("/{enterprise_id}")
     public ResponseEntity<Map<String, Object>> updateEnterprise(
             @Parameter(description = "기업 ID") @PathVariable String enterprise_id,
             @Parameter(description = "수정할 기업 정보") @RequestBody Enterprise enterpriseDetails,
