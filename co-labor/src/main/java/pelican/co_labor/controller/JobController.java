@@ -17,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import pelican.co_labor.domain.enterprise_user.EnterpriseUser;
 import pelican.co_labor.domain.job.Job;
 import pelican.co_labor.domain.job.JobEng;
+import pelican.co_labor.dto.JobUpdatedDTO;
 import pelican.co_labor.repository.enterprise_user.EnterpriseUserRepository;
 import pelican.co_labor.service.AuthService;
 import pelican.co_labor.service.JobService;
@@ -65,7 +66,7 @@ public class JobController {
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Map<String, Object>> createJob(
             @Parameter(description = "채용 공고 정보") @RequestPart("job") Job job,
-            @Parameter(description = "채용 공고 이미지 파일") @RequestPart("image") MultipartFile image,
+            @Parameter(description = "채용 공고 이미지 파일") @RequestPart(value = "image", required = false) MultipartFile image,
             HttpServletRequest httpServletRequest) {
 
         Map<String, Object> response = new HashMap<>();
@@ -105,7 +106,7 @@ public class JobController {
     @PatchMapping(value = "/{job_id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Map<String, Object>> updateJob(
             @Parameter(description = "채용 공고 ID") @PathVariable("job_id") Long job_id,
-            @Parameter(description = "수정할 채용 공고 정보") @RequestPart("job") Job job,
+            @Parameter(description = "수정할 채용 공고 정보") @RequestPart("job") JobUpdatedDTO jobUpdatedDTO,
             @Parameter(description = "수정할 이미지 파일") @RequestPart(value = "image", required = false) MultipartFile image,
             HttpServletRequest httpServletRequest) {
 
@@ -125,7 +126,7 @@ public class JobController {
         }
 
         // 수정된 Job 객체와 이미지 파일을 사용하여 업데이트
-        Optional<Job> updatedJob = jobService.updateJob(job_id, job, image);
+        Optional<Job> updatedJob = jobService.updateJob(job_id, jobUpdatedDTO, image);
 
         return updatedJob.map(job1 -> {
             response.put("message", "채용 공고가 성공적으로 수정되었습니다.");

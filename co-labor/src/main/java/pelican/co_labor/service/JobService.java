@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import pelican.co_labor.domain.job.Job;
 import pelican.co_labor.domain.job.JobEng;
+import pelican.co_labor.dto.JobUpdatedDTO;
 import pelican.co_labor.repository.job.JobEngRepository;
 import pelican.co_labor.repository.job.JobRepository;
 
@@ -15,6 +16,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -77,30 +79,56 @@ public class JobService {
     }
 
     @Transactional
-    public Optional<Job> updateJob(Long jobId, Job jobDetails, MultipartFile image) {
+    public Optional<Job> updateJob(Long jobId, JobUpdatedDTO jobUpdatedDTO, MultipartFile image) {
         return jobRepository.findById(jobId).map(job -> {
-            job.setTitle(jobDetails.getTitle());
-            job.setDescription(jobDetails.getDescription());
-            job.setRequirement(jobDetails.getRequirement());
-            job.setJobRole(jobDetails.getJobRole());
-            job.setExperience(jobDetails.getExperience());
-            job.setEmploymentType(jobDetails.getEmploymentType());
-            job.setAddress1(jobDetails.getAddress1());
-            if(jobDetails.getAddress2()!= null) job.setAddress2(jobDetails.getAddress2());
-            if(jobDetails.getAddress3()!= null) job.setAddress3(jobDetails.getAddress3());
-            job.setSkills(jobDetails.getSkills());
-            job.setViews(jobDetails.getViews());
-            job.setDeadDate(jobDetails.getDeadDate());
-            job.setModified_at(jobDetails.getModified_at());
+            if (jobUpdatedDTO.getTitle() != null) {
+                job.setTitle(jobUpdatedDTO.getTitle());
+            }
+            if (jobUpdatedDTO.getDescription() != null) {
+                job.setDescription(jobUpdatedDTO.getDescription());
+            }
+            if (jobUpdatedDTO.getRequirement() != null) {
+                job.setRequirement(jobUpdatedDTO.getRequirement());
+            }
+            if (jobUpdatedDTO.getJobRole() != null) {
+                job.setJobRole(jobUpdatedDTO.getJobRole());
+            }
+            if (jobUpdatedDTO.getExperience() != null) {
+                job.setExperience(jobUpdatedDTO.getExperience());
+            }
+            if (jobUpdatedDTO.getEmploymentType() != null) {
+                job.setEmploymentType(jobUpdatedDTO.getEmploymentType());
+            }
+            if (jobUpdatedDTO.getAddress1() != null) {
+                job.setAddress1(jobUpdatedDTO.getAddress1());
+            }
+            if (jobUpdatedDTO.getAddress2() != null) {
+                job.setAddress2(jobUpdatedDTO.getAddress2());
+            }
+            if (jobUpdatedDTO.getAddress3() != null) {
+                job.setAddress3(jobUpdatedDTO.getAddress3());
+            }
+            if (jobUpdatedDTO.getSkills() != null) {
+                job.setSkills(jobUpdatedDTO.getSkills());
+            }
+            if (jobUpdatedDTO.getDeadDate() != null) {
+                job.setDeadDate(jobUpdatedDTO.getDeadDate());
+            }
+
+            job.setModified_at(LocalDateTime.now());
+
             if (image != null && !image.isEmpty()) {
                 try {
-                    Files.deleteIfExists(Paths.get(job.getImageName()));
+                    if (job.getImageName() != null) {
+                        Files.deleteIfExists(Paths.get(job.getImageName()));
+                    }
                     String imagePath = saveImage(image);
                     job.setImageName(imagePath);
                 } catch (IOException e) {
                     throw new RuntimeException("Failed to save image", e);
                 }
             }
+
             return jobRepository.save(job);
         });
     }
