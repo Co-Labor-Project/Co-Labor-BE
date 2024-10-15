@@ -73,19 +73,18 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-aop'
 	implementation 'org.springframework.boot:spring-boot-starter'
 
-	// Springdoc OpenAPI 의존성 추가
-	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.1.0'
 
+	// 엘라스틱서치 의존성 추가
 	implementation 'co.elastic.clients:elasticsearch-java:8.15.2'
 	implementation 'com.fasterxml.jackson.core:jackson-databind:2.14.0'
 	implementation 'jakarta.json:jakarta.json-api:2.0.1'
 
-	// Openai
+	// Spring ai 의존성 추가
 	implementation 'org.springframework.ai:spring-ai-openai-spring-boot-starter:0.8.0'
+	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.1.0'
 
-//	// review auth (SecurityConfig)
-//	implementation 'org.springframework.boot:spring-boot-starter-security'
-//	implementation 'org.springframework:spring-core'
+	// BCrypt 의존성 추가
+	implementation 'org.mindrot:jbcrypt:0.4'
 
 
 }

@@ -1,6 +1,7 @@
 package pelican.co_labor.service;
 
 import lombok.RequiredArgsConstructor;
+import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.session.Session;
 import org.springframework.session.SessionRepository;
 import org.springframework.stereotype.Service;
@@ -27,11 +28,13 @@ public class AuthService {
 
     public void registerLaborUser(LaborUserDTO laborUserDTO) {
         LaborUser laborUser = LaborUser.toLaborUser(laborUserDTO);
+        laborUser.setPassword(BCrypt.hashpw(laborUser.getPassword(), BCrypt.gensalt()));
         laborUserRepository.save(laborUser);
     }
 
     public void registerEnterpriseUser(EnterpriseUserDTO enterpriseUserDTO) {
         EnterpriseUser enterpriseUser = EnterpriseUser.toEnterpriseUser(enterpriseUserDTO);
+        enterpriseUser.setPassword(BCrypt.hashpw(enterpriseUser.getPassword(), BCrypt.gensalt()));
         enterpriseUserRepository.save(enterpriseUser);
     }
 
@@ -43,20 +46,17 @@ public class AuthService {
         Optional<LaborUser> byLaborUserId = laborUserRepository.findByLaborUserId(username);
 
         if (byLaborUserId.isPresent()) {
-            // 조회 결과가 존재하면 비밀번호 비교
             LaborUser laborUser = byLaborUserId.get();
-            return laborUser.getPassword().equals(password);
+            return BCrypt.checkpw(password, laborUser.getPassword());
         } else {
-            // 조회 결과가 없으면 기업 사용자 테이블에서 조회
             Optional<EnterpriseUser> byEnterpriseUserId = Optional.ofNullable(enterpriseUserRepository.findByEnterpriseUserId(username));
             if (byEnterpriseUserId.isPresent()) {
-                // 조회 결과가 존재하면 비밀번호 비교
                 EnterpriseUser enterpriseUser = byEnterpriseUserId.get();
-                return enterpriseUser.getPassword().equals(password);
+                return BCrypt.checkpw(password, enterpriseUser.getPassword());
             }
         }
 
-        return false; // 조회 결과가 둘 다 없으면 로그인 실패
+        return false;
     }
 
     public Optional<?> getUser(String username) {
