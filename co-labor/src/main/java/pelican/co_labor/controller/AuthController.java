@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import pelican.co_labor.domain.enterprise_user.EnterpriseUser;
 import pelican.co_labor.dto.auth.EnterpriseUserDTO;
 import pelican.co_labor.dto.auth.LaborUserDTO;
+import pelican.co_labor.dto.auth.LoginDTO;
 import pelican.co_labor.repository.enterprise_user.EnterpriseUserRepository;
 import pelican.co_labor.service.AuthService;
 
@@ -33,11 +34,12 @@ public class AuthController {
     @Operation(summary = "로그인 API", description = "사용자가 제공한 자격 증명을 통해 로그인합니다.")
     @PostMapping("/login")
     public void login(
-            @Parameter(description = "사용자 이름") @RequestParam("username") String username,
-            @Parameter(description = "사용자 비밀번호") @RequestParam("password") String password,
+            @RequestBody LoginDTO loginInfo,
             HttpServletResponse httpServletResponse,
             HttpServletRequest httpServletRequest) {
         try {
+            String username = loginInfo.getUsername();
+            String password = loginInfo.getPassword();
             Cookie[] cookies = httpServletRequest.getCookies();
             boolean authenticated = authService.authenticateUser(username, password);
 
