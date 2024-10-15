@@ -84,15 +84,13 @@ public class JobController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
         }
 
+        EnterpriseUser enterpriseUser = enterpriseUserRepository.findByEnterpriseUserId((String) currentUser.get().get("username"));
         // 사용자의 기업 정보가 없으면 404 NOT FOUND 응답 반환
-        if (currentUser.get().get("enterprise") == null) {
+        if (enterpriseUser.getEnterprise() == null) {
             response.put("message", "회원의 기업 정보가 없습니다.");
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         }
 
-
-        String enterpriseUserId = (String) currentUser.get().get("userType");
-        EnterpriseUser enterpriseUser = enterpriseUserRepository.findByEnterpriseUserId(enterpriseUserId);
         job.setEnterpriseUser(enterpriseUser);
         job.setEnterprise(enterpriseUser.getEnterprise());
 
