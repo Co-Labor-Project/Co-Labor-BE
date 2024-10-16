@@ -1,4 +1,4 @@
-# License for Co-Labor Project
+# License for Co-Labor-BE Project
 
 This project contains software licensed under multiple licenses, including but not limited to the following:
 
