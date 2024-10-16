@@ -17,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import pelican.co_labor.domain.enterprise_user.EnterpriseUser;
 import pelican.co_labor.domain.job.Job;
 import pelican.co_labor.domain.job.JobEng;
+import pelican.co_labor.dto.JobPostingDTO;
 import pelican.co_labor.dto.JobUpdatedDTO;
 import pelican.co_labor.repository.enterprise_user.EnterpriseUserRepository;
 import pelican.co_labor.service.AuthService;
@@ -66,6 +67,7 @@ public class JobController {
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Map<String, Object>> createJob(
             @Parameter(description = "채용 공고 정보") @RequestPart("job") Job job,
+            @Parameter(description = "채용 공고 본문") @RequestPart("jobPostingDTO") JobPostingDTO jobPostingDTO,
             @Parameter(description = "채용 공고 이미지 파일") @RequestPart(value = "image", required = false) MultipartFile image,
             HttpServletRequest httpServletRequest) {
 
@@ -96,7 +98,7 @@ public class JobController {
         job.setEnterprise(enterpriseUser.getEnterprise());
 
         // 채용 공고 생성
-        Job createdJob = jobService.createJob(job, image);
+        Job createdJob = jobService.createJob(job, jobPostingDTO,image);
         response.put("message", "채용 공고가 성공적으로 생성되었습니다.");
         response.put("job", createdJob);
         return ResponseEntity.ok(response);
