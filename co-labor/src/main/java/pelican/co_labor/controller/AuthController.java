@@ -53,7 +53,7 @@ public class AuthController {
                 HttpSession session = httpServletRequest.getSession(true);
                 session.setAttribute("username", username);
                 session.setAttribute("userType", authService.getUserType(username));
-                session.setMaxInactiveInterval(1800); // 30분 세션 만료
+                session.setMaxInactiveInterval(86400); // 24시간 세션 만료
 
                 // HTTP 응답에 성공 메시지와 리다이렉트 정보 설정
                 httpServletResponse.setStatus(HttpServletResponse.SC_OK);
