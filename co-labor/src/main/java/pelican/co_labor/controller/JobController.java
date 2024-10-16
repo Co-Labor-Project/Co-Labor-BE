@@ -98,7 +98,7 @@ public class JobController {
         job.setEnterprise(enterpriseUser.getEnterprise());
 
         // 채용 공고 생성
-        Job createdJob = jobService.createJob(job, jobPostingDTO,image);
+        Job createdJob = jobService.createJob(job, jobPostingDTO, image);
         response.put("message", "채용 공고가 성공적으로 생성되었습니다.");
         response.put("job", createdJob);
         return ResponseEntity.ok(response);
@@ -108,7 +108,8 @@ public class JobController {
     @PatchMapping(value = "/{job_id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Map<String, Object>> updateJob(
             @Parameter(description = "채용 공고 ID") @PathVariable("job_id") Long job_id,
-            @Parameter(description = "수정할 채용 공고 정보") @RequestPart("job") JobUpdatedDTO jobUpdatedDTO,
+            @Parameter(description = "수정할 채용 공고 정보") @RequestPart("jobUpdatedDTO") JobUpdatedDTO jobUpdatedDTO,
+            @Parameter(description = "수정할 채용 공고 본문") @RequestPart("jobPostingDTO") JobPostingDTO jobPostingDTO,
             @Parameter(description = "수정할 이미지 파일") @RequestPart(value = "image", required = false) MultipartFile image,
             HttpServletRequest httpServletRequest) {
 
@@ -120,15 +121,29 @@ public class JobController {
         }
 
         Optional<Map<String, Object>> currentUser = authService.getCurrentUser(jsessionId);
-        // 세션에서 가져온 username이 채용 공고의 enterprise_user_id와 일치하지 않으면 403 FORBIDDEN 응답 반환
         Optional<Job> jobOptional = jobService.getJobById(job_id);
-        if (currentUser.isEmpty() || !"enterprise_user".equals(currentUser.get().get("userType")) || jobOptional.isEmpty() || !jobOptional.get().getEnterpriseUser().getEnterprise_user_id().equals(currentUser.get().get("username"))) {
-            response.put("message", "채용 공고를 수정할 권한이 없습니다.");
+        if (currentUser.isEmpty()) {
+            response.put("message", "로그인 후 다시 시도해주세요.");
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
+        }
+
+        if (!"enterprise_user".equals(currentUser.get().get("userType"))) {
+            response.put("message", "기업 사용자만 수정할 수 있습니다.");
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
+        }
+
+        if (jobOptional.isEmpty()) {
+            response.put("message", "수정할 채용 공고가 존재하지 않습니다.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+        }
+
+        if (!jobOptional.get().getEnterpriseUser().getEnterprise_user_id().equals(currentUser.get().get("username"))) {
+            response.put("message", "채용 공고 수정 권한이 없습니다.");
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
         }
 
         // 수정된 Job 객체와 이미지 파일을 사용하여 업데이트
-        Optional<Job> updatedJob = jobService.updateJob(job_id, jobUpdatedDTO, image);
+        Optional<Job> updatedJob = jobService.updateJob(job_id, jobUpdatedDTO, jobPostingDTO, image);
 
         return updatedJob.map(job1 -> {
             response.put("message", "채용 공고가 성공적으로 수정되었습니다.");
