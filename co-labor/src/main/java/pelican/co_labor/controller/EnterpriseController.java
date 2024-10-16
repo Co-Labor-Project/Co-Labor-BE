@@ -158,15 +158,15 @@ public class EnterpriseController {
 
         Enterprise enterprise = enterpriseService.getEnterpriseById(enterpriseId).orElse(null);
         if (enterprise == null) {
-            response.put("status", 0);
-            response.put("message", "유효하지 않은 기업 ID입니다.");
+            response.put("status", 1);
+            response.put("message", "등록되지 않은 기업입니다.");
             return ResponseEntity.badRequest().body(response);
         }
 
         EnterpriseUser enterpriseUser = authService.findEnterpriseUserById((String) currentUser.get().get("username")).orElse(null);
         enterpriseUser.setEnterprise(enterprise);
         authService.saveEnterpriseUser(enterpriseUser);
-        response.put("status", 1);
+        response.put("status", 2);
         response.put("message", "기업 등록이 완료되었습니다.");
 
         return ResponseEntity.ok(response);
