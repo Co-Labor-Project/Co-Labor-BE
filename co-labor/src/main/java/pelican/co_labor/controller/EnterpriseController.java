@@ -156,6 +156,13 @@ public class EnterpriseController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
         }
 
+        // 회원에게 이미 등록된 기업이 있으면 200 OK 응답 반환
+        if (authService.findEnterpriseUserById((String) currentUser.get().get("username")).get().getEnterprise() != null) {
+            response.put("status", 3);
+            response.put("message", "이미 등록된 기업이 있습니다.");
+            return ResponseEntity.ok(response);
+        }
+
         Enterprise enterprise = enterpriseService.getEnterpriseById(enterpriseId).orElse(null);
         if (enterprise == null) {
             response.put("status", 1);
