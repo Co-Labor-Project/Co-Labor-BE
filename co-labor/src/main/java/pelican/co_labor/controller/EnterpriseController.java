@@ -160,7 +160,7 @@ public class EnterpriseController {
         if (enterprise == null) {
             response.put("status", 1);
             response.put("message", "등록되지 않은 기업입니다.");
-            return ResponseEntity.badRequest().body(response);
+            return ResponseEntity.ok(response);
         }
 
         EnterpriseUser enterpriseUser = authService.findEnterpriseUserById((String) currentUser.get().get("username")).orElse(null);
