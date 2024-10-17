@@ -182,7 +182,7 @@ public class AuthController {
             String jsessionId = extractJSessionIdFromCookie(httpServletRequest.getCookies());
             if (jsessionId == null) {
                 response.put("message", "No JSESSIONID found");
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+                return ResponseEntity.status(HttpStatus.OK).body(response);
             }
 
             Map<String, Object> currentUser = authService.getCurrentUser(jsessionId).orElse(null);
@@ -190,7 +190,7 @@ public class AuthController {
                 return ResponseEntity.ok(currentUser);
             } else {
                 response.put("message", "No user found for the current session");
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+                return ResponseEntity.status(HttpStatus.OK).body(response);
             }
         } catch (Exception e) {
             response.put("message", "Failed to retrieve current user: " + e.getMessage());
