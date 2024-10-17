@@ -128,7 +128,7 @@ public class ChattingController {
         Optional<LaborUser> optionalUser = authService.findLaborUserById(userId);
         if (optionalUser.isPresent()) {
             LaborUser user = optionalUser.get();
-            return chattingService.getRecentMessagesByUser(user.getLaborUserId(), 1);
+            return chattingService.getAllMessagesByUser(user.getLaborUserId());  // 전체 메시지 조회
         } else {
             throw new RuntimeException("User not found");
         }

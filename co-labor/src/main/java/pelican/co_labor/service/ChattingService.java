@@ -16,17 +16,20 @@ import pelican.co_labor.repository.chatting.ChattingRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 public class ChattingService {
 
+
     private static final Logger logger = LoggerFactory.getLogger(ChattingService.class);
 
     private final ChattingRepository chattingRepository;
     private final OpenAIChatService openAIChatService;
     private final RestTemplate restTemplate;
+
 
     @Autowired
     public ChattingService(ChattingRepository chattingRepository, OpenAIChatService openAIChatService, RestTemplate restTemplate) {
@@ -59,12 +62,69 @@ public class ChattingService {
         chatting.setMy_message(false);
         return chattingRepository.save(chatting);
     }
+    // 기존 코드
+    public List<Chatting> getAllMessagesByUser(String laborUserId) {
+        return chattingRepository.findByLaborUser_LaborUserId(laborUserId);
+    }
 
-    // 이전 대화 기록을 아예 보내지 않고 현재 질문만 GPT로 보내도록 수정
+//    // 기존 코드 모두 기억해서 오류 발생
+//    public String getGptResponse(String userId, String userMessage) {
+//
+//        List<Chatting> userChats = getAllMessagesByUser(userId);
+//        String previousResponses = userChats.stream()
+//                .map(Chatting::getContent)
+//                .collect(Collectors.joining(" "));
+//
+//        // previousResponses에서 userMessage와 겹치는 부분 제거
+//        String cleanedResponses = removeOverlap(previousResponses, userMessage);
+//        String prev = cleanedResponses + "\n\nThe above is a conversation I had with you before. If it's empty, ignore it, but if it is, remember it.\n\n";
+//
+//        String summaryPrompt = prev + "\nCondition 0 - The English in the prompt is the setting to be referenced in the answer, and the Korean is the actual question. \nCondition 1 - Your role is a legal chatbot consulting with a foreign worker. \nCondition 2 - Now the foreign worker will ask you a question about legal advice, and you must answer the question according to conditions 3 and 4. \nCondition 3 - First paragraph: The main answer to the question. This includes various contents such as solutions, advice, etc. Second paragraph: The law, case law, etc. related to the question. \nCondition 4 - Answer in three paragraphs using indentation and do not put subtitles before the paragraphs.\n"
+//                + "Legal Advice Questions: " + userMessage + "\nPlease answer legal advice questions in Korean according to conditions 1, 2, 3, 4, and 5. \nIf the legal advice question is not relevant, please reply that you did not understand and that you need to ask the correct question.";
+//
+//        String gptResponse = openAIChatService.getGptResponse(summaryPrompt);
+//        String output = gptResponse.replace("\n", "<br>");
+//        return output;
+//    }
+
+//    // 새로운 메서드: 대화의 처음 3문장만 가져오는 요약 기능 추가
+//    private String summarizeMessages(List<Chatting> recentChats) {
+//        return recentChats.stream()
+//                .map(chat -> getFirstThreeSentences(chat.getContent()))  // 각 대화의 처음 3문장만 가져옴
+//                .collect(Collectors.joining(" "));
+//    }
+//
+//    // 각 메시지에서 처음 3문장만 가져오는 메서드
+//    private String getFirstThreeSentences(String content) {
+//        // 문장 단위로 분리 (기본적으로 '.'으로 구분)
+//        String[] sentences = content.split("\\. ");
+//
+//        // 처음 3개의 문장만 추출, 만약 문장이 3개 미만이면 있는 만큼 가져옴
+//        return Arrays.stream(sentences)
+//                .limit(3)
+//                .collect(Collectors.joining(". ")) + ".";  // 마지막 문장 뒤에 '.' 추가
+//    }
+
+    // 241017 최근 메시지를 가져오는 메서드 추가
+    public List<Chatting> getRecentMessagesByUser(String laborUserId, int messageCount) {
+        List<Chatting> allMessages = chattingRepository.findByLaborUser_LaborUserId(laborUserId);
+        return allMessages.stream()
+                .skip(Math.max(0, allMessages.size() - messageCount))
+                .collect(Collectors.toList());
+    }
+
+
+    // 241017 GPT 호출 시 최근 4개의 메시지만 포함하도록 수정
     public String getGptResponse(String userId, String userMessage) {
         try {
-            // 이전 대화 기록을 제거하고, 현재 질문만 GPT로 전달
-            String summaryPrompt = "Condition 0 - The English in the prompt is the setting to be referenced in the answer, and the Korean is the actual question. \nCondition 1 - Your role is a legal chatbot consulting with a foreign worker. \nCondition 2 - Now the foreign worker will ask you a question about legal advice, and you must answer the question according to conditions 3 and 4. \nCondition 3 - First paragraph: The main answer to the question. This includes various contents such as solutions, advice, etc. Second paragraph: The law, case law, etc. related to the question. \nCondition 4 - Answer in three paragraphs using indentation and do not put subtitles before the paragraphs.\n"
+            List<Chatting> recentChats = getRecentMessagesByUser(userId, 4);
+            String recentMessages = recentChats.stream()
+                    .map(Chatting::getContent)
+                    .collect(Collectors.joining(" "));
+
+            String prev = recentMessages + "\n\nThe above is a conversation I had with you before. If it's empty, ignore it, but if it is, remember it.\n\n";
+
+            String summaryPrompt = prev + "\nCondition 0 - The English in the prompt is the setting to be referenced in the answer, and the Korean is the actual question. \nCondition 1 - Your role is a legal chatbot consulting with a foreign worker. \nCondition 2 - Now the foreign worker will ask you a question about legal advice, and you must answer the question according to conditions 3 and 4. \nCondition 3 - First paragraph: The main answer to the question. This includes various contents such as solutions, advice, etc. Second paragraph: The law, case law, etc. related to the question. \nCondition 4 - Answer in three paragraphs using indentation and do not put subtitles before the paragraphs.\n"
                     + "Legal Advice Questions: " + userMessage + "\nPlease answer legal advice questions in Korean according to conditions 1, 2, 3, 4, and 5.";
 
             return openAIChatService.getGptResponse(summaryPrompt).replace("\n", "<br>");
@@ -74,13 +134,7 @@ public class ChattingService {
         }
     }
 
-    // 241017 최근 메시지를 가져오는 메서드 추가 (사용되지 않음 - 예시로 남겨둠)
-    public List<Chatting> getRecentMessagesByUser(String laborUserId, int messageCount) {
-        List<Chatting> allMessages = chattingRepository.findByLaborUser_LaborUserId(laborUserId);
-        return allMessages.stream()
-                .skip(Math.max(0, allMessages.size() - messageCount))
-                .collect(Collectors.toList());
-    }
+
 
     private String removeOverlap(String previousResponses, String userMessage) {
         // 이전 응답에서 사용자 메시지를 제거
